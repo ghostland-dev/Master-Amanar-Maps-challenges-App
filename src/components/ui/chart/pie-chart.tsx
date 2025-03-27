@@ -25,47 +25,49 @@ export const PieChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      <RechartsPrimitive.PieChart>
-        <RechartsPrimitive.Pie
-          data={data}
-          dataKey={category}
-          nameKey={index}
-          cx="50%"
-          cy="50%"
-          outerRadius={80}
-          fill="#8884d8"
-        >
-          {data.map((entry, i) => (
-            <RechartsPrimitive.Cell
-              key={`cell-${i}`}
-              fill={colors[i % colors.length]}
-            />
-          ))}
-        </RechartsPrimitive.Pie>
-        <ChartTooltip
-          content={({ active, payload }) => {
-            if (!active || !payload?.length) return null;
-            const [item] = payload;
-            return (
-              <div className="rounded-lg border bg-background p-2 shadow-sm">
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span className="font-semibold">{item.name}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {valueFormatter ? valueFormatter(item.value as string | number) : item.value}
+      {(containerProps) => (
+        <RechartsPrimitive.PieChart>
+          <RechartsPrimitive.Pie
+            data={data}
+            dataKey={category}
+            nameKey={index}
+            cx="50%"
+            cy="50%"
+            outerRadius={80}
+            fill="#8884d8"
+          >
+            {data.map((entry, i) => (
+              <RechartsPrimitive.Cell
+                key={`cell-${i}`}
+                fill={colors[i % colors.length]}
+              />
+            ))}
+          </RechartsPrimitive.Pie>
+          <ChartTooltip
+            content={({ active, payload }) => {
+              if (!active || !payload?.length) return null;
+              const [item] = payload;
+              return (
+                <div className="rounded-lg border bg-background p-2 shadow-sm">
+                  <div className="grid gap-1">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="font-semibold">{item.name}</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {valueFormatter ? valueFormatter(item.value as string | number) : item.value}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          }}
-        />
-        {showLegend && <RechartsPrimitive.Legend />}
-      </RechartsPrimitive.PieChart>
+              );
+            }}
+          />
+          {showLegend && <RechartsPrimitive.Legend />}
+        </RechartsPrimitive.PieChart>
+      )}
     </ChartContainer>
   );
 });

@@ -1,7 +1,7 @@
 
 import { Trophy, Target, Award } from "lucide-react";
 
-interface Challenge {
+export interface Challenge {
   id: string;
   title: string;
   participants: number;

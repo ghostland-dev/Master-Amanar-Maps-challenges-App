@@ -11,6 +11,11 @@ interface OverviewTabProps {
 }
 
 export const OverviewTab = ({ timeRange }: OverviewTabProps) => {
+  // Map string timeRange to TimeRange type
+  const mappedTimeRange = timeRange === "week" ? "day" : 
+                           timeRange === "month" ? "month" :
+                           timeRange === "year" ? "year" : "month";
+                           
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -19,28 +24,28 @@ export const OverviewTab = ({ timeRange }: OverviewTabProps) => {
           value={overviewData.totalUsers} 
           growth={overviewData.userGrowth} 
           icon={Users} 
-          timeRange={timeRange} 
+          timeRange={mappedTimeRange} 
         />
         <StatCard 
           title="Utilisateurs Actifs" 
           value={overviewData.activeUsers} 
           growth={overviewData.activeGrowth} 
           icon={Eye} 
-          timeRange={timeRange} 
+          timeRange={mappedTimeRange} 
         />
         <StatCard 
           title="Revenus Total (€)" 
           value={overviewData.revenue} 
           growth={overviewData.revenueGrowth} 
           icon={CreditCard} 
-          timeRange={timeRange} 
+          timeRange={mappedTimeRange} 
         />
         <StatCard 
           title="Complétions de Challenges" 
           value={overviewData.completions} 
           growth={overviewData.completionGrowth} 
           icon={CheckCircle} 
-          timeRange={timeRange} 
+          timeRange={mappedTimeRange} 
         />
       </div>
 

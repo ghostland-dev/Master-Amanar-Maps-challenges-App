@@ -40,7 +40,11 @@ export const ChallengesTab = () => {
         description="Analyse des taux de complétion et d'abandon"
       >
         <ChallengeTable 
-          challenges={challengePerformanceData} 
+          challenges={challengePerformanceData.map(challenge => ({
+            ...challenge,
+            participants: challenge.starts,
+            completionRate: 100 - (challenge.abandonRate || 0)
+          }))} 
           showRating={true} 
           showAbandonRate={true} 
         />

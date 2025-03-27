@@ -81,7 +81,7 @@ const UserManager = () => {
     const newStatus = user.status === "active" ? "blocked" : "active";
     
     const updatedUsers = users.map((u) =>
-      u.id === user.id ? { ...u, status: newStatus } : u
+      u.id === user.id ? { ...u, status: newStatus as "active" | "pending" | "blocked" } : u
     );
     
     setUsers(updatedUsers);
