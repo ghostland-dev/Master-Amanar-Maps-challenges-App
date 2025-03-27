@@ -13,7 +13,7 @@ const Index = () => {
   
   useEffect(() => {
     if (categoriesRef.current) {
-      slideIn(categoriesRef.current, 'up', 0.2);
+      slideIn(categoriesRef.current, 'up');
     }
   }, []);
   

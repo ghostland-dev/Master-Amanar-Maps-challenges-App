@@ -28,7 +28,8 @@ const ResultCard = ({
   
   useEffect(() => {
     if (valueRef.current && typeof value === 'number' && animate) {
-      animateNumber(valueRef.current, 0, value, 1, (v) => `${prefix}${formatter(v)}${suffix}`);
+      const formatWithAffixes = (v: number) => `${prefix}${formatter(v)}${suffix}`;
+      animateNumber(valueRef.current, 0, value, formatWithAffixes);
     }
   }, [value, formatter, prefix, suffix, animate]);
   

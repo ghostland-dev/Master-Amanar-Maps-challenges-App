@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, TrendingUp, Timer, BookOpen, Award } from "lucide-react";
@@ -12,8 +11,8 @@ const Hero = () => {
   
   useEffect(() => {
     if (heroRef.current) fadeIn(heroRef.current);
-    if (featuresRef.current) slideIn(featuresRef.current, 'up', 0.3);
-    if (ctaRef.current) scaleIn(ctaRef.current, 0.6);
+    if (featuresRef.current) slideIn(featuresRef.current, 'up');
+    if (ctaRef.current) scaleIn(ctaRef.current);
   }, []);
 
   return (

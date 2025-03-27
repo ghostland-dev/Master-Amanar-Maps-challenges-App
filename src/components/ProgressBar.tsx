@@ -33,7 +33,7 @@ const ProgressBar = ({
   
   useEffect(() => {
     if (animate && percentRef.current) {
-      animateNumber(percentRef.current, 0, percentage, 1);
+      animateNumber(percentRef.current, 0, percentage);
     }
   }, [percentage, animate]);
 

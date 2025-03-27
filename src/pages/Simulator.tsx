@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ROISimulator from "@/components/ROISimulator";
@@ -15,8 +14,8 @@ const Simulator = () => {
     document.title = "FinQuest - Simulateurs";
     
     if (headerRef.current) fadeIn(headerRef.current);
-    if (simulatorRef.current) slideIn(simulatorRef.current, 'right', 0.3);
-    if (cardsRef.current) slideIn(cardsRef.current, 'up', 0.6);
+    if (simulatorRef.current) slideIn(simulatorRef.current, 'right');
+    if (cardsRef.current) slideIn(cardsRef.current, 'up');
   }, []);
 
   const simulators = [

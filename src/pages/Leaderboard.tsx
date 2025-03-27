@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,14 +28,14 @@ const Leaderboard = () => {
     const cards = document.querySelectorAll('.top-user-card');
     cards.forEach((card, index) => {
       setTimeout(() => {
-        if (card instanceof HTMLElement) scaleIn(card, index * 0.1);
+        if (card instanceof HTMLElement) scaleIn(card);
       }, 100);
     });
     
     const rankCards = document.querySelectorAll('.rank-card');
     rankCards.forEach((card, index) => {
       setTimeout(() => {
-        if (card instanceof HTMLElement) fadeIn(card, 0.3 + index * 0.05);
+        if (card instanceof HTMLElement) fadeIn(card);
       }, 300);
     });
   }, []);
