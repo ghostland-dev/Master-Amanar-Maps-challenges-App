@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ROISimulator from "@/components/ROISimulator";
 import SimulatorCard from "@/components/SimulatorCard";
-import { BarChart, TrendingUp, Calculator, DollarSign, Percent, LineChart, Download, FilePdf } from "lucide-react";
+import { BarChart, TrendingUp, Calculator, DollarSign, Percent, LineChart, Download, FileText } from "lucide-react";
 import { fadeIn, slideIn } from "@/lib/animations";
 
 const Simulator = () => {

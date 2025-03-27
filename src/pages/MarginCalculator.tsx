@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calculator, ArrowRightLeft, Heart, RefreshCw, Percent, FilePdf, Download } from "lucide-react";
+import { Calculator, ArrowRightLeft, Heart, RefreshCw, Percent, FileText, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { slideIn } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
@@ -148,18 +148,6 @@ const MarginCalculator = () => {
     }
   };
   
-  const reset = () => {
-    setSellingPrice(100);
-    setCostPrice(60);
-    setMarginType("percent");
-    setResults(null);
-  };
-  
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
-  };
-  
   return (
     <div className="min-h-screen pb-16 md:pb-0 bg-gradient-to-br from-background to-background/80">
       <Navbar />
@@ -284,7 +272,7 @@ const MarginCalculator = () => {
                           onClick={handleExportPdf} 
                           className="flex items-center gap-1 hover:bg-primary/10"
                         >
-                          <FilePdf className="h-4 w-4" />
+                          <FileText className="h-4 w-4" />
                           <span>Exporter</span>
                         </Button>
                       </div>

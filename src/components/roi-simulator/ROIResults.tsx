@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ResultCard from "./ResultCard";
 import { Button } from "@/components/ui/button";
-import { Download, FilePdf } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { generatePdfFromData } from "@/utils/pdf";
 import { useToast } from "@/hooks/use-toast";
 
@@ -86,7 +86,7 @@ const ROIResults = ({ investment, returns, period, roi, monthlyROI }: ROIResults
           onClick={handleExportPdf} 
           className="text-sm flex items-center gap-1 hover:bg-primary/10"
         >
-          <FilePdf className="h-4 w-4" />
+          <FileText className="h-4 w-4" />
           <span>Exporter en PDF</span>
         </Button>
       </div>
@@ -95,20 +95,23 @@ const ROIResults = ({ investment, returns, period, roi, monthlyROI }: ROIResults
         <ResultCard
           title="Investissement"
           value={formatCurrency(investment)}
-          description="Montant investi initialement"
-          variant="primary"
+          suffix=""
+          prefix=""
+          colorClass="text-primary"
         />
         <ResultCard
           title="Retours"
           value={formatCurrency(returns)}
-          description="Gains générés par l'investissement"
-          variant="success"
+          suffix=""
+          prefix=""
+          colorClass="text-green-600"
         />
         <ResultCard
           title="Bénéfice"
           value={formatCurrency(returns - investment)}
-          description="Profit net après investissement"
-          variant={returns - investment > 0 ? "success" : "danger"}
+          suffix=""
+          prefix=""
+          colorClass={returns - investment > 0 ? "text-green-600" : "text-red-600"}
         />
       </div>
       

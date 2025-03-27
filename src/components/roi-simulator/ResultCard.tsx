@@ -12,6 +12,7 @@ interface ResultCardProps {
   formatter?: (value: number) => string;
   delay?: number;
   animate?: boolean;
+  variant?: string;  // Add this prop to support the variant prop
 }
 
 const ResultCard = ({
@@ -23,8 +24,25 @@ const ResultCard = ({
   formatter = (v) => v.toFixed(2),
   delay = 0,
   animate = true,
+  variant,
 }: ResultCardProps) => {
   const valueRef = useRef<HTMLDivElement>(null);
+  
+  // Map variant to colorClass if variant is provided
+  if (variant) {
+    switch (variant) {
+      case "primary":
+        colorClass = "text-primary";
+        break;
+      case "success":
+        colorClass = "text-green-600";
+        break;
+      case "danger":
+        colorClass = "text-red-600";
+        break;
+      // Add more variants as needed
+    }
+  }
   
   useEffect(() => {
     if (valueRef.current && typeof value === 'number' && animate) {
