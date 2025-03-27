@@ -16,6 +16,8 @@ import TrendAnalysis from "./pages/TrendAnalysis";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Notifications from "./pages/Notifications";
 import Leaderboard from "./pages/Leaderboard";
 import Library from "./pages/Library";
 
@@ -39,6 +41,8 @@ const App = () => (
           <Route path="/simulators/trend-analysis" element={<TrendAnalysis />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/library" element={<Library />} />
           <Route path="*" element={<NotFound />} />
