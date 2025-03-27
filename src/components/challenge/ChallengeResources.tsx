@@ -4,7 +4,7 @@ import { BookOpen, BarChart, ChevronRight, Download, File, FileText } from "luci
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { motion } from "motion";
+import { animate } from "motion";
 import { cn } from "@/lib/utils";
 
 interface Resource {
@@ -57,10 +57,9 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
         </CardHeader>
         <CardContent className="p-4 space-y-3">
           {resources.map((resource) => (
-            <motion.div
+            <div
               key={resource.id}
-              whileHover={{ scale: 1.01 }}
-              className="overflow-hidden rounded-md"
+              className="overflow-hidden rounded-md hover:scale-[1.01] transition-transform"
             >
               <div className="flex items-center justify-between p-3 bg-secondary/40 rounded-lg hover:bg-secondary transition-colors">
                 <div className="flex-1 min-w-0">
@@ -101,7 +100,7 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
           
           {resources.length === 0 && (

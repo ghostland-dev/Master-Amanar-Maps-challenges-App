@@ -21,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { generatePdfFromData } from "@/utils/pdfGenerator";
 import { useToast } from "@/components/ui/use-toast";
-import { motion } from "motion";
 
 const Challenge = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,7 +69,7 @@ const Challenge = () => {
     const data = {
       "Challenge": {
         "Titre": challenge.title,
-        "Niveau": challenge.level,
+        "Niveau": challenge.difficulty || "Non spécifié", // Change level to difficulty
         "Description": challenge.description,
         "Durée estimée": challenge.duration,
         "Date de début": new Date().toLocaleDateString(),
@@ -161,7 +160,7 @@ const Challenge = () => {
               <div className="flex flex-wrap gap-2 items-center">
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
                   <FileText className="mr-1 h-3.5 w-3.5" />
-                  Niveau: {challenge.level}
+                  Niveau: {challenge.difficulty || "Non spécifié"} {/* Change level to difficulty */}
                 </Badge>
                 
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
@@ -172,11 +171,9 @@ const Challenge = () => {
                 <div className="ml-auto flex items-center">
                   <span className="text-sm text-muted-foreground mr-2">Progression:</span>
                   <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-primary rounded-full"
-                      initial={{ width: '0%' }}
-                      animate={{ width: `${(challenge.currentStep / challenge.totalSteps) * 100}%` }}
-                      transition={{ duration: 1, ease: "easeOut" }}
+                    <div 
+                      className="h-full bg-primary rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: `${(challenge.currentStep / challenge.totalSteps) * 100}%` }}
                     />
                   </div>
                   <span className="ml-2 text-sm font-medium">
