@@ -6,14 +6,16 @@ import { ChartContext } from "./context";
 import { ChartStyle } from "./chart-style";
 import { ChartConfig } from "./types";
 
-export interface ChartContainerProps extends React.ComponentProps<"div"> {
+export interface ChartContainerProps {
   config: ChartConfig;
   children: (containerProps: { chartId: string }) => React.ReactNode;
+  className?: string;
+  id?: string;
 }
 
 export const ChartContainer = React.forwardRef<
   HTMLDivElement,
-  ChartContainerProps
+  ChartContainerProps & Omit<React.HTMLAttributes<HTMLDivElement>, "children">
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;

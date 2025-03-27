@@ -35,7 +35,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>((
   }, [categories, colors]);
 
   return (
-    <ChartContainer ref={ref} config={config} className={className}>
+    <ChartContainer 
+      ref={ref} 
+      config={config} 
+      className={className}
+    >
       {({ chartId }) => (
         <RechartsPrimitive.LineChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />

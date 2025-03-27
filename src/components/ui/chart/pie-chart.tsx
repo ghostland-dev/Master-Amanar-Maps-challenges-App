@@ -35,7 +35,11 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
   }, [data, index, colors]);
 
   return (
-    <ChartContainer ref={ref} config={config} className={className}>
+    <ChartContainer 
+      ref={ref} 
+      config={config} 
+      className={className}
+    >
       {({ chartId }) => (
         <RechartsPrimitive.PieChart>
           <RechartsPrimitive.Pie

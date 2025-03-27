@@ -35,7 +35,11 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
   }, [categories, colors]);
 
   return (
-    <ChartContainer ref={ref} config={config} className={className}>
+    <ChartContainer 
+      ref={ref} 
+      config={config} 
+      className={className}
+    >
       {({ chartId }) => (
         <RechartsPrimitive.BarChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />
