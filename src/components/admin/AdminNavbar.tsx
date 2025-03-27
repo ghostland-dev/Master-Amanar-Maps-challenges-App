@@ -27,16 +27,20 @@ const AdminNavbar = () => {
     { label: "Paramètres", href: "/admin/settings", icon: Settings },
   ];
 
-  // Fix the isActive function to ensure exact path matching
+  // Fix the isActive function to properly handle the simulator route
   const isActive = (path: string) => {
-    // For exact matches (like /admin)
+    // For the dashboard route
     if (path === "/admin" && location.pathname === "/admin") {
       return true;
     }
     
-    // For other routes, make sure we're checking the exact path
-    // This prevents /admin/subscriptions from matching when on /admin/settings
-    if (path !== "/admin") {
+    // For the simulator route and its sub-routes
+    if (path === "/simulator" && location.pathname.startsWith("/simulator")) {
+      return true;
+    }
+    
+    // For other admin routes, ensure exact matching
+    if (path !== "/admin" && path !== "/simulator") {
       return location.pathname === path;
     }
     
