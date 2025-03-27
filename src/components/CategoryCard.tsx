@@ -26,7 +26,7 @@ const CategoryCard = ({
   const difficultyMap = {
     beginner: {
       label: "Débutant",
-      color: "success",
+      color: "success" as const,
     },
     intermediate: {
       label: "Intermédiaire",
