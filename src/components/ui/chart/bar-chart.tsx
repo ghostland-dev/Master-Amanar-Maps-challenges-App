@@ -25,7 +25,7 @@ export const BarChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      {() => (
+      {(containerProps) => (
         <RechartsPrimitive.BarChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />
           <RechartsPrimitive.YAxis />

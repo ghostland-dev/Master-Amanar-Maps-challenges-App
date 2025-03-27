@@ -25,7 +25,7 @@ export const PieChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      {() => (
+      {(containerProps) => (
         <RechartsPrimitive.PieChart>
           <RechartsPrimitive.Pie
             data={data}
