@@ -1,0 +1,113 @@
+
+import { Challenge } from "./types";
+
+export const nftChallenge: Challenge = {
+  id: "6",
+  title: "Trading de NFTs",
+  description: "Explorez le marché des NFTs et développez une stratégie de trading efficace.",
+  category: "Crypto",
+  difficulty: "Avancé",
+  duration: "30 jours",
+  xp: 550,
+  progress: 15,
+  currentStep: 2,
+  totalSteps: 10,
+  steps: [
+    {
+      id: 1,
+      title: "Comprendre l'écosystème NFT",
+      description: "Découvrir les concepts fondamentaux des NFTs et leurs cas d'usage.",
+      isCompleted: true,
+      isLocked: false,
+    },
+    {
+      id: 2,
+      title: "Configurer un wallet NFT sécurisé",
+      description: "Mettre en place et sécuriser un portefeuille compatible avec les NFTs.",
+      isCompleted: true,
+      isLocked: false,
+    },
+    {
+      id: 3,
+      title: "Explorer les principales marketplaces",
+      description: "Se familiariser avec OpenSea, Rarible et autres plateformes d'échange.",
+      isCompleted: false,
+      isLocked: false,
+    },
+    {
+      id: 4,
+      title: "Évaluer la valeur des collections NFT",
+      description: "Identifier les critères qui déterminent la valeur d'une collection.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 5,
+      title: "Analyser les facteurs de valorisation",
+      description: "Comprendre ce qui influence le prix et l'attractivité des NFTs.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 6,
+      title: "Investir dans vos premiers NFTs",
+      description: "Acquérir des NFTs selon une stratégie d'investissement réfléchie.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 7,
+      title: "Suivre les tendances du marché",
+      description: "Utiliser les outils et communautés pour anticiper les évolutions.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 8,
+      title: "Participer à des drops et mints",
+      description: "Stratégies pour accéder aux lancements de nouvelles collections.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 9,
+      title: "Élaborer une stratégie de revente",
+      description: "Définir des critères et moments optimaux pour revendre avec profit.",
+      isCompleted: false,
+      isLocked: true,
+    },
+    {
+      id: 10,
+      title: "Gérer un portfolio NFT diversifié",
+      description: "Techniques pour équilibrer et optimiser votre collection de NFTs.",
+      isCompleted: false,
+      isLocked: true,
+    },
+  ],
+  resources: [
+    {
+      id: 1,
+      title: "Guide complet sur les NFTs",
+      type: "pdf",
+      url: "#",
+    },
+    {
+      id: 2,
+      title: "Analyse des principales collections NFT",
+      type: "pdf",
+      url: "#",
+    },
+    {
+      id: 3,
+      title: "Outils de suivi du marché NFT",
+      type: "pdf",
+      url: "#",
+    },
+    {
+      id: 4,
+      title: "Simulateur de ROI pour NFTs",
+      type: "simulator",
+      url: "/simulators",
+    },
+  ],
+};

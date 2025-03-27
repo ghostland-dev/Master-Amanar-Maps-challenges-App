@@ -1,17 +1,10 @@
 
 import { useState } from "react";
 import ChallengeStep from "./ChallengeStep";
-
-interface Step {
-  id: number;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-  isLocked: boolean;
-}
+import { ChallengeStep as StepType } from "@/utils/challenge/types";
 
 interface ChallengeStepsProps {
-  steps: Step[];
+  steps: StepType[];
   currentStep: number;
   totalSteps: number;
 }

@@ -1,24 +1,13 @@
-
 import { Link } from "react-router-dom";
 import { Award, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import ProgressBar from "@/components/ProgressBar";
+import { Challenge } from "@/utils/challenge/types";
 
 interface ChallengeInfoProps {
-  challenge: {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    difficulty: string;
-    duration: string;
-    xp: number;
-    progress: number;
-    currentStep: number;
-    totalSteps: number;
-  };
+  challenge: Challenge;
 }
 
 const ChallengeInfo = ({ challenge }: ChallengeInfoProps) => {

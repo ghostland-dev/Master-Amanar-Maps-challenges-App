@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { BookOpen, BarChart, ChevronRight, Download, File, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,18 +5,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { animate } from "motion";
 import { cn } from "@/lib/utils";
-
-interface Resource {
-  id: number;
-  title: string;
-  type: string;
-  url: string;
-  description?: string;
-  canDownload?: boolean;
-}
+import { ChallengeResource } from "@/utils/challenge/types";
 
 interface ChallengeResourcesProps {
-  resources: Resource[];
+  resources: ChallengeResource[];
 }
 
 const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
