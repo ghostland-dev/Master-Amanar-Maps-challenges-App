@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Shield, Menu, X, Home, LogOut } from "lucide-react";
+import { Shield, Menu, X, Home, LogOut, Users, Award, CreditCard, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -18,10 +19,10 @@ const AdminNavbar = () => {
 
   const navItems = [
     { label: "Tableau de bord", href: "/admin", icon: Home },
-    { label: "Challenges", href: "/admin/challenges", icon: Shield },
-    { label: "Utilisateurs", href: "/admin/users", icon: Shield },
-    { label: "Abonnements", href: "/admin/subscriptions", icon: Shield },
-    { label: "Analytique", href: "/admin/analytics", icon: Shield },
+    { label: "Challenges", href: "/admin/challenges", icon: Award },
+    { label: "Utilisateurs", href: "/admin/users", icon: Users },
+    { label: "Abonnements", href: "/admin/subscriptions", icon: CreditCard },
+    { label: "Analytique", href: "/admin/analytics", icon: BarChart3 },
   ];
 
   const isActive = (path: string) => location.pathname === path;

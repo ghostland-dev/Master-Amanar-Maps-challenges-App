@@ -11,7 +11,7 @@ interface ChartCardProps {
 
 export const ChartCard = ({ title, description, children, className }: ChartCardProps) => {
   return (
-    <Card className={`glass hover-lift ${className}`}>
+    <Card className={`hover:shadow-md transition-all duration-300 ${className}`}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

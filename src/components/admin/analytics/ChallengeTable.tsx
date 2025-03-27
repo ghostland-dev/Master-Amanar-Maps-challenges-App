@@ -20,33 +20,33 @@ interface ChallengeTableProps {
 
 export const ChallengeTable = ({ challenges, showRating = false, showAbandonRate = false }: ChallengeTableProps) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto border rounded-lg">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-border">
-            <th className="text-left p-3 text-muted-foreground">Challenge</th>
-            {showAbandonRate && <th className="text-center p-3 text-muted-foreground">Démarrages</th>}
-            <th className="text-center p-3 text-muted-foreground">
+          <tr className="bg-muted/50">
+            <th className="text-left p-3 text-muted-foreground font-medium">Challenge</th>
+            {showAbandonRate && <th className="text-center p-3 text-muted-foreground font-medium">Démarrages</th>}
+            <th className="text-center p-3 text-muted-foreground font-medium">
               {showAbandonRate ? "Complétions" : "Participants"}
             </th>
-            <th className="text-center p-3 text-muted-foreground">
+            <th className="text-center p-3 text-muted-foreground font-medium">
               {showAbandonRate ? "Taux d'abandon" : "Taux de complétion"}
             </th>
-            {showRating && <th className="text-center p-3 text-muted-foreground">Feedback moyen</th>}
+            {showRating && <th className="text-center p-3 text-muted-foreground font-medium">Feedback moyen</th>}
           </tr>
         </thead>
         <tbody>
           {challenges.map((challenge, index) => (
-            <tr key={challenge.id} className="border-b border-border hover:bg-secondary/40 transition-colors">
+            <tr key={challenge.id} className="border-t border-border hover:bg-secondary/20 transition-colors">
               <td className="p-3 flex items-center gap-2">
                 <div className="bg-primary/10 w-8 h-8 rounded-full flex items-center justify-center">
                   {index === 0 && <Trophy className="h-4 w-4 text-primary" />}
                   {index !== 0 && <Target className="h-4 w-4 text-primary" />}
                 </div>
-                <span className="text-sm md:text-base whitespace-nowrap">{challenge.title}</span>
+                <span className="text-sm md:text-base font-medium">{challenge.title}</span>
               </td>
               {showAbandonRate && <td className="p-3 text-center">{challenge.starts}</td>}
-              <td className="p-3 text-center">{showAbandonRate ? challenge.completions : challenge.participants}</td>
+              <td className="p-3 text-center font-medium">{showAbandonRate ? challenge.completions : challenge.participants}</td>
               <td className="p-3 text-center">
                 {showAbandonRate ? (
                   <span className={`px-2 py-1 rounded-full text-xs ${
