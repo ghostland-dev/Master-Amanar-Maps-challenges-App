@@ -9,30 +9,15 @@ import { Calculator, RefreshCw } from "lucide-react";
 import { slideIn } from "@/lib/animations";
 
 interface ROIFormProps {
-  investment: number;
-  setInvestment: (value: number) => void;
-  revenue: number;
-  setRevenue: (value: number) => void;
-  costs: number;
-  setCosts: (value: number) => void;
-  period: string;
-  setPeriod: (value: string) => void;
-  calculateResults: () => void;
-  reset: () => void;
+  onCalculate: (investmentAmount: number, returnsAmount: number, timePeriod: number) => void;
 }
 
-const ROIForm = ({
-  investment,
-  setInvestment,
-  revenue,
-  setRevenue,
-  costs,
-  setCosts,
-  period,
-  setPeriod,
-  calculateResults,
-  reset
-}: ROIFormProps) => {
+const ROIForm = ({ onCalculate }: ROIFormProps) => {
+  const [investment, setInvestment] = useState(1000);
+  const [revenue, setRevenue] = useState(1500);
+  const [costs, setCosts] = useState(200);
+  const [period, setPeriod] = useState("month");
+  
   const handleInvestmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInvestment(parseFloat(e.target.value) || 0);
   };
@@ -43,6 +28,24 @@ const ROIForm = ({
   
   const handleCostsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCosts(parseFloat(e.target.value) || 0);
+  };
+  
+  const calculateResults = () => {
+    const returns = revenue - costs;
+    const timePeriod = period === "month" ? 12 : 
+                      period === "quarter" ? 4 : 
+                      period === "week" ? 52 : 
+                      period === "day" ? 365 : 
+                      period === "year" ? 1 : 12;
+    
+    onCalculate(investment, returns, timePeriod);
+  };
+  
+  const reset = () => {
+    setInvestment(1000);
+    setRevenue(1500);
+    setCosts(200);
+    setPeriod("month");
   };
 
   return (
