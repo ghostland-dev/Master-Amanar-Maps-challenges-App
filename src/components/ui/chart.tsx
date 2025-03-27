@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
@@ -353,6 +354,208 @@ function getPayloadConfigFromPayload(
     : config[key as keyof typeof config]
 }
 
+// Add the missing chart components
+const BarChart = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof ChartContainer> & {
+    data: any[]
+    index: string
+    categories: string[]
+    colors?: string[]
+    valueFormatter?: (value: number) => string
+    showLegend?: boolean
+  }
+>(({ data, index, categories, colors = ["#2563eb"], valueFormatter, showLegend = true, ...props }, ref) => {
+  const config: ChartConfig = React.useMemo(() => {
+    return categories.reduce<ChartConfig>((acc, category, i) => {
+      acc[category] = { color: colors[i % colors.length] }
+      return acc
+    }, {})
+  }, [categories, colors])
+
+  return (
+    <ChartContainer ref={ref} config={config} {...props}>
+      <RechartsPrimitive.BarChart data={data}>
+        <RechartsPrimitive.XAxis dataKey={index} />
+        <RechartsPrimitive.YAxis />
+        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+        <ChartTooltip
+          content={({ active, payload, label }) => {
+            if (!active || !payload?.length) return null
+            return (
+              <div className="rounded-lg border bg-background p-2 shadow-sm">
+                <div className="grid gap-2">
+                  <div className="font-semibold">{label}</div>
+                  <div className="grid gap-1">
+                    {payload.map((item: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div
+                          className="h-2 w-2 rounded-full"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {item.name}:
+                        </span>
+                        <span className="font-medium">
+                          {valueFormatter ? valueFormatter(item.value) : item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          }}
+        />
+        {showLegend && <RechartsPrimitive.Legend />}
+        {categories.map((category, i) => (
+          <RechartsPrimitive.Bar
+            key={category}
+            dataKey={category}
+            fill={colors[i % colors.length]}
+            radius={[4, 4, 0, 0]}
+          />
+        ))}
+      </RechartsPrimitive.BarChart>
+    </ChartContainer>
+  )
+})
+BarChart.displayName = "BarChart"
+
+const LineChart = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof ChartContainer> & {
+    data: any[]
+    index: string
+    categories: string[]
+    colors?: string[]
+    valueFormatter?: (value: number) => string
+    showLegend?: boolean
+  }
+>(({ data, index, categories, colors = ["#2563eb"], valueFormatter, showLegend = true, ...props }, ref) => {
+  const config: ChartConfig = React.useMemo(() => {
+    return categories.reduce<ChartConfig>((acc, category, i) => {
+      acc[category] = { color: colors[i % colors.length] }
+      return acc
+    }, {})
+  }, [categories, colors])
+
+  return (
+    <ChartContainer ref={ref} config={config} {...props}>
+      <RechartsPrimitive.LineChart data={data}>
+        <RechartsPrimitive.XAxis dataKey={index} />
+        <RechartsPrimitive.YAxis />
+        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+        <ChartTooltip
+          content={({ active, payload, label }) => {
+            if (!active || !payload?.length) return null
+            return (
+              <div className="rounded-lg border bg-background p-2 shadow-sm">
+                <div className="grid gap-2">
+                  <div className="font-semibold">{label}</div>
+                  <div className="grid gap-1">
+                    {payload.map((item: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div
+                          className="h-2 w-2 rounded-full"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {item.name}:
+                        </span>
+                        <span className="font-medium">
+                          {valueFormatter ? valueFormatter(item.value) : item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          }}
+        />
+        {showLegend && <RechartsPrimitive.Legend />}
+        {categories.map((category, i) => (
+          <RechartsPrimitive.Line
+            key={category}
+            type="monotone"
+            dataKey={category}
+            stroke={colors[i % colors.length]}
+            activeDot={{ r: 6 }}
+          />
+        ))}
+      </RechartsPrimitive.LineChart>
+    </ChartContainer>
+  )
+})
+LineChart.displayName = "LineChart"
+
+const PieChart = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof ChartContainer> & {
+    data: any[]
+    index: string
+    category: string
+    colors?: string[]
+    valueFormatter?: (value: number) => string
+    showLegend?: boolean
+  }
+>(({ data, index, category, colors = ["#2563eb", "#4ade80", "#f97316", "#f43f5e"], valueFormatter, showLegend = true, ...props }, ref) => {
+  const config: ChartConfig = React.useMemo(() => {
+    return data.reduce<ChartConfig>((acc, item, i) => {
+      acc[item[index]] = { color: colors[i % colors.length], label: item[index] }
+      return acc
+    }, {})
+  }, [data, index, colors])
+
+  return (
+    <ChartContainer ref={ref} config={config} {...props}>
+      <RechartsPrimitive.PieChart>
+        <RechartsPrimitive.Pie
+          data={data}
+          dataKey={category}
+          nameKey={index}
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          fill="#8884d8"
+        >
+          {data.map((entry, i) => (
+            <RechartsPrimitive.Cell
+              key={`cell-${i}`}
+              fill={colors[i % colors.length]}
+            />
+          ))}
+        </RechartsPrimitive.Pie>
+        <ChartTooltip
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null
+            const [item] = payload
+            return (
+              <div className="rounded-lg border bg-background p-2 shadow-sm">
+                <div className="grid gap-1">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="font-semibold">{item.name}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {valueFormatter ? valueFormatter(item.value) : item.value}
+                  </div>
+                </div>
+              </div>
+            )
+          }}
+        />
+        {showLegend && <RechartsPrimitive.Legend />}
+      </RechartsPrimitive.PieChart>
+    </ChartContainer>
+  )
+})
+PieChart.displayName = "PieChart"
+
 export {
   ChartContainer,
   ChartTooltip,
@@ -360,4 +563,7 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  BarChart,
+  LineChart,
+  PieChart
 }
