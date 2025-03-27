@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { fadeIn, slideIn } from "@/lib/animations";
-import { getChallengeData } from "@/utils/challengeData";
+import { getChallengeData } from "@/utils/challenge";
 import ChallengeInfo from "@/components/challenge/ChallengeInfo";
 import ChallengeResources from "@/components/challenge/ChallengeResources";
 import ChallengeSteps from "@/components/challenge/ChallengeSteps";
