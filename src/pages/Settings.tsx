@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { ArrowLeft, Save, RefreshCw, Shield, Bell, Moon, Languages, CreditCard }
 import { useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 const Settings = () => {
   const { toast } = useToast();

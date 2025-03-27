@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -252,7 +251,7 @@ const Profile = () => {
                             <div className="flex items-center">
                               {activity.status === "completed" ? (
                                 <div className="flex items-center space-x-2">
-                                  <Badge variant="success" className="bg-green-500">+{activity.xp} XP</Badge>
+                                  <Badge variant="default" className="bg-green-500">+{activity.xp} XP</Badge>
                                   <CheckCircle2 className="h-5 w-5 text-green-500" />
                                 </div>
                               ) : (
@@ -428,7 +427,7 @@ const Profile = () => {
                             </div>
                           </div>
                           <div className="flex items-center">
-                            <Badge variant="success" className="mr-2 bg-green-500">+150 XP</Badge>
+                            <Badge variant="default" className="mr-2 bg-green-500">+150 XP</Badge>
                             <Button variant="ghost" size="sm" onClick={() => navigate("/challenge/1")}>
                               Revoir
                             </Button>
@@ -444,7 +443,7 @@ const Profile = () => {
                             </div>
                           </div>
                           <div className="flex items-center">
-                            <Badge variant="success" className="mr-2 bg-green-500">+150 XP</Badge>
+                            <Badge variant="default" className="mr-2 bg-green-500">+150 XP</Badge>
                             <Button variant="ghost" size="sm" onClick={() => navigate("/challenge/3")}>
                               Revoir
                             </Button>
