@@ -10,6 +10,10 @@ import Challenges from "./pages/Challenges";
 import Challenge from "./pages/Challenge";
 import Simulator from "./pages/Simulator";
 import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
+import Leaderboard from "./pages/Leaderboard";
+import Library from "./pages/Library";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +29,10 @@ const App = () => (
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/challenge/:id" element={<Challenge />} />
           <Route path="/simulators" element={<Simulator />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/library" element={<Library />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

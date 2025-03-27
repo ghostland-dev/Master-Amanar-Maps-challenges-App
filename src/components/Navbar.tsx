@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trophy, BarChart3, BookOpen, Home, User } from "lucide-react";
+import { Trophy, BarChart3, BookOpen, Home, User, Award, Library } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
@@ -30,7 +30,7 @@ const Navbar = () => {
             </Link>
           </div>
           
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/") ? "text-primary" : "text-foreground/80"}`}>
               Accueil
             </Link>
@@ -40,24 +40,42 @@ const Navbar = () => {
             <Link to="/simulators" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/simulators") ? "text-primary" : "text-foreground/80"}`}>
               Simulateurs
             </Link>
+            <Link to="/library" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/library") ? "text-primary" : "text-foreground/80"}`}>
+              Bibliothèque
+            </Link>
+            <Link to="/leaderboard" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/leaderboard") ? "text-primary" : "text-foreground/80"}`}>
+              Classement
+            </Link>
             <Link to="/dashboard" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/dashboard") ? "text-primary" : "text-foreground/80"}`}>
               Dashboard
             </Link>
           </nav>
           
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="hidden md:flex">
-              Se connecter
-            </Button>
-            <Button size="sm" className="hidden md:flex">
-              S'inscrire
-            </Button>
+            <Link to="/auth">
+              <Button variant="ghost" size="sm" className="hidden md:flex">
+                Se connecter
+              </Button>
+            </Link>
+            <Link to="/auth?tab=register">
+              <Button size="sm" className="hidden md:flex">
+                S'inscrire
+              </Button>
+            </Link>
+            
+            <Link to="/profile" className="hidden md:block">
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
             
             {/* Mobile menu button placeholder */}
             <div className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
+              <Link to="/profile">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -76,6 +94,14 @@ const Navbar = () => {
         <Link to="/simulators" className={`flex flex-col items-center p-2 ${isActive("/simulators") ? "text-primary" : "text-muted-foreground"}`}>
           <BarChart3 className="h-5 w-5" />
           <span className="text-xs mt-1">Simulateurs</span>
+        </Link>
+        <Link to="/library" className={`flex flex-col items-center p-2 ${isActive("/library") ? "text-primary" : "text-muted-foreground"}`}>
+          <Library className="h-5 w-5" />
+          <span className="text-xs mt-1">Bibliothèque</span>
+        </Link>
+        <Link to="/leaderboard" className={`flex flex-col items-center p-2 ${isActive("/leaderboard") ? "text-primary" : "text-muted-foreground"}`}>
+          <Award className="h-5 w-5" />
+          <span className="text-xs mt-1">Classement</span>
         </Link>
         <Link to="/dashboard" className={`flex flex-col items-center p-2 ${isActive("/dashboard") ? "text-primary" : "text-muted-foreground"}`}>
           <BookOpen className="h-5 w-5" />
