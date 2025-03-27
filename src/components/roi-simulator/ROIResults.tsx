@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRightLeft, Download } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePdfFromElement, generatePdfFromData } from "@/utils/pdfGenerator";
+import ResultCard from "./ResultCard";
+import InterpretationPanel from "./InterpretationPanel";
+import { formatCurrency, translatePeriod, getInterpretation } from "./utils";
 
 interface ResultsData {
   roi: number;
@@ -22,32 +25,27 @@ const ROIResults = ({ results, period }: ROIResultsProps) => {
   const printRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
-  };
-  
-  const translatePeriod = (period: string) => {
-    const periods: Record<string, string> = {
-      "day": "jour",
-      "week": "semaine",
-      "month": "mois",
-      "quarter": "trimestre",
-      "year": "année"
-    };
-    return periods[period] || period;
-  };
-  
-  const getInterpretation = (roi: number) => {
-    if (roi >= 30) {
-      return "Excellent ROI ! Votre investissement est très rentable.";
-    } else if (roi >= 15) {
-      return "Bon ROI. Votre projet est rentable et présente un bon potentiel.";
-    } else if (roi >= 0) {
-      return "ROI positif mais modeste. Cherchez des moyens d'améliorer la rentabilité.";
-    } else {
-      return "ROI négatif. Reconsidérez votre stratégie ou réduisez vos coûts.";
+  // Generate tips based on results
+  const generateTips = () => {
+    const tips = [];
+    
+    if (results.roi < 0) {
+      tips.push(`• Cherchez à réduire vos coûts opérationnels de ${Math.abs(results.profit).toFixed(0)}€ pour atteindre le seuil de rentabilité.`);
     }
+    
+    if (results.returnOnCost < 50) {
+      tips.push(`• Optimisez l'utilisation de vos ressources pour améliorer le retour sur coût.`);
+    }
+    
+    if (results.breakEvenPoint > 3 && period === "month") {
+      tips.push(`• Le point d'équilibre est assez éloigné. Envisagez d'augmenter vos revenus pour le réduire.`);
+    }
+    
+    if (results.breakEvenPoint > 1 && period === "year") {
+      tips.push(`• Plus d'un an pour rentabiliser votre investissement. Évaluez si cela correspond à vos objectifs.`);
+    }
+    
+    return tips;
   };
 
   const downloadPDF = async () => {
@@ -132,73 +130,40 @@ const ROIResults = ({ results, period }: ROIResultsProps) => {
       <CardContent className="space-y-6">
         <div ref={printRef}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-secondary/50 p-4 rounded-lg text-center hover:shadow-sm transition-all">
-              <h3 className="text-sm text-muted-foreground font-medium mb-1">ROI</h3>
-              <p className={`text-3xl font-bold ${results.roi >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {results.roi.toFixed(2)}%
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Retour sur investissement
-              </p>
-            </div>
+            <ResultCard
+              title="ROI"
+              value={results.roi}
+              suffix="%"
+              description="Retour sur investissement"
+              isPositive={results.roi >= 0}
+            />
             
-            <div className="bg-secondary/50 p-4 rounded-lg text-center hover:shadow-sm transition-all">
-              <h3 className="text-sm text-muted-foreground font-medium mb-1">Profit Net</h3>
-              <p className={`text-3xl font-bold ${results.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {formatCurrency(results.profit)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Revenus - Coûts
-              </p>
-            </div>
+            <ResultCard
+              title="Profit Net"
+              value={formatCurrency(results.profit)}
+              description="Revenus - Coûts"
+              isPositive={results.profit >= 0}
+            />
             
-            <div className="bg-secondary/50 p-4 rounded-lg text-center hover:shadow-sm transition-all">
-              <h3 className="text-sm text-muted-foreground font-medium mb-1">Retour sur coût</h3>
-              <p className={`text-3xl font-bold ${results.returnOnCost >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {results.returnOnCost.toFixed(2)}%
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Profit / Coûts opérationnels
-              </p>
-            </div>
+            <ResultCard
+              title="Retour sur coût"
+              value={results.returnOnCost}
+              suffix="%"
+              description="Profit / Coûts opérationnels"
+              isPositive={results.returnOnCost >= 0}
+            />
             
-            <div className="bg-secondary/50 p-4 rounded-lg text-center hover:shadow-sm transition-all">
-              <h3 className="text-sm text-muted-foreground font-medium mb-1">Point d'équilibre</h3>
-              <p className="text-3xl font-bold">
-                {results.breakEvenPoint.toFixed(1)} {translatePeriod(period)}s
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Temps nécessaire pour récupérer l'investissement
-              </p>
-            </div>
+            <ResultCard
+              title="Point d'équilibre"
+              value={`${results.breakEvenPoint.toFixed(1)} ${translatePeriod(period)}s`}
+              description="Temps nécessaire pour récupérer l'investissement"
+            />
           </div>
           
-          <div className="pt-6 space-y-4">
-            <div className="bg-primary/5 p-4 rounded-lg hover:shadow-sm transition-all">
-              <h3 className="text-sm font-medium mb-2">Interprétation des résultats</h3>
-              <p className="text-sm text-muted-foreground">
-                {getInterpretation(results.roi)}
-              </p>
-            </div>
-            
-            <div className="bg-primary/5 p-4 rounded-lg hover:shadow-sm transition-all">
-              <h3 className="text-sm font-medium mb-2">Conseils personnalisés</h3>
-              <ul className="text-sm text-muted-foreground space-y-2">
-                {results.roi < 0 && (
-                  <li>• Cherchez à réduire vos coûts opérationnels de {Math.abs(results.profit).toFixed(0)}€ pour atteindre le seuil de rentabilité.</li>
-                )}
-                {results.returnOnCost < 50 && (
-                  <li>• Optimisez l'utilisation de vos ressources pour améliorer le retour sur coût.</li>
-                )}
-                {results.breakEvenPoint > 3 && period === "month" && (
-                  <li>• Le point d'équilibre est assez éloigné. Envisagez d'augmenter vos revenus pour le réduire.</li>
-                )}
-                {results.breakEvenPoint > 1 && period === "year" && (
-                  <li>• Plus d'un an pour rentabiliser votre investissement. Évaluez si cela correspond à vos objectifs.</li>
-                )}
-              </ul>
-            </div>
-          </div>
+          <InterpretationPanel 
+            interpretation={getInterpretation(results.roi)}
+            tips={generateTips()}
+          />
         </div>
         
         <div className="border-t pt-4 mt-4">
