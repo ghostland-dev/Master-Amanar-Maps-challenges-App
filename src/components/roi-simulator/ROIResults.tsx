@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from "react";
-import { ArrowUpRight, ArrowDownRight, CalendarDays, LineChart } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import ResultCard from "./ResultCard";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
@@ -11,10 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Chart,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipItem,
   BarChart,
 } from "@/components/ui/chart";
 
@@ -122,26 +120,24 @@ const ROIResults = ({
         </CardHeader>
         <CardContent className="pb-4">
           <div ref={chartRef} className="h-[200px] w-full">
-            <ChartContainer>
-              <Chart id="roi-chart" config={{
+            <ChartContainer
+              config={{
                 grid: { color: "var(--primary)" },
                 investment: { color: "var(--muted)" },
                 value: { color: "var(--primary)" },
-              }}>
-                <ChartTooltip>
-                  <ChartTooltipItem name="Investissement" color="investment" />
-                  <ChartTooltipItem name="Valeur" color="value" />
-                </ChartTooltip>
+              }}
+            >
+              {({ chartId }) => (
                 <BarChart 
                   data={chartData}
                   categories={["Valeur"]}
                   index="name"
                   colors={["var(--primary)"]}
-                  stack={false}
-                  valueFormatter={(value) => formatCurrency(value)}
+                  valueFormatter={(value) => formatCurrency(Number(value))}
                   layout={isDesktop ? "vertical" : "horizontal"}
+                  showLegend={false}
                 />
-              </Chart>
+              )}
             </ChartContainer>
           </div>
         </CardContent>

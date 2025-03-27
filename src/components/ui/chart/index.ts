@@ -24,3 +24,6 @@ export {
   type PieChartProps,
   type ChartConfig,
 };
+
+// Export ChartContainer as Chart for backward compatibility
+export const Chart = ChartContainer;
