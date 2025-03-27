@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Challenges from "./pages/Challenges";
-import Challenge from "./pages/Challenge";
+import Challenge from "./pages/challenge";
 import Simulator from "./pages/Simulator";
 import MarginCalculator from "./pages/MarginCalculator";
 import AdBudgetCalculator from "./pages/AdBudgetCalculator";
