@@ -9,6 +9,7 @@ import { OverviewTab } from "@/components/admin/analytics/OverviewTab";
 import { UsersTab } from "@/components/admin/analytics/UsersTab";
 import { ChallengesTab } from "@/components/admin/analytics/ChallengesTab";
 import { RevenueTab } from "@/components/admin/analytics/RevenueTab";
+import { FileDown } from "lucide-react";
 
 const AnalyticsManager = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -28,7 +29,7 @@ const AnalyticsManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
       <AdminNavbar />
       <div className="container px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -55,6 +56,7 @@ const AnalyticsManager = () => {
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleExportData}>
+              <FileDown className="h-4 w-4 mr-2" />
               Exporter
             </Button>
           </div>
@@ -77,22 +79,22 @@ const AnalyticsManager = () => {
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview">
+          <TabsContent value="overview" className="animate-fade-in">
             <OverviewTab timeRange={timeRange} />
           </TabsContent>
 
           {/* Users Tab */}
-          <TabsContent value="users">
+          <TabsContent value="users" className="animate-fade-in">
             <UsersTab />
           </TabsContent>
 
           {/* Challenges Tab */}
-          <TabsContent value="challenges">
+          <TabsContent value="challenges" className="animate-fade-in">
             <ChallengesTab />
           </TabsContent>
 
           {/* Revenue Tab */}
-          <TabsContent value="revenue">
+          <TabsContent value="revenue" className="animate-fade-in">
             <RevenueTab />
           </TabsContent>
         </Tabs>

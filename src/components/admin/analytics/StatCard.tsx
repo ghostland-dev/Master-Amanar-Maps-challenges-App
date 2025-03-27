@@ -40,9 +40,9 @@ export const StatCard = ({
   };
   
   const cardStyles = {
-    default: "",
-    outline: "border border-border",
-    glass: "glass hover-lift"
+    default: "hover:shadow-md transition-all duration-300",
+    outline: "border border-border hover:shadow-md transition-all duration-300",
+    glass: "bg-white/80 backdrop-blur-md border border-white/20 shadow-sm hover:shadow-md transition-all duration-300"
   };
 
   return (

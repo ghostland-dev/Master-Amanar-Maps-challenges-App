@@ -40,11 +40,11 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/challenge/:id" element={<Challenge />} />
-          <Route path="/simulators" element={<Simulator />} />
-          <Route path="/simulators/margin" element={<MarginCalculator />} />
-          <Route path="/simulators/ad-budget" element={<AdBudgetCalculator />} />
-          <Route path="/simulators/passive-income" element={<PassiveIncomeCalculator />} />
-          <Route path="/simulators/trend-analysis" element={<TrendAnalysis />} />
+          <Route path="/simulator" element={<Simulator />} />
+          <Route path="/simulator/margin" element={<MarginCalculator />} />
+          <Route path="/simulator/ad-budget" element={<AdBudgetCalculator />} />
+          <Route path="/simulator/passive-income" element={<PassiveIncomeCalculator />} />
+          <Route path="/simulator/trend-analysis" element={<TrendAnalysis />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
