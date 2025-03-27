@@ -27,7 +27,21 @@ const AdminNavbar = () => {
     { label: "Paramètres", href: "/admin/settings", icon: Settings },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  // Fix the isActive function to ensure exact path matching
+  const isActive = (path: string) => {
+    // For exact matches (like /admin)
+    if (path === "/admin" && location.pathname === "/admin") {
+      return true;
+    }
+    
+    // For other routes, make sure we're checking the exact path
+    // This prevents /admin/subscriptions from matching when on /admin/settings
+    if (path !== "/admin") {
+      return location.pathname === path;
+    }
+    
+    return false;
+  };
 
   const handleNavigation = (path: string) => {
     navigate(path);
