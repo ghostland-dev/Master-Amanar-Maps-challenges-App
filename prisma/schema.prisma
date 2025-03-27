@@ -1,0 +1,276 @@
+
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modèles utilisateur et authentification
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          Role      @default(USER)
+  status        UserStatus @default(ACTIVE)
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  plan          Plan      @default(FREE)
+  
+  // Relations
+  accounts            Account[]
+  sessions            Session[]
+  challengeProgress   ChallengeProgress[]
+  badges              BadgeAward[]
+  notificationsReceived Notification[] @relation("userNotifications")
+  submissions         ChallengeSubmission[]
+  simulationHistory   SimulationHistory[]
+  libraryProgress     LibraryProgress[]
+  transactions        Transaction[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Modèles Challenge
+model Challenge {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  category    String
+  difficulty  String
+  xpReward    Int
+  duration    Int      // en jours
+  steps       ChallengeStep[]
+  resources   ChallengeResource[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+  
+  // Relations
+  progress    ChallengeProgress[]
+  submissions ChallengeSubmission[]
+}
+
+model ChallengeStep {
+  id           String   @id @default(cuid())
+  challengeId  String
+  title        String
+  description  String   @db.Text
+  order        Int
+  isOptional   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model ChallengeResource {
+  id           String   @id @default(cuid())
+  challengeId  String
+  type         String   // article, video, pdf
+  title        String
+  url          String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model ChallengeProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  currentStep Int      @default(0)
+  completed   Boolean  @default(false)
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, challengeId])
+}
+
+model ChallengeSubmission {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  content     String   @db.Text
+  status      SubmissionStatus @default(PENDING)
+  feedback    String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+// Modèles Classement et Badges
+model Badge {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  image       String
+  category    String
+  requirement String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  awards      BadgeAward[]
+}
+
+model BadgeAward {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, badgeId])
+}
+
+// Modèles Bibliothèque
+model LibraryItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  category    String
+  type        String   // article, video, book, podcast
+  content     String?  @db.Text
+  url         String?
+  image       String?
+  author      String?
+  duration    Int?     // en minutes
+  difficulty  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  progress    LibraryProgress[]
+}
+
+model LibraryProgress {
+  id            String   @id @default(cuid())
+  userId        String
+  libraryItemId String
+  progress      Int      @default(0) // pourcentage
+  completed     Boolean  @default(false)
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+  
+  // Relations
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  libraryItem   LibraryItem @relation(fields: [libraryItemId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, libraryItemId])
+}
+
+// Modèles Simulateurs
+model SimulationHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // margin, adBudget, passiveIncome, trendAnalysis
+  parameters  Json
+  results     Json
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Modèles Notifications
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String   // info, success, warning, error
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  // Relations
+  user      User     @relation("userNotifications", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Modèles Abonnements et Transactions
+model Transaction {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  currency      String   @default("EUR")
+  type          String   // subscription, purchase
+  status        String   // completed, pending, failed
+  paymentMethod String?
+  paymentId     String?
+  createdAt     DateTime @default(now())
+  
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Enums pour les types
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  BLOCKED
+}
+
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
