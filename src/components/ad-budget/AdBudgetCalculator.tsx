@@ -21,6 +21,19 @@ export interface AdBudgetResult {
   };
 }
 
+export interface AdBudgetInputs {
+  monthlyRevenue: number;
+  targetROAS: number;
+  industryType: string;
+  includeOrganic: boolean;
+  conversionRate: number;
+  averageOrderValue: number;
+}
+
+// Storage keys for localStorage
+const STORAGE_KEY_RESULTS = 'adBudget_results';
+const STORAGE_KEY_INPUTS = 'adBudget_inputs';
+
 const AdBudgetCalculator = () => {
   const { toast } = useToast();
   const simulatorRef = useRef<HTMLDivElement>(null);
@@ -35,14 +48,63 @@ const AdBudgetCalculator = () => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState<boolean>(false);
   const [results, setResults] = useState<AdBudgetResult | null>(null);
   
+  // Load saved data on initial mount
   useEffect(() => {
     document.title = "FinQuest - Calcul Budget Publicitaire";
+    
+    // Load saved inputs and results
+    try {
+      const savedInputs = localStorage.getItem(STORAGE_KEY_INPUTS);
+      const savedResults = localStorage.getItem(STORAGE_KEY_RESULTS);
+      
+      if (savedInputs) {
+        const parsedInputs: AdBudgetInputs = JSON.parse(savedInputs);
+        setMonthlyRevenue(parsedInputs.monthlyRevenue);
+        setTargetROAS(parsedInputs.targetROAS);
+        setIndustryType(parsedInputs.industryType);
+        setIncludeOrganic(parsedInputs.includeOrganic);
+        setConversionRate(parsedInputs.conversionRate);
+        setAverageOrderValue(parsedInputs.averageOrderValue);
+      }
+      
+      if (savedResults) {
+        const parsedResults: AdBudgetResult = JSON.parse(savedResults);
+        setResults(parsedResults);
+        
+        // Wait for state update to complete before animating
+        setTimeout(() => {
+          if (resultsRef.current) {
+            slideIn(resultsRef.current, 'up');
+          }
+        }, 100);
+      }
+    } catch (error) {
+      console.error("Error loading saved ad budget data:", error);
+    }
     
     // Animate simulator on initial render
     if (simulatorRef.current) {
       slideIn(simulatorRef.current, 'right');
     }
   }, []);
+  
+  // Save inputs and results to localStorage whenever they change
+  useEffect(() => {
+    // Only save if we have results
+    if (results) {
+      const inputsToSave: AdBudgetInputs = {
+        monthlyRevenue,
+        targetROAS,
+        industryType,
+        includeOrganic,
+        conversionRate,
+        averageOrderValue
+      };
+      
+      localStorage.setItem(STORAGE_KEY_INPUTS, JSON.stringify(inputsToSave));
+      localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(results));
+    }
+  }, [results, monthlyRevenue, targetROAS, industryType, includeOrganic, conversionRate, averageOrderValue]);
   
   // Format currency
   const formatCurrency = (value: number) => {
@@ -74,6 +136,15 @@ const AdBudgetCalculator = () => {
     setAverageOrderValue(75);
     setIsAdvancedOpen(false);
     setResults(null);
+    
+    // Clear localStorage data
+    localStorage.removeItem(STORAGE_KEY_INPUTS);
+    localStorage.removeItem(STORAGE_KEY_RESULTS);
+    
+    toast({
+      title: "Réinitialisation effectuée",
+      description: "Toutes les données ont été réinitialisées",
+    });
   };
   
   const calculate = () => {
@@ -120,13 +191,15 @@ const AdBudgetCalculator = () => {
       display: recommendedBudget * factor.displayRatio
     };
     
-    setResults({
+    const newResults = {
       recommendedBudget,
       percentageOfRevenue: budgetPercentage * 100,
       estimatedROI,
       projectedRevenue,
       breakdown
-    });
+    };
+    
+    setResults(newResults);
     
     // Wait for state update to complete before animating
     setTimeout(() => {
@@ -134,6 +207,11 @@ const AdBudgetCalculator = () => {
         slideIn(resultsRef.current, 'up');
       }
     }, 0);
+    
+    toast({
+      title: "Calcul effectué",
+      description: "Votre budget publicitaire a été calculé avec succès",
+    });
   };
 
   const handleExportPdf = () => {
@@ -148,6 +226,16 @@ const AdBudgetCalculator = () => {
     };
     
     exportAdBudgetToPdf(results, inputs, toast);
+  };
+  
+  const clearSavedData = () => {
+    localStorage.removeItem(STORAGE_KEY_INPUTS);
+    localStorage.removeItem(STORAGE_KEY_RESULTS);
+    
+    toast({
+      title: "Données effacées",
+      description: "Les données sauvegardées ont été supprimées",
+    });
   };
   
   return (
@@ -177,6 +265,7 @@ const AdBudgetCalculator = () => {
                   onAdvancedOpenChange={setIsAdvancedOpen}
                   onCalculate={calculate}
                   onReset={reset}
+                  onClearSavedData={clearSavedData}
                 />
                 
                 <AdBudgetFooter />
