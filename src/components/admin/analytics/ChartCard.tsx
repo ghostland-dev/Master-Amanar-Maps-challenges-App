@@ -11,13 +11,15 @@ interface ChartCardProps {
 
 export const ChartCard = ({ title, description, children, className }: ChartCardProps) => {
   return (
-    <Card className={`hover:shadow-md transition-all duration-300 ${className}`}>
+    <Card className={`hover:shadow-md transition-all duration-300 animate-fade-in ${className}`}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        {children}
+      <CardContent className="flex justify-center items-center">
+        <div className="w-full h-full">
+          {children}
+        </div>
       </CardContent>
     </Card>
   );

@@ -40,9 +40,9 @@ export const StatCard = ({
   };
   
   const cardStyles = {
-    default: "hover:shadow-md transition-all duration-300",
-    outline: "border border-border hover:shadow-md transition-all duration-300",
-    glass: "bg-white/80 backdrop-blur-md border border-white/20 shadow-sm hover:shadow-md transition-all duration-300"
+    default: "hover:shadow-md transition-all duration-300 animate-fade-in",
+    outline: "border border-border hover:shadow-md transition-all duration-300 animate-fade-in",
+    glass: "bg-white/80 backdrop-blur-md border border-white/20 shadow-sm hover:shadow-md transition-all duration-300 animate-fade-in"
   };
 
   return (
@@ -65,7 +65,7 @@ export const StatCard = ({
               </div>
             )}
           </div>
-          <div className={cn("h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center", iconClassName)}>
+          <div className={cn("h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center transition-transform hover:scale-110", iconClassName)}>
             <Icon className="h-5 w-5 text-primary" />
           </div>
         </div>
