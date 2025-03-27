@@ -1,43 +1,49 @@
 
-import { ReactNode } from "react";
+import React, { useEffect, useRef } from "react";
+import { Card } from "@/components/ui/card";
+import { animateNumber } from "@/lib/animations";
 
 interface ResultCardProps {
   title: string;
-  value: string | number;
-  description: string;
-  isPositive?: boolean;
-  prefix?: string;
+  value: number | string;
   suffix?: string;
+  prefix?: string;
+  colorClass?: string;
+  formatter?: (value: number) => string;
+  delay?: number;
+  animate?: boolean;
 }
 
 const ResultCard = ({
   title,
   value,
-  description,
-  isPositive,
-  prefix,
-  suffix
+  suffix = "",
+  prefix = "",
+  colorClass = "text-primary",
+  formatter = (v) => v.toFixed(2),
+  delay = 0,
+  animate = true,
 }: ResultCardProps) => {
-  // Determine text color based on isPositive (only if provided)
-  const valueColor = isPositive !== undefined
-    ? isPositive ? 'text-green-600' : 'text-red-600'
-    : '';
-
-  // Format display value if needed
-  const displayValue = typeof value === 'number' 
-    ? value.toFixed(2)
-    : value;
-
+  const valueRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (valueRef.current && typeof value === 'number' && animate) {
+      animateNumber(valueRef.current, 0, value, 1, (v) => `${prefix}${formatter(v)}${suffix}`);
+    }
+  }, [value, formatter, prefix, suffix, animate]);
+  
   return (
-    <div className="bg-secondary/50 p-4 rounded-lg text-center hover:shadow-sm transition-all">
-      <h3 className="text-sm text-muted-foreground font-medium mb-1">{title}</h3>
-      <p className={`text-3xl font-bold ${valueColor}`}>
-        {prefix}{displayValue}{suffix}
-      </p>
-      <p className="text-xs text-muted-foreground mt-1">
-        {description}
-      </p>
-    </div>
+    <Card className="p-4 text-center border-border/40 hover:border-border/60 transition-colors duration-300 hover:shadow-sm bg-card/40">
+      <div className="text-sm text-muted-foreground mb-1">{title}</div>
+      <div
+        ref={valueRef}
+        className={`text-xl font-bold ${colorClass}`}
+      >
+        {typeof value === 'number' 
+          ? `${prefix}${formatter(value)}${suffix}` 
+          : `${prefix}${value}${suffix}`}
+      </div>
+    </Card>
   );
 };
 
