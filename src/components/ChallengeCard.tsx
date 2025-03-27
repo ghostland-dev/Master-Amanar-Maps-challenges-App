@@ -1,7 +1,7 @@
 
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Clock, Award, ArrowRight } from "lucide-react";
+import { Clock, Award, ArrowRight, Users, Target, BookOpen } from "lucide-react";
 import { Chip } from "@/components/ui/chip";
 import { Progress } from "@/components/ui/progress";
 
@@ -15,6 +15,9 @@ interface ChallengeCardProps {
   duration: string;
   xp: number;
   progress?: number;
+  participants?: number;
+  steps?: number;
+  isPopular?: boolean;
 }
 
 const ChallengeCard = ({
@@ -27,6 +30,9 @@ const ChallengeCard = ({
   duration,
   xp,
   progress = 0,
+  participants = 0,
+  steps = 0,
+  isPopular = false,
 }: ChallengeCardProps) => {
   const difficultyMap = {
     beginner: {
@@ -51,9 +57,16 @@ const ChallengeCard = ({
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
               {icon}
             </div>
-            <Chip variant="neutral" size="sm">
-              {category}
-            </Chip>
+            <div className="flex gap-2">
+              {isPopular && (
+                <Chip variant="danger" size="sm">
+                  Populaire
+                </Chip>
+              )}
+              <Chip variant="neutral" size="sm">
+                {category}
+              </Chip>
+            </div>
           </div>
           
           <h3 className="text-xl font-medium mb-2">{title}</h3>
@@ -68,6 +81,18 @@ const ChallengeCard = ({
               <Award className="mr-1 h-4 w-4" />
               {xp} XP
             </div>
+            {steps > 0 && (
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Target className="mr-1 h-4 w-4" />
+                {steps} étapes
+              </div>
+            )}
+            {participants > 0 && (
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Users className="mr-1 h-4 w-4" />
+                {participants} participants
+              </div>
+            )}
             <Chip variant={difficultyMap[difficulty].color} size="sm">
               {difficultyMap[difficulty].label}
             </Chip>
