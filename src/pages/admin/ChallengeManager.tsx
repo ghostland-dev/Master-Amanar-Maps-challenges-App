@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import { Button } from "@/components/ui/button";
@@ -981,4 +982,413 @@ const ChallengeManager = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="edit-isActive" 
+                        checked={currentChallenge.isActive} 
+                        onCheckedChange={(checked) => 
+                          setCurrentChallenge({
+                            ...currentChallenge, 
+                            isActive: checked as boolean
+                          })
+                        }
+                      />
+                      <Label htmlFor="edit-isActive">Challenge actif</Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="edit-isNew" 
+                        checked={currentChallenge.isNew} 
+                        onCheckedChange={(checked) => 
+                          setCurrentChallenge({
+                            ...currentChallenge, 
+                            isNew: checked as boolean
+                          })
+                        }
+                      />
+                      <Label htmlFor="edit-isNew">Marquer comme nouveau</Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="edit-isPopular" 
+                        checked={currentChallenge.isPopular} 
+                        onCheckedChange={(checked) => 
+                          setCurrentChallenge({
+                            ...currentChallenge, 
+                            isPopular: checked as boolean
+                          })
+                        }
+                      />
+                      <Label htmlFor="edit-isPopular">Marquer comme populaire</Label>
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                {/* Steps Tab */}
+                <TabsContent value="steps" className="space-y-4">
+                  <div className="grid gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-xl">Étapes du challenge</CardTitle>
+                        <CardDescription>
+                          Les étapes permettent de structurer le parcours des utilisateurs dans le challenge
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {/* Form for adding a step */}
+                          <div className="grid gap-4 border p-4 rounded-lg">
+                            <h4 className="font-medium">Ajouter une étape</h4>
+                            <div className="grid grid-cols-1 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="step-title">Titre de l'étape</Label>
+                                <Input
+                                  id="step-title"
+                                  value={stepForm.title}
+                                  onChange={(e) => setStepForm({
+                                    ...stepForm,
+                                    title: e.target.value
+                                  })}
+                                  placeholder="Ex: Recherche de fournisseurs"
+                                />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <Label htmlFor="step-description">Description</Label>
+                                <Textarea
+                                  id="step-description"
+                                  value={stepForm.description}
+                                  onChange={(e) => setStepForm({
+                                    ...stepForm,
+                                    description: e.target.value
+                                  })}
+                                  placeholder="Décrivez cette étape..."
+                                  rows={2}
+                                />
+                              </div>
+                              
+                              <div className="flex flex-wrap gap-4 pt-2">
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="step-completed"
+                                    checked={stepForm.isCompleted}
+                                    onCheckedChange={(checked) => 
+                                      setStepForm({
+                                        ...stepForm,
+                                        isCompleted: checked as boolean
+                                      })
+                                    }
+                                  />
+                                  <Label htmlFor="step-completed">Marquée comme complétée</Label>
+                                </div>
+                                
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id="step-locked"
+                                    checked={stepForm.isLocked}
+                                    onCheckedChange={(checked) => 
+                                      setStepForm({
+                                        ...stepForm,
+                                        isLocked: checked as boolean
+                                      })
+                                    }
+                                  />
+                                  <Label htmlFor="step-locked">Bloquer cette étape</Label>
+                                </div>
+                              </div>
+                              
+                              <Button className="mt-2" onClick={handleAddStep}>
+                                <PlusSquare className="h-4 w-4 mr-2" />
+                                Ajouter l'étape
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* List of steps */}
+                          <div className="space-y-2 mt-4">
+                            <h4 className="font-medium">Étapes existantes</h4>
+                            {currentChallenge.steps.length === 0 ? (
+                              <div className="text-center py-4 border rounded-lg">
+                                <p className="text-muted-foreground">
+                                  Aucune étape créée pour ce challenge.
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                {currentChallenge.steps.map((step, index) => (
+                                  <div 
+                                    key={step.id} 
+                                    className="flex items-start justify-between border rounded-lg p-3"
+                                  >
+                                    <div className="flex items-start gap-3">
+                                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                                        {step.isLocked ? (
+                                          <Lock className="h-4 w-4" />
+                                        ) : step.isCompleted ? (
+                                          <CheckCircle className="h-4 w-4 text-primary" />
+                                        ) : (
+                                          <Play className="h-4 w-4" />
+                                        )}
+                                      </div>
+                                      <div>
+                                        <div className="font-medium">
+                                          {index + 1}. {step.title}
+                                          {step.isLocked && (
+                                            <Chip variant="primary" size="sm" className="ml-2">
+                                              Bloquée
+                                            </Chip>
+                                          )}
+                                          {step.isCompleted && (
+                                            <Chip variant="secondary" size="sm" className="ml-2">
+                                              Complétée
+                                            </Chip>
+                                          )}
+                                        </div>
+                                        <div className="text-sm text-muted-foreground">
+                                          {step.description}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => handleDeleteStep(step.id)}
+                                      className="h-8 w-8"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+                
+                {/* Resources Tab */}
+                <TabsContent value="resources" className="space-y-4">
+                  <div className="grid gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-xl">Ressources du challenge</CardTitle>
+                        <CardDescription>
+                          Ajoutez des ressources utiles pour les participants du challenge
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {/* Form for adding a resource */}
+                          <div className="grid gap-4 border p-4 rounded-lg">
+                            <h4 className="font-medium">Ajouter une ressource</h4>
+                            <div className="grid grid-cols-1 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="resource-title">Titre de la ressource</Label>
+                                <Input
+                                  id="resource-title"
+                                  value={resourceForm.title}
+                                  onChange={(e) => setResourceForm({
+                                    ...resourceForm,
+                                    title: e.target.value
+                                  })}
+                                  placeholder="Ex: Guide d'introduction"
+                                />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <Label htmlFor="resource-type">Type de ressource</Label>
+                                <Select
+                                  value={resourceForm.type}
+                                  onValueChange={(value: "pdf" | "template" | "simulator" | "video") => 
+                                    setResourceForm({
+                                      ...resourceForm,
+                                      type: value
+                                    })
+                                  }
+                                >
+                                  <SelectTrigger id="resource-type">
+                                    <SelectValue placeholder="Sélectionner un type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pdf">Document PDF</SelectItem>
+                                    <SelectItem value="template">Modèle/Template</SelectItem>
+                                    <SelectItem value="simulator">Simulateur</SelectItem>
+                                    <SelectItem value="video">Vidéo</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <Label htmlFor="resource-url">URL de la ressource</Label>
+                                <Input
+                                  id="resource-url"
+                                  value={resourceForm.url}
+                                  onChange={(e) => setResourceForm({
+                                    ...resourceForm,
+                                    url: e.target.value
+                                  })}
+                                  placeholder="https://..."
+                                />
+                              </div>
+                              
+                              <Button className="mt-2" onClick={handleAddResource}>
+                                <PlusSquare className="h-4 w-4 mr-2" />
+                                Ajouter la ressource
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* List of resources */}
+                          <div className="space-y-2 mt-4">
+                            <h4 className="font-medium">Ressources existantes</h4>
+                            {currentChallenge.resources.length === 0 ? (
+                              <div className="text-center py-4 border rounded-lg">
+                                <p className="text-muted-foreground">
+                                  Aucune ressource ajoutée pour ce challenge.
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                {currentChallenge.resources.map((resource) => (
+                                  <div 
+                                    key={resource.id} 
+                                    className="flex items-center justify-between border rounded-lg p-3"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                                        {resource.type === "pdf" && <BookOpen className="h-4 w-4" />}
+                                        {resource.type === "template" && <Layers className="h-4 w-4" />}
+                                        {resource.type === "simulator" && <Target className="h-4 w-4" />}
+                                        {resource.type === "video" && <Play className="h-4 w-4" />}
+                                      </div>
+                                      <div>
+                                        <div className="font-medium">
+                                          {resource.title}
+                                        </div>
+                                        <div className="text-xs flex items-center gap-2">
+                                          <Badge variant="outline" className="font-normal">
+                                            {resourceTypeLabels[resource.type]}
+                                          </Badge>
+                                          <a
+                                            href={resource.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary flex items-center hover:underline"
+                                          >
+                                            <Link className="h-3 w-3 mr-1" />
+                                            Voir la ressource
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => handleDeleteResource(resource.id)}
+                                      className="h-8 w-8"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Form for adding rewards */}
+                          <div className="mt-6 pt-6 border-t">
+                            <h4 className="font-medium mb-4">Récompenses du challenge</h4>
+                            <div className="flex items-end gap-2 mb-4">
+                              <div className="flex-1">
+                                <Label htmlFor="reward-name" className="mb-2">
+                                  Ajouter une récompense
+                                </Label>
+                                <Input
+                                  id="reward-name"
+                                  value={rewardForm}
+                                  onChange={(e) => setRewardForm(e.target.value)}
+                                  placeholder="Ex: Badge Expert, 50 XP, etc."
+                                />
+                              </div>
+                              <Button onClick={handleAddReward}>
+                                <PlusSquare className="h-4 w-4 mr-2" />
+                                Ajouter
+                              </Button>
+                            </div>
+                            
+                            {currentChallenge.rewards.length === 0 ? (
+                              <div className="text-center py-4 border rounded-lg">
+                                <p className="text-muted-foreground">
+                                  Aucune récompense définie pour ce challenge.
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="flex flex-wrap gap-2">
+                                {currentChallenge.rewards.map((reward, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center border rounded-full px-3 py-1.5"
+                                  >
+                                    <Award className="h-4 w-4 text-primary mr-2" />
+                                    <span className="text-sm">{reward}</span>
+                                    <button
+                                      className="ml-2 text-muted-foreground hover:text-foreground"
+                                      onClick={() => handleDeleteReward(index)}
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            )}
+            
+            <DialogFooter className="mt-6">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Annuler
+              </Button>
+              <Button onClick={handleUpdateChallenge}>Mettre à jour</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Supprimer le challenge</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer ce challenge ? Cette action est irréversible.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-4">
+              <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                Annuler
+              </Button>
+              <Button 
+                variant="destructive" 
+                onClick={handleDeleteChallenge}
+              >
+                Supprimer
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  );
+};
+
+export default ChallengeManager;
