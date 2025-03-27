@@ -76,7 +76,7 @@ const PaymentGatewayManager = () => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === 'checkbox' ? checked : value;
     
-    // Fix: Ensure we're providing all required properties when updating state
+    // Fix: Provide all required properties when updating state
     setStripeConfig(prevConfig => ({
       ...prevConfig,
       [name]: inputValue
@@ -87,7 +87,7 @@ const PaymentGatewayManager = () => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === 'checkbox' ? checked : value;
     
-    // Fix: Ensure we're providing all required properties when updating state
+    // Fix: Provide all required properties when updating state
     setPaypalConfig(prevConfig => ({
       ...prevConfig,
       [name]: inputValue
