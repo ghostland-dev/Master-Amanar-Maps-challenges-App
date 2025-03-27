@@ -14,8 +14,8 @@ import { exportAdBudgetToPdf } from "@/utils/pdf/exportAdBudget";
 
 const AdBudgetCalculator = () => {
   const { toast } = useToast();
-  const simulatorRef = useRef<HTMLDivElement | null>(null);
-  const resultsRef = useRef<HTMLDivElement | null>(null);
+  const simulatorRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   
   const [monthlyRevenue, setMonthlyRevenue] = useState<number>(10000);
   const [targetROAS, setTargetROAS] = useState<number>(3);
@@ -39,6 +39,11 @@ const AdBudgetCalculator = () => {
   
   useEffect(() => {
     document.title = "FinQuest - Calcul Budget Publicitaire";
+    
+    // Animate simulator on initial render
+    if (simulatorRef.current) {
+      slideIn(simulatorRef.current, 'right');
+    }
   }, []);
   
   // Format currency
@@ -125,9 +130,12 @@ const AdBudgetCalculator = () => {
       breakdown
     });
     
-    if (resultsRef) {
-      slideIn(resultsRef, 'up');
-    }
+    // Wait for state update to complete before animating
+    setTimeout(() => {
+      if (resultsRef.current) {
+        slideIn(resultsRef.current, 'up');
+      }
+    }, 0);
   };
 
   const handleExportPdf = () => {
@@ -166,7 +174,7 @@ const AdBudgetCalculator = () => {
         
           <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div ref={(el) => { if (el && !simulatorRef) slideIn(el, 'right') }}>
+              <div ref={simulatorRef}>
                 <Card className="glass">
                   <CardHeader>
                     <CardTitle className="flex items-center">
@@ -328,7 +336,7 @@ const AdBudgetCalculator = () => {
               </div>
               
               {results && (
-                <div ref={(el) => { if (el && !resultsRef) slideIn(el, 'up') }}>
+                <div ref={resultsRef}>
                   <Card className="glass">
                     <CardHeader>
                       <div className="flex items-center justify-between">
