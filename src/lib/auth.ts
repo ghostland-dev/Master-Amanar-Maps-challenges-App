@@ -133,6 +133,3 @@ function generateToken(user: any): string {
   
   return `${header}.${payload}.${signature}`;
 }
-
-// Install jwt-decode for token handling
-<lov-add-dependency>jwt-decode@latest</lov-add-dependency>
