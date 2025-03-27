@@ -1,0 +1,89 @@
+
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Trophy, BarChart3, BookOpen, Home, User } from "lucide-react";
+
+const Navbar = () => {
+  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-2">
+              <Trophy className="h-6 w-6 text-primary" />
+              <span className="text-xl font-semibold text-foreground">FinQuest</span>
+            </Link>
+          </div>
+          
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link to="/" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/") ? "text-primary" : "text-foreground/80"}`}>
+              Accueil
+            </Link>
+            <Link to="/challenges" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/challenges") ? "text-primary" : "text-foreground/80"}`}>
+              Challenges
+            </Link>
+            <Link to="/simulators" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/simulators") ? "text-primary" : "text-foreground/80"}`}>
+              Simulateurs
+            </Link>
+            <Link to="/dashboard" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/dashboard") ? "text-primary" : "text-foreground/80"}`}>
+              Dashboard
+            </Link>
+          </nav>
+          
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="sm" className="hidden md:flex">
+              Se connecter
+            </Button>
+            <Button size="sm" className="hidden md:flex">
+              S'inscrire
+            </Button>
+            
+            {/* Mobile menu button placeholder */}
+            <div className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border flex justify-around py-2">
+        <Link to="/" className={`flex flex-col items-center p-2 ${isActive("/") ? "text-primary" : "text-muted-foreground"}`}>
+          <Home className="h-5 w-5" />
+          <span className="text-xs mt-1">Accueil</span>
+        </Link>
+        <Link to="/challenges" className={`flex flex-col items-center p-2 ${isActive("/challenges") ? "text-primary" : "text-muted-foreground"}`}>
+          <Trophy className="h-5 w-5" />
+          <span className="text-xs mt-1">Challenges</span>
+        </Link>
+        <Link to="/simulators" className={`flex flex-col items-center p-2 ${isActive("/simulators") ? "text-primary" : "text-muted-foreground"}`}>
+          <BarChart3 className="h-5 w-5" />
+          <span className="text-xs mt-1">Simulateurs</span>
+        </Link>
+        <Link to="/dashboard" className={`flex flex-col items-center p-2 ${isActive("/dashboard") ? "text-primary" : "text-muted-foreground"}`}>
+          <BookOpen className="h-5 w-5" />
+          <span className="text-xs mt-1">Dashboard</span>
+        </Link>
+      </div>
+    </header>
+  );
+};
+
+export default Navbar;
