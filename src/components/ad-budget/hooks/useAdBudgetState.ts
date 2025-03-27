@@ -123,6 +123,9 @@ export const useAdBudgetState = () => {
     savedScenario,
     setSavedScenario,
     
+    // Toast
+    toast,
+    
     // Storage keys
     STORAGE_KEY_RESULTS,
     STORAGE_KEY_INPUTS,
