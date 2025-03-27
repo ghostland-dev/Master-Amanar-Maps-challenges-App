@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { BookOpen, BarChart, ChevronRight, Download, File, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +13,7 @@ interface ChallengeResourcesProps {
 }
 
 const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
-  const handleDownload = (resource: Resource) => {
+  const handleDownload = (resource: ChallengeResource) => {
     // In a real app, this would trigger the actual download
     // For now, we'll just show a toast
     toast({
@@ -66,17 +67,16 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
                 </div>
                 
                 <div className="flex items-center ml-2 space-x-2">
-                  {resource.canDownload && (
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                      onClick={() => handleDownload(resource)}
-                    >
-                      <Download className="h-4 w-4" />
-                      <span className="sr-only">Télécharger</span>
-                    </Button>
-                  )}
+                  {/* Since canDownload is not in the ChallengeResource type, we'll assume all resources are downloadable */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                    onClick={() => handleDownload(resource)}
+                  >
+                    <Download className="h-4 w-4" />
+                    <span className="sr-only">Télécharger</span>
+                  </Button>
                   
                   <Link 
                     to={resource.url}
