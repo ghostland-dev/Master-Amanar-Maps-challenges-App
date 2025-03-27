@@ -98,3 +98,90 @@ export const exportAdBudgetToPdf = (
     });
   }
 };
+
+export const exportAdBudgetComparisonToPdf = (
+  leftScenario: AdBudgetResult,
+  rightScenario: AdBudgetResult,
+  leftLabel: string,
+  rightLabel: string,
+  toast: any
+) => {
+  // Format currency
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'EUR',
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
+  // Calculate difference
+  const getDifference = (a: number, b: number, formatter: (n: number) => string = (n) => n.toString()) => {
+    const diff = a - b;
+    const percentage = b !== 0 ? (diff / b) * 100 : 0;
+    return `${diff > 0 ? '+' : ''}${formatter(diff)} (${diff > 0 ? '+' : ''}${percentage.toFixed(1)}%)`;
+  };
+
+  // Prepare data for PDF export
+  const data = {
+    [`Comparaison des scénarios: ${leftLabel} vs ${rightLabel}`]: {
+      "Date de génération": new Date().toLocaleDateString('fr-FR')
+    },
+    "Budget recommandé": {
+      [`Budget mensuel - ${leftLabel}`]: formatCurrency(leftScenario.recommendedBudget),
+      [`Budget mensuel - ${rightLabel}`]: formatCurrency(rightScenario.recommendedBudget),
+      "Différence": getDifference(leftScenario.recommendedBudget, rightScenario.recommendedBudget, formatCurrency),
+      
+      [`Pourcentage du CA - ${leftLabel}`]: `${leftScenario.percentageOfRevenue.toFixed(1)}%`,
+      [`Pourcentage du CA - ${rightLabel}`]: `${rightScenario.percentageOfRevenue.toFixed(1)}%`,
+      "Différence (%)": getDifference(leftScenario.percentageOfRevenue, rightScenario.percentageOfRevenue, (n) => `${n.toFixed(1)}%`)
+    },
+    "Performance projetée": {
+      [`ROAS estimé - ${leftLabel}`]: `${leftScenario.estimatedROI.toFixed(1)}x`,
+      [`ROAS estimé - ${rightLabel}`]: `${rightScenario.estimatedROI.toFixed(1)}x`,
+      "Différence": getDifference(leftScenario.estimatedROI, rightScenario.estimatedROI, (n) => `${n.toFixed(1)}x`),
+      
+      [`Revenu projeté - ${leftLabel}`]: formatCurrency(leftScenario.projectedRevenue),
+      [`Revenu projeté - ${rightLabel}`]: formatCurrency(rightScenario.projectedRevenue),
+      "Différence": getDifference(leftScenario.projectedRevenue, rightScenario.projectedRevenue, formatCurrency)
+    },
+    "Répartition du budget": {
+      [`Search - ${leftLabel}`]: formatCurrency(leftScenario.breakdown.search),
+      [`Search - ${rightLabel}`]: formatCurrency(rightScenario.breakdown.search),
+      "Différence (Search)": getDifference(leftScenario.breakdown.search, rightScenario.breakdown.search, formatCurrency),
+      
+      [`Social - ${leftLabel}`]: formatCurrency(leftScenario.breakdown.social),
+      [`Social - ${rightLabel}`]: formatCurrency(rightScenario.breakdown.social),
+      "Différence (Social)": getDifference(leftScenario.breakdown.social, rightScenario.breakdown.social, formatCurrency),
+      
+      [`Display - ${leftLabel}`]: formatCurrency(leftScenario.breakdown.display),
+      [`Display - ${rightLabel}`]: formatCurrency(rightScenario.breakdown.display),
+      "Différence (Display)": getDifference(leftScenario.breakdown.display, rightScenario.breakdown.display, formatCurrency)
+    },
+    "Recommandations": [
+      "Analysez attentivement les différences entre les deux scénarios pour identifier la stratégie la plus adaptée à vos objectifs.",
+      "Considérez réaliser un test A/B avec un budget limité pour valider la performance des deux approches avant de déployer à grande échelle.",
+      "Le scénario avec le ROAS le plus élevé n'est pas nécessairement le meilleur - évaluez également le volume de conversions et le revenu total généré."
+    ]
+  };
+
+  try {
+    // Generate PDF
+    generatePdfFromData(data, {
+      title: "Comparaison de budgets publicitaires",
+      filename: "comparaison-budgets-publicitaires.pdf",
+      subject: "Comparaison de scénarios FinQuest"
+    });
+    
+    toast({
+      title: "Rapport comparatif téléchargé",
+      description: "La comparaison des budgets publicitaires a été téléchargée avec succès",
+    });
+  } catch (error) {
+    toast({
+      title: "Erreur",
+      description: "Impossible de générer le PDF",
+      variant: "destructive",
+    });
+  }
+};

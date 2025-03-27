@@ -8,6 +8,9 @@ import AdBudgetHeader from "./AdBudgetHeader";
 import AdBudgetForm from "./AdBudgetForm";
 import AdBudgetResults from "./AdBudgetResults";
 import AdBudgetFooter from "./AdBudgetFooter";
+import ComparisonView from "./ComparisonView";
+import { Button } from "@/components/ui/button";
+import { Columns, X } from "lucide-react";
 
 export interface AdBudgetResult {
   recommendedBudget: number;
@@ -33,6 +36,7 @@ export interface AdBudgetInputs {
 // Storage keys for localStorage
 const STORAGE_KEY_RESULTS = 'adBudget_results';
 const STORAGE_KEY_INPUTS = 'adBudget_inputs';
+const STORAGE_KEY_COMPARISON = 'adBudget_comparison';
 
 const AdBudgetCalculator = () => {
   const { toast } = useToast();
@@ -48,6 +52,10 @@ const AdBudgetCalculator = () => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState<boolean>(false);
   const [results, setResults] = useState<AdBudgetResult | null>(null);
   
+  // Comparison feature states
+  const [isComparisonMode, setIsComparisonMode] = useState<boolean>(false);
+  const [savedScenario, setSavedScenario] = useState<AdBudgetResult | null>(null);
+  
   // Load saved data on initial mount
   useEffect(() => {
     document.title = "FinQuest - Calcul Budget Publicitaire";
@@ -56,6 +64,7 @@ const AdBudgetCalculator = () => {
     try {
       const savedInputs = localStorage.getItem(STORAGE_KEY_INPUTS);
       const savedResults = localStorage.getItem(STORAGE_KEY_RESULTS);
+      const savedComparison = localStorage.getItem(STORAGE_KEY_COMPARISON);
       
       if (savedInputs) {
         const parsedInputs: AdBudgetInputs = JSON.parse(savedInputs);
@@ -77,6 +86,11 @@ const AdBudgetCalculator = () => {
             slideIn(resultsRef.current, 'up');
           }
         }, 100);
+      }
+      
+      if (savedComparison) {
+        const parsedComparison: AdBudgetResult = JSON.parse(savedComparison);
+        setSavedScenario(parsedComparison);
       }
     } catch (error) {
       console.error("Error loading saved ad budget data:", error);
@@ -231,11 +245,53 @@ const AdBudgetCalculator = () => {
   const clearSavedData = () => {
     localStorage.removeItem(STORAGE_KEY_INPUTS);
     localStorage.removeItem(STORAGE_KEY_RESULTS);
+    localStorage.removeItem(STORAGE_KEY_COMPARISON);
+    
+    setSavedScenario(null);
+    setIsComparisonMode(false);
     
     toast({
       title: "Données effacées",
       description: "Les données sauvegardées ont été supprimées",
     });
+  };
+  
+  const saveScenario = () => {
+    if (!results) return;
+    
+    setSavedScenario(results);
+    localStorage.setItem(STORAGE_KEY_COMPARISON, JSON.stringify(results));
+    
+    toast({
+      title: "Scénario sauvegardé",
+      description: "Ce scénario pourra être utilisé pour une comparaison",
+    });
+  };
+  
+  const toggleComparisonMode = () => {
+    if (isComparisonMode) {
+      setIsComparisonMode(false);
+    } else {
+      if (!savedScenario) {
+        toast({
+          title: "Aucun scénario sauvegardé",
+          description: "Veuillez d'abord sauvegarder un scénario pour comparer",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      if (!results) {
+        toast({
+          title: "Aucun résultat actuel",
+          description: "Veuillez d'abord calculer un budget pour comparer",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      setIsComparisonMode(true);
+    }
   };
   
   return (
@@ -271,18 +327,46 @@ const AdBudgetCalculator = () => {
                 <AdBudgetFooter />
               </div>
               
-              {results && (
-                <div ref={resultsRef}>
-                  <AdBudgetResults 
-                    {...results}
-                    conversionRate={conversionRate}
-                    targetROAS={targetROAS}
-                    averageOrderValue={averageOrderValue}
+              <div>
+                {isComparisonMode ? (
+                  <ComparisonView
+                    leftScenario={savedScenario}
+                    rightScenario={results}
+                    onClose={() => setIsComparisonMode(false)}
                     formatCurrency={formatCurrency}
-                    onExportPdf={handleExportPdf}
+                    toast={toast}
                   />
-                </div>
-              )}
+                ) : results ? (
+                  <div ref={resultsRef}>
+                    <div className="flex justify-end mb-4 gap-2">
+                      <Button 
+                        variant="outline" 
+                        className="gap-2"
+                        onClick={saveScenario}
+                      >
+                        Sauvegarder ce scénario
+                      </Button>
+                      <Button 
+                        variant={savedScenario ? "default" : "outline"} 
+                        className="gap-2"
+                        onClick={toggleComparisonMode}
+                        disabled={!savedScenario}
+                      >
+                        <Columns className="h-4 w-4" />
+                        Comparer
+                      </Button>
+                    </div>
+                    <AdBudgetResults 
+                      {...results}
+                      conversionRate={conversionRate}
+                      targetROAS={targetROAS}
+                      averageOrderValue={averageOrderValue}
+                      formatCurrency={formatCurrency}
+                      onExportPdf={handleExportPdf}
+                    />
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
