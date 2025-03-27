@@ -1,4 +1,3 @@
-
 import { Challenge } from "./types";
 
 // Challenge data for dropshipping
@@ -35,21 +34,41 @@ export const dropshippingChallenge: Challenge = {
       isLocked: false,
       estimatedTime: "2 heures",
       difficulty: "easy",
+      detailedInstructions: "Dans cette première étape, vous allez vous familiariser avec le modèle dropshipping en étudiant son fonctionnement, ses avantages et ses inconvénients. Commencez par regarder la vidéo d'introduction, puis lisez le guide PDF complet. Prenez des notes sur les points clés et créez un document résumant les éléments essentiels que vous avez appris.",
+      expectedOutcome: "À la fin de cette étape, vous serez capable d'expliquer clairement le modèle dropshipping, son fonctionnement, ses avantages et ses limites. Vous aurez également identifié les compétences nécessaires pour réussir dans ce domaine.",
+      prerequisites: [
+        "Aucun prérequis technique nécessaire",
+        "Prévoir un cahier ou document numérique pour prendre des notes"
+      ],
       tips: [
-        "Prenez des notes sur les avantages et inconvénients du dropshipping",
-        "Analysez des exemples concrets de boutiques qui utilisent ce modèle",
-        "Identifiez les erreurs courantes à éviter"
+        "Prenez des notes détaillées sur les avantages et inconvénients du dropshipping",
+        "Analysez en profondeur 3-4 exemples concrets de boutiques qui utilisent ce modèle avec succès",
+        "Identifiez au moins 5 erreurs courantes à éviter quand on débute",
+        "Créez un glossaire des termes techniques que vous rencontrez pour vous y référer plus tard"
+      ],
+      commonMistakes: [
+        "Se précipiter sans comprendre complètement le modèle économique",
+        "Sous-estimer l'importance de la logistique et des délais de livraison",
+        "Ne pas considérer les aspects légaux (mentions légales, CGV, etc.)"
       ],
       resources: [
         {
           title: "Guide complet du débutant en dropshipping",
           url: "#",
-          type: "pdf"
+          type: "pdf",
+          description: "Un guide de 50 pages couvrant tous les fondamentaux du modèle"
         },
         {
           title: "Vidéo: Comment fonctionne le dropshipping",
           url: "#",
-          type: "video"
+          type: "video",
+          description: "Explication claire et visuelle du processus complet en 15 minutes"
+        },
+        {
+          title: "Les bases juridiques du e-commerce",
+          url: "#",
+          type: "article",
+          description: "Informations essentielles sur les obligations légales"
         }
       ]
     },
@@ -61,10 +80,39 @@ export const dropshippingChallenge: Challenge = {
       isLocked: false,
       estimatedTime: "3 heures",
       difficulty: "medium",
+      detailedInstructions: "Dans cette étape cruciale, vous allez apprendre à identifier une niche de marché profitable pour votre boutique. Commencez par étudier les outils de recherche de tendances comme Google Trends, puis suivez la méthodologie d'analyse de niche détaillée dans les ressources. Vous devrez évaluer au moins 5 niches potentielles selon les critères de rentabilité, concurrence et tendances.",
+      expectedOutcome: "À la fin de cette étape, vous aurez identifié 1-2 niches prometteuses avec des produits spécifiques et une audience cible bien définie. Vous disposerez également d'une analyse comparative des niches étudiées.",
       tips: [
-        "Utilisez des outils comme Google Trends pour identifier les tendances",
-        "Analysez la concurrence sur au moins 5 niches potentielles",
-        "Évaluez la taille du marché et la demande"
+        "Utilisez des outils comme Google Trends pour identifier les tendances sur 12-24 mois",
+        "Analysez méthodiquement la concurrence sur au moins 5 niches potentielles",
+        "Évaluez la taille du marché et la demande à l'aide d'outils d'analyse de mots-clés",
+        "Vérifiez le volume de recherche mensuel pour les produits de votre niche",
+        "Privilégiez les niches avec une audience passionnée et prête à dépenser"
+      ],
+      commonMistakes: [
+        "Choisir une niche uniquement parce qu'elle vous passionne sans vérifier son potentiel commercial",
+        "Sélectionner une niche trop compétitive ou dominée par des grandes marques",
+        "Ne pas évaluer correctement les marges potentielles dans la niche"
+      ],
+      resources: [
+        {
+          title: "Méthodologie de recherche de niche rentable",
+          url: "#",
+          type: "pdf",
+          description: "Guide étape par étape pour identifier et évaluer des niches profitables"
+        },
+        {
+          title: "Tutorial: Utiliser Google Trends efficacement",
+          url: "#",
+          type: "tutorial",
+          description: "Comment exploiter toutes les fonctionnalités de cet outil gratuit"
+        },
+        {
+          title: "Modèle d'analyse comparative de niche",
+          url: "#",
+          type: "template",
+          description: "Tableur prêt à l'emploi pour comparer différentes niches"
+        }
       ]
     },
     {
@@ -110,7 +158,47 @@ export const dropshippingChallenge: Challenge = {
       isCompleted: true,
       isLocked: false,
       estimatedTime: "2 heures",
-      difficulty: "medium"
+      difficulty: "medium",
+      detailedInstructions: "Dans cette étape essentielle, vous allez configurer l'ensemble de votre système logistique et de paiement. Suivez le guide pas à pas pour connecter votre boutique avec vos fournisseurs, configurer les méthodes de paiement sécurisées et mettre en place le système de suivi des commandes pour vos clients.",
+      expectedOutcome: "À la fin de cette étape, votre boutique sera entièrement fonctionnelle avec un processus automatisé de traitement des commandes, des options de paiement sécurisées et un système de suivi des livraisons pour vos clients.",
+      prerequisites: [
+        "Avoir déjà créé votre boutique en ligne (étape 5)",
+        "Avoir sélectionné vos fournisseurs (étape 4)",
+        "Disposer d'un compte PayPal Business ou Stripe"
+      ],
+      tips: [
+        "Configurez plusieurs méthodes de paiement pour maximiser vos taux de conversion",
+        "Testez entièrement le processus de commande avant de lancer votre boutique",
+        "Assurez-vous que les délais de livraison sont clairement indiqués",
+        "Créez des e-mails automatiques pour chaque étape du processus de commande",
+        "Vérifiez que tous les aspects fiscaux sont correctement configurés"
+      ],
+      commonMistakes: [
+        "Négliger les frais de transaction dans le calcul de vos marges",
+        "Ne pas tester le processus de commande de bout en bout",
+        "Oublier de configurer les e-mails de confirmation et de suivi",
+        "Sous-estimer l'importance des conditions de remboursement et de retour"
+      ],
+      resources: [
+        {
+          title: "Guide de configuration Shopify-AliExpress",
+          url: "#",
+          type: "tutorial",
+          description: "Configuration complète et détaillée avec Oberlo ou DSers"
+        },
+        {
+          title: "Modèles d'e-mails pour le suivi client",
+          url: "#",
+          type: "template",
+          description: "10 modèles d'e-mails personnalisables pour chaque étape"
+        },
+        {
+          title: "Vidéo: Configuration des paiements sécurisés",
+          url: "#",
+          type: "video",
+          description: "Guide étape par étape pour configurer PayPal et Stripe"
+        }
+      ]
     },
     {
       id: 8,
