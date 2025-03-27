@@ -4,6 +4,14 @@ export interface ChallengeStep {
   description: string;
   isCompleted: boolean;
   isLocked: boolean;
+  estimatedTime?: string; // Durée estimée pour compléter l'étape
+  difficulty?: "easy" | "medium" | "hard"; // Niveau de difficulté de l'étape
+  tips?: string[]; // Conseils pour réussir l'étape
+  resources?: {
+    title: string;
+    url: string;
+    type: string;
+  }[]; // Ressources spécifiques à l'étape
 }
 
 export interface ChallengeResource {
@@ -11,6 +19,7 @@ export interface ChallengeResource {
   title: string;
   type: string;
   url: string;
+  description?: string; // Description de la ressource
 }
 
 export interface Challenge {
@@ -24,8 +33,15 @@ export interface Challenge {
   progress: number;
   currentStep: number;
   totalSteps: number;
+  objective?: string; // Objectif principal du challenge
+  prerequisites?: string[]; // Prérequis pour commencer le challenge
+  learningOutcomes?: string[]; // Ce que l'utilisateur va apprendre
   steps: ChallengeStep[];
   resources: ChallengeResource[];
+  faqs?: {
+    question: string;
+    answer: string;
+  }[]; // FAQ sur le challenge
 }
 
 // Challenge data for dropshipping
@@ -40,6 +56,19 @@ const dropshippingChallenge: Challenge = {
   progress: 65,
   currentStep: 7,
   totalSteps: 12,
+  objective: "Réaliser votre première vente en dropshipping et acquérir les compétences fondamentales pour développer une activité e-commerce rentable.",
+  prerequisites: [
+    "Avoir un budget minimum de 150€ pour démarrer (plateforme e-commerce et publicité)",
+    "Disposer d'une carte bancaire pour les paiements en ligne",
+    "Aucune connaissance préalable en e-commerce n'est nécessaire"
+  ],
+  learningOutcomes: [
+    "Maîtriser les fondamentaux du modèle dropshipping",
+    "Identifier des niches et produits à fort potentiel",
+    "Créer et configurer une boutique en ligne",
+    "Mettre en place une stratégie marketing de base",
+    "Gérer les commandes et la relation client"
+  ],
   steps: [
     {
       id: 1,
@@ -47,6 +76,25 @@ const dropshippingChallenge: Challenge = {
       description: "Apprendre les bases du dropshipping et comment ce modèle fonctionne.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "2 heures",
+      difficulty: "easy",
+      tips: [
+        "Prenez des notes sur les avantages et inconvénients du dropshipping",
+        "Analysez des exemples concrets de boutiques qui utilisent ce modèle",
+        "Identifiez les erreurs courantes à éviter"
+      ],
+      resources: [
+        {
+          title: "Guide complet du débutant en dropshipping",
+          url: "#",
+          type: "pdf"
+        },
+        {
+          title: "Vidéo: Comment fonctionne le dropshipping",
+          url: "#",
+          type: "video"
+        }
+      ]
     },
     {
       id: 2,
@@ -54,6 +102,13 @@ const dropshippingChallenge: Challenge = {
       description: "Rechercher et identifier une niche de marché avec un bon potentiel de profit.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "3 heures",
+      difficulty: "medium",
+      tips: [
+        "Utilisez des outils comme Google Trends pour identifier les tendances",
+        "Analysez la concurrence sur au moins 5 niches potentielles",
+        "Évaluez la taille du marché et la demande"
+      ]
     },
     {
       id: 3,
@@ -61,6 +116,8 @@ const dropshippingChallenge: Challenge = {
       description: "Utiliser des outils pour trouver des produits tendance et à forte marge.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "4 heures",
+      difficulty: "medium"
     },
     {
       id: 4,
@@ -68,6 +125,8 @@ const dropshippingChallenge: Challenge = {
       description: "Identifier et contacter des fournisseurs de qualité pour vos produits.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "3 heures",
+      difficulty: "medium"
     },
     {
       id: 5,
@@ -75,6 +134,8 @@ const dropshippingChallenge: Challenge = {
       description: "Configurer votre site e-commerce avec Shopify ou WooCommerce.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "5 heures",
+      difficulty: "hard"
     },
     {
       id: 6,
@@ -82,6 +143,8 @@ const dropshippingChallenge: Challenge = {
       description: "Apprendre à écrire des textes persuasifs pour vos fiches produits.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "3 heures",
+      difficulty: "medium"
     },
     {
       id: 7,
@@ -89,6 +152,8 @@ const dropshippingChallenge: Challenge = {
       description: "Mettre en place votre système de commande, livraison et paiement.",
       isCompleted: true,
       isLocked: false,
+      estimatedTime: "2 heures",
+      difficulty: "medium"
     },
     {
       id: 8,
@@ -96,6 +161,8 @@ const dropshippingChallenge: Challenge = {
       description: "Définir votre stratégie pour attirer vos premiers clients.",
       isCompleted: false,
       isLocked: false,
+      estimatedTime: "4 heures",
+      difficulty: "medium"
     },
     {
       id: 9,
@@ -103,6 +170,8 @@ const dropshippingChallenge: Challenge = {
       description: "Créer et lancer vos premières campagnes publicitaires.",
       isCompleted: false,
       isLocked: true,
+      estimatedTime: "5 heures",
+      difficulty: "hard"
     },
     {
       id: 10,
@@ -110,6 +179,8 @@ const dropshippingChallenge: Challenge = {
       description: "Améliorer l'expérience utilisateur pour augmenter vos ventes.",
       isCompleted: false,
       isLocked: true,
+      estimatedTime: "4 heures",
+      difficulty: "medium"
     },
     {
       id: 11,
@@ -117,6 +188,8 @@ const dropshippingChallenge: Challenge = {
       description: "Techniques pour finaliser votre première transaction.",
       isCompleted: false,
       isLocked: true,
+      estimatedTime: "2 heures",
+      difficulty: "easy"
     },
     {
       id: 12,
@@ -124,6 +197,8 @@ const dropshippingChallenge: Challenge = {
       description: "Analyser vos résultats et optimiser votre stratégie.",
       isCompleted: false,
       isLocked: true,
+      estimatedTime: "3 heures",
+      difficulty: "medium"
     },
   ],
   resources: [
@@ -132,26 +207,44 @@ const dropshippingChallenge: Challenge = {
       title: "Guide complet du dropshipping",
       type: "pdf",
       url: "#",
+      description: "Un guide de 50 pages couvrant tous les aspects essentiels du dropshipping"
     },
     {
       id: 2,
       title: "Liste des meilleurs fournisseurs",
       type: "pdf",
       url: "#",
+      description: "Comparatif détaillé de 20 fournisseurs fiables pour le dropshipping"
     },
     {
       id: 3,
       title: "Modèle de plan marketing",
       type: "template",
       url: "#",
+      description: "Template prêt à l'emploi pour définir votre stratégie marketing"
     },
     {
       id: 4,
       title: "Calculateur de marge",
       type: "simulator",
       url: "/simulators/margin",
-    },
+      description: "Outil pour calculer précisément vos marges et seuils de rentabilité"
+    }
   ],
+  faqs: [
+    {
+      question: "Est-ce que je dois avoir une entreprise déclarée pour démarrer?",
+      answer: "Non, vous pouvez commencer en tant que particulier, mais si votre activité devient rentable, il est recommandé de créer une structure juridique adaptée."
+    },
+    {
+      question: "Combien de temps avant de réaliser ma première vente?",
+      answer: "Cela varie considérablement, mais avec une stratégie efficace, vous pourriez réaliser votre première vente dans les 1-2 semaines suivant le lancement de votre boutique."
+    },
+    {
+      question: "Quelle plateforme est recommandée pour les débutants?",
+      answer: "Shopify est généralement recommandée pour les débutants en raison de sa facilité d'utilisation et ses nombreuses intégrations pour le dropshipping."
+    }
+  ]
 };
 
 // Challenge data for crypto portfolio

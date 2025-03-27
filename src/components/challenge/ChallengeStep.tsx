@@ -1,5 +1,6 @@
+
 import React from "react";
-import { CheckCircle, LockIcon, UnlockIcon, Download, BookOpen, Calendar } from "lucide-react";
+import { CheckCircle, LockIcon, UnlockIcon, Download, BookOpen, Calendar, Timer, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -16,6 +17,7 @@ interface StepProps {
     isLocked: boolean;
     estimatedTime?: string;
     difficulty?: "easy" | "medium" | "hard";
+    tips?: string[];
     resources?: {
       title: string;
       url: string;
@@ -65,7 +67,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
         "Temps estimé": step.estimatedTime || "Non spécifié"
       },
       "Instructions": {
-        "Points clés": [
+        "Points clés": step.tips || [
           "Recherchez au moins 3 sources d'information sur le sujet",
           "Comparez les différentes approches et méthodologies",
           "Établissez un plan d'action personnalisé",
@@ -143,7 +145,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
                 
                 {step.estimatedTime && (
                   <Badge variant="outline" className="text-xs px-2 py-0 bg-primary/5 text-primary">
-                    <Calendar className="h-3 w-3 mr-1" />
+                    <Timer className="h-3 w-3 mr-1" />
                     {step.estimatedTime}
                   </Badge>
                 )}
@@ -176,6 +178,7 @@ interface StepDetailsProps {
     id: number;
     title: string;
     isCompleted: boolean;
+    tips?: string[];
     resources?: {
       title: string;
       url: string;
@@ -190,18 +193,32 @@ const StepDetails = ({ step, onDownload }: StepDetailsProps) => {
   return (
     <div className="bg-secondary/50 p-4 border-t border-border">
       <div className="text-sm mb-4">
-        <p className="mb-2 font-medium">Instructions détaillées :</p>
+        <p className="mb-2 font-medium flex items-center">
+          <Star className="h-4 w-4 mr-1.5 text-amber-500" />
+          Conseils pour réussir cette étape:
+        </p>
         <ul className="list-disc list-inside space-y-1.5 text-muted-foreground">
-          <li>Recherchez au moins 3 sources d'information sur le sujet</li>
-          <li>Comparez les différentes approches et méthodologies</li>
-          <li>Établissez un plan d'action personnalisé</li>
-          <li>Fixez des objectifs spécifiques et mesurables</li>
+          {step.tips ? (
+            step.tips.map((tip, index) => (
+              <li key={index}>{tip}</li>
+            ))
+          ) : (
+            <>
+              <li>Recherchez au moins 3 sources d'information sur le sujet</li>
+              <li>Comparez les différentes approches et méthodologies</li>
+              <li>Établissez un plan d'action personnalisé</li>
+              <li>Fixez des objectifs spécifiques et mesurables</li>
+            </>
+          )}
         </ul>
       </div>
       
       {step.resources && step.resources.length > 0 && (
         <div className="mb-4">
-          <p className="text-sm font-medium mb-2">Ressources recommandées :</p>
+          <p className="text-sm font-medium mb-2 flex items-center">
+            <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
+            Ressources recommandées:
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {step.resources.map((resource, idx) => (
               <Button 
