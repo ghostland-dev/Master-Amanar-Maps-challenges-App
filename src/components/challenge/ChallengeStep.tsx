@@ -1,4 +1,3 @@
-
 import React from "react";
 import { CheckCircle, LockIcon, UnlockIcon, Download, BookOpen, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { animate } from "motion";
 import { useToast } from "@/components/ui/use-toast";
-import { generatePdfFromData } from "@/utils/pdfGenerator";
+import { generatePdfFromData } from "@/utils/pdf";
 
 interface StepProps {
   step: {
