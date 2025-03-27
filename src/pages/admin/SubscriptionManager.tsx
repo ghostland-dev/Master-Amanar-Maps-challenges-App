@@ -134,8 +134,14 @@ const SubscriptionManager = () => {
   const onCreatePlan = (values: z.infer<typeof formSchema>) => {
     const newPlan: SubscriptionPlan = {
       id: String(Date.now()),
-      ...values,
-      features: [],
+      name: values.name,
+      description: values.description,
+      price: values.price,
+      billingCycle: values.billingCycle,
+      features: values.features || [],
+      isActive: values.isActive,
+      isDefault: values.isDefault,
+      usersCount: values.usersCount
     };
     setPlans([...plans, newPlan]);
     setIsCreateDialogOpen(false);
