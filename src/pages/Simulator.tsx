@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ROISimulator from "@/components/ROISimulator";
 import SimulatorCard from "@/components/SimulatorCard";
-import { BarChart, TrendingUp, Calculator, DollarSign, Percent, LineChart } from "lucide-react";
+import { BarChart, TrendingUp, Calculator, DollarSign, Percent, LineChart, Download, FilePdf } from "lucide-react";
 import { fadeIn, slideIn } from "@/lib/animations";
 
 const Simulator = () => {
@@ -58,7 +58,7 @@ const Simulator = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-16 md:pb-0 bg-background/50">
+    <div className="min-h-screen pb-16 md:pb-0 bg-gradient-to-br from-background to-background/80">
       <Navbar />
       <div className="pt-20">
         <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-6">
@@ -69,14 +69,25 @@ const Simulator = () => {
             </p>
           </div>
           
-          <div ref={headerRef} className="glass p-6 rounded-xl text-center mb-10 border-border/30 hover:border-border/50 transition-colors duration-300">
+          <div ref={headerRef} className="glass p-6 rounded-xl text-center mb-10 border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md transition-all duration-300">
             <div className="inline-block rounded-full bg-primary/10 p-3 mb-4">
               <BarChart className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Simulateur de ROI (Retour sur Investissement)</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
               Calculez rapidement la rentabilité de vos investissements et projets.
             </p>
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Export PDF
+              </span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                Calcul en temps réel
+              </span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                Analyses personnalisées
+              </span>
+            </div>
           </div>
           
           <div ref={simulatorRef}>

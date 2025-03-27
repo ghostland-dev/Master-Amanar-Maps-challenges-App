@@ -1,19 +1,21 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calculator, ArrowRightLeft, Heart, RefreshCw, Percent } from "lucide-react";
+import { Calculator, ArrowRightLeft, Heart, RefreshCw, Percent, FilePdf, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { slideIn } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
+import { generatePdfFromData, generatePdfFromElement } from "@/utils/pdf";
 
 const MarginCalculator = () => {
   const { toast } = useToast();
   const simulatorRef = useState<HTMLDivElement | null>(null)[0];
   const resultsRef = useState<HTMLDivElement | null>(null)[0];
+  const resultsContainerRef = useRef<HTMLDivElement>(null);
   
   const [sellingPrice, setSellingPrice] = useState<number>(100);
   const [costPrice, setCostPrice] = useState<number>(60);
@@ -86,30 +88,113 @@ const MarginCalculator = () => {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
   };
   
+  const handleExportPdf = () => {
+    if (!results) return;
+    
+    // Option 1: Export as data
+    const data = {
+      "Informations du calcul": {
+        "Prix de vente": formatCurrency(sellingPrice),
+        "Coût de revient": formatCurrency(costPrice),
+        "Type de marge": marginType === "percent" ? "Pourcentage" : "Montant"
+      },
+      "Résultats": {
+        "Marge brute": formatCurrency(results.marginAmount),
+        "Taux de marge": `${results.marginPercent.toFixed(2)}%`,
+        "Taux de marque": `${results.markup.toFixed(2)}%`,
+        "Seuil de rentabilité": `${(results.breakEvenPoint * 100).toFixed(2)}%`
+      },
+      "Interprétation": [
+        results.marginPercent >= 40
+          ? "Excellente marge ! Votre produit est très rentable."
+          : results.marginPercent >= 25
+          ? "Bonne marge. Votre prix est compétitif tout en assurant une bonne rentabilité."
+          : results.marginPercent >= 15
+          ? "Marge moyenne. Envisagez d'optimiser vos coûts ou d'augmenter légèrement votre prix."
+          : "Marge faible. Examinez vos coûts ou ajustez votre stratégie de prix."
+      ],
+      "Conseils": [
+        results.marginPercent < 20 
+          ? `Envisagez d'augmenter votre prix de vente de ${((costPrice * 0.25) - results.marginAmount).toFixed(0)}€ pour atteindre une marge de 25%.` 
+          : "",
+        results.markup < 50 
+          ? "Cherchez à réduire vos coûts de production pour améliorer votre taux de marque." 
+          : "",
+        results.marginPercent > 60 
+          ? "Votre marge est très élevée. Vous pourriez envisager de baisser légèrement votre prix pour augmenter votre volume de ventes." 
+          : "",
+        results.marginAmount <= 0 
+          ? "Attention ! Vous vendez à perte. Augmentez votre prix ou réduisez vos coûts immédiatement." 
+          : ""
+      ].filter(item => item !== "")
+    };
+    
+    try {
+      generatePdfFromData(data, {
+        title: "Analyse de Marge - FinQuest",
+        filename: "margin-analysis.pdf",
+      });
+      
+      toast({
+        title: "PDF généré avec succès",
+        description: "Votre analyse de marge a été téléchargée",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de générer le PDF",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const reset = () => {
+    setSellingPrice(100);
+    setCostPrice(60);
+    setMarginType("percent");
+    setResults(null);
+  };
+  
+  // Format currency
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
+  };
+  
   return (
-    <div className="min-h-screen pb-16 md:pb-0">
+    <div className="min-h-screen pb-16 md:pb-0 bg-gradient-to-br from-background to-background/80">
       <Navbar />
       <div className="pt-20">
         <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-6">
-          <h1 className="text-3xl font-bold mb-2">Calculateur de marge</h1>
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">Calculateur de marge</h1>
           <p className="text-muted-foreground mb-8">
             Déterminez vos marges et prix optimaux pour maximiser votre rentabilité
           </p>
           
-          <div className="glass p-6 rounded-xl text-center mb-10">
+          <div className="glass p-6 rounded-xl text-center mb-10 border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md transition-all duration-300">
             <div className="inline-block rounded-full bg-primary/10 p-3 mb-4">
               <Percent className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Calculateur de marge et prix</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
               Calculez rapidement votre marge bénéficiaire et analysez votre rentabilité.
             </p>
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Export PDF
+              </span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                Calcul en temps réel
+              </span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                Conseils personnalisés
+              </span>
+            </div>
           </div>
         
           <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div ref={(el) => { if (el && !simulatorRef) slideIn(el, 'right') }}>
-                <Card className="glass">
+                <Card className="glass border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="flex items-center">
                       <Calculator className="mr-2 h-5 w-5 text-primary" />
@@ -130,7 +215,7 @@ const MarginCalculator = () => {
                           step="1"
                           value={sellingPrice}
                           onChange={handleSellingPriceChange}
-                          className="pl-8"
+                          className="pl-8 transition-all hover:border-primary focus:border-primary"
                         />
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
                       </div>
@@ -146,7 +231,7 @@ const MarginCalculator = () => {
                           step="1"
                           value={costPrice}
                           onChange={handleCostPriceChange}
-                          className="pl-8"
+                          className="pl-8 transition-all hover:border-primary focus:border-primary"
                         />
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
                       </div>
@@ -155,7 +240,7 @@ const MarginCalculator = () => {
                     <div className="space-y-2">
                       <Label htmlFor="marginType">Type de marge</Label>
                       <Select value={marginType} onValueChange={setMarginType}>
-                        <SelectTrigger id="marginType">
+                        <SelectTrigger id="marginType" className="transition-all hover:border-primary focus:border-primary">
                           <SelectValue placeholder="Sélectionnez un type de marge" />
                         </SelectTrigger>
                         <SelectContent>
@@ -166,7 +251,7 @@ const MarginCalculator = () => {
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <Button onClick={calculate} className="flex-1">
+                      <Button onClick={calculate} className="flex-1 transition-all hover:shadow-md">
                         Calculer
                       </Button>
                       <Button variant="outline" onClick={reset} className="flex-1">
@@ -186,19 +271,30 @@ const MarginCalculator = () => {
               
               {results && (
                 <div ref={(el) => { if (el && !resultsRef) slideIn(el, 'up') }}>
-                  <Card className="glass">
+                  <Card className="glass border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md transition-all duration-300">
                     <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <ArrowRightLeft className="mr-2 h-5 w-5 text-primary" />
-                        Résultats de l'analyse
-                      </CardTitle>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="flex items-center">
+                          <ArrowRightLeft className="mr-2 h-5 w-5 text-primary" />
+                          Résultats de l'analyse
+                        </CardTitle>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={handleExportPdf} 
+                          className="flex items-center gap-1 hover:bg-primary/10"
+                        >
+                          <FilePdf className="h-4 w-4" />
+                          <span>Exporter</span>
+                        </Button>
+                      </div>
                       <CardDescription>
                         Analyse détaillée de votre marge et rentabilité
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-6" ref={resultsContainerRef}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                        <div className="bg-gradient-to-br from-primary/5 to-secondary/10 p-4 rounded-lg text-center shadow-sm">
                           <h3 className="text-sm text-muted-foreground font-medium mb-1">Marge brute</h3>
                           <p className={`text-3xl font-bold ${results.marginAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {formatCurrency(results.marginAmount)}
@@ -208,7 +304,7 @@ const MarginCalculator = () => {
                           </p>
                         </div>
                         
-                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                        <div className="bg-gradient-to-br from-primary/5 to-secondary/10 p-4 rounded-lg text-center shadow-sm">
                           <h3 className="text-sm text-muted-foreground font-medium mb-1">Taux de marge</h3>
                           <p className={`text-3xl font-bold ${results.marginPercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {results.marginPercent.toFixed(2)}%
@@ -218,7 +314,7 @@ const MarginCalculator = () => {
                           </p>
                         </div>
                         
-                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                        <div className="bg-gradient-to-br from-primary/5 to-secondary/10 p-4 rounded-lg text-center shadow-sm">
                           <h3 className="text-sm text-muted-foreground font-medium mb-1">Taux de marque</h3>
                           <p className={`text-3xl font-bold ${results.markup >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {results.markup.toFixed(2)}%
@@ -228,7 +324,7 @@ const MarginCalculator = () => {
                           </p>
                         </div>
                         
-                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                        <div className="bg-gradient-to-br from-primary/5 to-secondary/10 p-4 rounded-lg text-center shadow-sm">
                           <h3 className="text-sm text-muted-foreground font-medium mb-1">Seuil de rentabilité</h3>
                           <p className="text-3xl font-bold">
                             {(results.breakEvenPoint * 100).toFixed(2)}%
@@ -240,7 +336,7 @@ const MarginCalculator = () => {
                       </div>
                       
                       <div className="pt-4 space-y-4">
-                        <div className="bg-primary/5 p-4 rounded-lg">
+                        <div className="bg-primary/5 p-4 rounded-lg shadow-sm">
                           <h3 className="text-sm font-medium mb-2">Interprétation des résultats</h3>
                           <p className="text-sm text-muted-foreground">
                             {results.marginPercent >= 40
@@ -253,7 +349,7 @@ const MarginCalculator = () => {
                           </p>
                         </div>
                         
-                        <div className="bg-primary/5 p-4 rounded-lg">
+                        <div className="bg-primary/5 p-4 rounded-lg shadow-sm">
                           <h3 className="text-sm font-medium mb-2">Conseils personnalisés</h3>
                           <ul className="text-sm text-muted-foreground space-y-2">
                             {results.marginPercent < 20 && (

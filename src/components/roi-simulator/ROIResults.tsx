@@ -1,20 +1,11 @@
 
-import React, { useEffect, useRef } from "react";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import ResultCard from "./ResultCard";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  BarChart,
-} from "@/components/ui/chart";
+import { Button } from "@/components/ui/button";
+import { Download, FilePdf } from "lucide-react";
+import { generatePdfFromData } from "@/utils/pdf";
+import { useToast } from "@/hooks/use-toast";
 
 interface ROIResultsProps {
   investment: number;
@@ -24,124 +15,132 @@ interface ROIResultsProps {
   monthlyROI: number;
 }
 
-const ROIResults = ({ 
-  investment, 
-  returns, 
-  period, 
-  roi, 
-  monthlyROI 
-}: ROIResultsProps) => {
-  const profit = returns - investment;
-  const isProfit = profit > 0;
-  const chartRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+const ROIResults = ({ investment, returns, period, roi, monthlyROI }: ROIResultsProps) => {
+  const { toast } = useToast();
   
+  // Format currency values
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('fr-FR', { 
-      style: 'currency', 
-      currency: 'EUR',
-      maximumFractionDigits: 0
-    }).format(value);
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
+  };
+
+  // Format percentage values
+  const formatPercentage = (value: number) => {
+    return value.toFixed(2) + '%';
   };
   
-  const formatPercent = (value: number) => {
-    return value.toFixed(2);
-  };
-  
-  const chartData = Array.from({ length: period }).map((_, i) => {
-    const monthlyProfit = profit / period;
-    const currentValue = investment + (monthlyProfit * (i + 1));
-    return {
-      name: `M${i + 1}`,
-      Investissement: investment,
-      Valeur: Math.round(currentValue),
+  const handleExportPdf = () => {
+    // Prepare data for PDF export
+    const data = {
+      "Retour sur Investissement (ROI)": {
+        "Investissement initial": formatCurrency(investment),
+        "Retours générés": formatCurrency(returns),
+        "Période": period === 1 ? "Annuelle" : 
+                  period === 4 ? "Trimestrielle" : 
+                  period === 12 ? "Mensuelle" : 
+                  period === 52 ? "Hebdomadaire" : 
+                  period === 365 ? "Journalière" : "Personnalisée",
+      },
+      "Résultats": {
+        "ROI total": formatPercentage(roi),
+        "ROI périodique": formatPercentage(monthlyROI),
+        "Bénéfice": formatCurrency(returns - investment),
+      },
+      "Interprétation": [
+        roi > 100 
+          ? "Excellente performance ! Votre investissement est très rentable." 
+          : roi > 50 
+          ? "Bonne performance ! Votre investissement présente un bon retour." 
+          : roi > 20 
+          ? "Performance correcte. Votre investissement est rentable." 
+          : roi > 0 
+          ? "Performance modeste. Votre investissement est légèrement rentable." 
+          : "Attention, votre investissement n'est pas rentable avec ce ROI."
+      ]
     };
-  });
-  
+    
+    try {
+      generatePdfFromData(data, {
+        title: "Analyse de ROI - FinQuest",
+        filename: "roi-analysis.pdf",
+      });
+      
+      toast({
+        title: "PDF généré avec succès",
+        description: "Votre analyse ROI a été téléchargée",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de générer le PDF",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <ResultCard 
-          title="Investissement" 
-          value={investment} 
-          formatter={v => formatCurrency(v)} 
-          colorClass="text-foreground"
-          delay={0}
+    <div className="space-y-4">
+      <div className="flex justify-end mb-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleExportPdf} 
+          className="text-sm flex items-center gap-1 hover:bg-primary/10"
+        >
+          <FilePdf className="h-4 w-4" />
+          <span>Exporter en PDF</span>
+        </Button>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <ResultCard
+          title="Investissement"
+          value={formatCurrency(investment)}
+          description="Montant investi initialement"
+          variant="primary"
         />
-        
-        <ResultCard 
-          title="Retour Final" 
-          value={returns} 
-          formatter={v => formatCurrency(v)} 
-          colorClass={isProfit ? "text-green-500" : "text-red-500"}
-          delay={0.2}
+        <ResultCard
+          title="Retours"
+          value={formatCurrency(returns)}
+          description="Gains générés par l'investissement"
+          variant="success"
         />
-        
-        <ResultCard 
-          title="ROI" 
-          value={roi} 
-          suffix="%" 
-          formatter={formatPercent} 
-          colorClass={isProfit ? "text-green-500" : "text-red-500"}
-          delay={0.4}
-        />
-        
-        <ResultCard 
-          title="ROI Mensuel" 
-          value={monthlyROI} 
-          suffix="%" 
-          formatter={formatPercent} 
-          colorClass={isProfit ? "text-green-500" : "text-red-500"}
-          delay={0.6}
+        <ResultCard
+          title="Bénéfice"
+          value={formatCurrency(returns - investment)}
+          description="Profit net après investissement"
+          variant={returns - investment > 0 ? "success" : "danger"}
         />
       </div>
       
-      <Card className="overflow-hidden border-border/50 hover:shadow-sm transition-all duration-300">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base font-medium">Évolution de l'investissement</CardTitle>
-              <CardDescription>Sur {period} mois</CardDescription>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+        <Card className="overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex flex-col items-center justify-center h-full">
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">ROI Total</h3>
+              <p className={`text-3xl font-bold ${roi >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {formatPercentage(roi)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                (Retours - Investissement) / Investissement × 100
+              </p>
             </div>
-            <div className="flex items-center gap-2">
-              {isProfit ? (
-                <div className="flex items-center text-sm font-medium text-green-500">
-                  <ArrowUpRight className="h-4 w-4 mr-1" />
-                  <span>+{formatCurrency(profit)}</span>
-                </div>
-              ) : (
-                <div className="flex items-center text-sm font-medium text-red-500">
-                  <ArrowDownRight className="h-4 w-4 mr-1" />
-                  <span>{formatCurrency(profit)}</span>
-                </div>
-              )}
+          </CardContent>
+        </Card>
+        
+        <Card className="overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex flex-col items-center justify-center h-full">
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">ROI Périodique</h3>
+              <p className={`text-3xl font-bold ${monthlyROI >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {formatPercentage(monthlyROI)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                ROI total / Période
+              </p>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pb-4">
-          <div ref={chartRef} className="h-[200px] w-full">
-            <ChartContainer
-              config={{
-                grid: { color: "var(--primary)" },
-                investment: { color: "var(--muted)" },
-                value: { color: "var(--primary)" },
-              }}
-            >
-              {({ chartId }) => (
-                <BarChart 
-                  data={chartData}
-                  categories={["Valeur"]}
-                  index="name"
-                  colors={["var(--primary)"]}
-                  valueFormatter={(value) => formatCurrency(Number(value))}
-                  layout={isDesktop ? "vertical" : "horizontal"}
-                  showLegend={false}
-                />
-              )}
-            </ChartContainer>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
