@@ -8,7 +8,7 @@ import { ChartConfig } from "./types";
 
 export interface ChartContainerProps {
   config: ChartConfig;
-  children: (containerProps: { chartId: string }) => React.ReactNode;
+  children: (containerProps: { chartId: string }) => React.ReactElement;
   className?: string;
   id?: string;
 }
