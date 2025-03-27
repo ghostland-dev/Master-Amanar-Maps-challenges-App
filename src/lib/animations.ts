@@ -3,10 +3,18 @@ import { animate } from "motion";
 
 /**
  * Slides an element in with an animation
- * @param element The DOM element to animate
+ * @param element The DOM element or React ref to animate
  * @param direction The direction to slide from ('up', 'down', 'left', 'right')
  */
-export const slideIn = (element: HTMLElement, direction: 'up' | 'down' | 'left' | 'right') => {
+export const slideIn = (
+  element: HTMLElement | React.RefObject<HTMLElement>,
+  direction: 'up' | 'down' | 'left' | 'right'
+) => {
+  // Get the actual DOM element from a potential ref
+  const targetElement = element instanceof HTMLElement ? element : element.current;
+  
+  if (!targetElement) return;
+  
   // Direction mapping
   const directionMap = {
     up: { y: [50, 0] },
@@ -20,7 +28,7 @@ export const slideIn = (element: HTMLElement, direction: 'up' | 'down' | 'left' 
   
   // Animate the element
   animate(
-    element,
+    targetElement,
     {
       opacity: [0, 1],
       ...animationProps
@@ -34,11 +42,15 @@ export const slideIn = (element: HTMLElement, direction: 'up' | 'down' | 'left' 
 
 /**
  * Scale element in with an animation
- * @param element The DOM element to animate
+ * @param element The DOM element or React ref to animate
  */
-export const scaleIn = (element: HTMLElement) => {
+export const scaleIn = (element: HTMLElement | React.RefObject<HTMLElement>) => {
+  const targetElement = element instanceof HTMLElement ? element : element.current;
+  
+  if (!targetElement) return;
+  
   animate(
-    element,
+    targetElement,
     { 
       scale: [0.95, 1],
       opacity: [0, 1]
@@ -52,11 +64,15 @@ export const scaleIn = (element: HTMLElement) => {
 
 /**
  * Fade element in with an animation
- * @param element The DOM element to animate
+ * @param element The DOM element or React ref to animate
  */
-export const fadeIn = (element: HTMLElement) => {
+export const fadeIn = (element: HTMLElement | React.RefObject<HTMLElement>) => {
+  const targetElement = element instanceof HTMLElement ? element : element.current;
+  
+  if (!targetElement) return;
+  
   animate(
-    element,
+    targetElement,
     { opacity: [0, 1] },
     {
       duration: 0.5,
@@ -73,11 +89,15 @@ export const fadeIn = (element: HTMLElement) => {
  * @param formatter Function to format the number (optional)
  */
 export const animateNumber = (
-  element: HTMLElement, 
+  element: HTMLElement | React.RefObject<HTMLElement>, 
   start: number, 
   end: number, 
   formatter: (value: number) => string = (val) => val.toString()
 ) => {
+  const targetElement = element instanceof HTMLElement ? element : element.current;
+  
+  if (!targetElement) return;
+  
   let currentValue = start;
   const duration = 1000; // 1 second
   const startTime = performance.now();
@@ -90,12 +110,12 @@ export const animateNumber = (
     const easeOutQuart = 1 - Math.pow(1 - progress, 4);
     
     currentValue = start + (end - start) * easeOutQuart;
-    element.textContent = formatter(currentValue);
+    targetElement.textContent = formatter(currentValue);
     
     if (progress < 1) {
       requestAnimationFrame(updateValue);
     } else {
-      element.textContent = formatter(end); // Ensure we end on the exact value
+      targetElement.textContent = formatter(end); // Ensure we end on the exact value
     }
   };
   
