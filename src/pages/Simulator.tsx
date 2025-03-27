@@ -23,28 +23,28 @@ const Simulator = () => {
       description: "Déterminez vos marges et prix optimaux",
       icon: <Calculator className="h-6 w-6 text-primary" />,
       to: "/simulators/margin",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       title: "Budget publicitaire",
       description: "Optimisez votre budget marketing et publicitaire",
       icon: <DollarSign className="h-6 w-6 text-primary" />,
       to: "/simulators/ad-budget",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       title: "Revenus passifs",
       description: "Projetez vos revenus passifs sur le long terme",
       icon: <Percent className="h-6 w-6 text-primary" />,
       to: "/simulators/passive-income",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       title: "Analyse de tendance",
       description: "Analysez les tendances du marché et leur impact",
       icon: <LineChart className="h-6 w-6 text-primary" />,
       to: "/simulators/trend-analysis",
-      comingSoon: true,
+      comingSoon: false,
     },
   ];
 

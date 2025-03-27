@@ -9,6 +9,10 @@ import Dashboard from "./pages/Dashboard";
 import Challenges from "./pages/Challenges";
 import Challenge from "./pages/Challenge";
 import Simulator from "./pages/Simulator";
+import MarginCalculator from "./pages/MarginCalculator";
+import AdBudgetCalculator from "./pages/AdBudgetCalculator";
+import PassiveIncomeCalculator from "./pages/PassiveIncomeCalculator";
+import TrendAnalysis from "./pages/TrendAnalysis";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
@@ -29,6 +33,10 @@ const App = () => (
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/challenge/:id" element={<Challenge />} />
           <Route path="/simulators" element={<Simulator />} />
+          <Route path="/simulators/margin" element={<MarginCalculator />} />
+          <Route path="/simulators/ad-budget" element={<AdBudgetCalculator />} />
+          <Route path="/simulators/passive-income" element={<PassiveIncomeCalculator />} />
+          <Route path="/simulators/trend-analysis" element={<TrendAnalysis />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/leaderboard" element={<Leaderboard />} />

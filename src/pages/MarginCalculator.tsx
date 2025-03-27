@@ -1,0 +1,286 @@
+
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calculator, ArrowRightLeft, Heart, RefreshCw, Percent } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import { slideIn } from "@/lib/animations";
+import { useToast } from "@/hooks/use-toast";
+
+const MarginCalculator = () => {
+  const { toast } = useToast();
+  const simulatorRef = useState<HTMLDivElement | null>(null)[0];
+  const resultsRef = useState<HTMLDivElement | null>(null)[0];
+  
+  const [sellingPrice, setSellingPrice] = useState<number>(100);
+  const [costPrice, setCostPrice] = useState<number>(60);
+  const [marginType, setMarginType] = useState<string>("percent");
+  const [results, setResults] = useState<{
+    marginAmount: number;
+    marginPercent: number;
+    markup: number;
+    breakEvenPoint: number;
+  } | null>(null);
+  
+  useEffect(() => {
+    document.title = "FinQuest - Calculateur de marge";
+  }, []);
+  
+  const handleSellingPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSellingPrice(parseFloat(e.target.value) || 0);
+  };
+  
+  const handleCostPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCostPrice(parseFloat(e.target.value) || 0);
+  };
+  
+  const calculate = () => {
+    if (costPrice <= 0) {
+      toast({
+        title: "Erreur",
+        description: "Le coût de revient doit être supérieur à zéro",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (sellingPrice <= 0) {
+      toast({
+        title: "Erreur",
+        description: "Le prix de vente doit être supérieur à zéro",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Calculate margin
+    const marginAmount = sellingPrice - costPrice;
+    const marginPercent = (marginAmount / sellingPrice) * 100;
+    const markup = (marginAmount / costPrice) * 100;
+    const breakEvenPoint = costPrice > 0 ? costPrice / sellingPrice : 0;
+    
+    setResults({
+      marginAmount,
+      marginPercent,
+      markup,
+      breakEvenPoint
+    });
+    
+    if (resultsRef) {
+      slideIn(resultsRef, 'up');
+    }
+  };
+  
+  const reset = () => {
+    setSellingPrice(100);
+    setCostPrice(60);
+    setMarginType("percent");
+    setResults(null);
+  };
+  
+  // Format currency
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
+  };
+  
+  return (
+    <div className="min-h-screen pb-16 md:pb-0">
+      <Navbar />
+      <div className="pt-20">
+        <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-6">
+          <h1 className="text-3xl font-bold mb-2">Calculateur de marge</h1>
+          <p className="text-muted-foreground mb-8">
+            Déterminez vos marges et prix optimaux pour maximiser votre rentabilité
+          </p>
+          
+          <div className="glass p-6 rounded-xl text-center mb-10">
+            <div className="inline-block rounded-full bg-primary/10 p-3 mb-4">
+              <Percent className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">Calculateur de marge et prix</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
+              Calculez rapidement votre marge bénéficiaire et analysez votre rentabilité.
+            </p>
+          </div>
+        
+          <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div ref={(el) => { if (el && !simulatorRef) slideIn(el, 'right') }}>
+                <Card className="glass">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Calculator className="mr-2 h-5 w-5 text-primary" />
+                      Calculateur de marge
+                    </CardTitle>
+                    <CardDescription>
+                      Calculez votre marge bénéficiaire et votre taux de marge
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="sellingPrice">Prix de vente</Label>
+                      <div className="relative">
+                        <Input
+                          id="sellingPrice"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={sellingPrice}
+                          onChange={handleSellingPriceChange}
+                          className="pl-8"
+                        />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="costPrice">Coût de revient</Label>
+                      <div className="relative">
+                        <Input
+                          id="costPrice"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={costPrice}
+                          onChange={handleCostPriceChange}
+                          className="pl-8"
+                        />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="marginType">Type de marge</Label>
+                      <Select value={marginType} onValueChange={setMarginType}>
+                        <SelectTrigger id="marginType">
+                          <SelectValue placeholder="Sélectionnez un type de marge" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="percent">Marge en pourcentage</SelectItem>
+                          <SelectItem value="amount">Marge en montant</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                      <Button onClick={calculate} className="flex-1">
+                        Calculer
+                      </Button>
+                      <Button variant="outline" onClick={reset} className="flex-1">
+                        <RefreshCw className="mr-2 h-4 w-4" /> Réinitialiser
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <div className="mt-8 text-center text-sm text-muted-foreground">
+                  <p className="flex items-center justify-center">
+                    <Heart className="mr-1 h-4 w-4 text-red-500" />
+                    Développé pour vous aider à optimiser votre stratégie de prix
+                  </p>
+                </div>
+              </div>
+              
+              {results && (
+                <div ref={(el) => { if (el && !resultsRef) slideIn(el, 'up') }}>
+                  <Card className="glass">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <ArrowRightLeft className="mr-2 h-5 w-5 text-primary" />
+                        Résultats de l'analyse
+                      </CardTitle>
+                      <CardDescription>
+                        Analyse détaillée de votre marge et rentabilité
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                          <h3 className="text-sm text-muted-foreground font-medium mb-1">Marge brute</h3>
+                          <p className={`text-3xl font-bold ${results.marginAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {formatCurrency(results.marginAmount)}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Prix de vente - Coût de revient
+                          </p>
+                        </div>
+                        
+                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                          <h3 className="text-sm text-muted-foreground font-medium mb-1">Taux de marge</h3>
+                          <p className={`text-3xl font-bold ${results.marginPercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {results.marginPercent.toFixed(2)}%
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            (Marge / Prix de vente) × 100
+                          </p>
+                        </div>
+                        
+                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                          <h3 className="text-sm text-muted-foreground font-medium mb-1">Taux de marque</h3>
+                          <p className={`text-3xl font-bold ${results.markup >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {results.markup.toFixed(2)}%
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            (Marge / Coût de revient) × 100
+                          </p>
+                        </div>
+                        
+                        <div className="bg-secondary/50 p-4 rounded-lg text-center">
+                          <h3 className="text-sm text-muted-foreground font-medium mb-1">Seuil de rentabilité</h3>
+                          <p className="text-3xl font-bold">
+                            {(results.breakEvenPoint * 100).toFixed(2)}%
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Pourcentage des ventes nécessaire pour couvrir les coûts
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 space-y-4">
+                        <div className="bg-primary/5 p-4 rounded-lg">
+                          <h3 className="text-sm font-medium mb-2">Interprétation des résultats</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {results.marginPercent >= 40
+                              ? "Excellente marge ! Votre produit est très rentable."
+                              : results.marginPercent >= 25
+                              ? "Bonne marge. Votre prix est compétitif tout en assurant une bonne rentabilité."
+                              : results.marginPercent >= 15
+                              ? "Marge moyenne. Envisagez d'optimiser vos coûts ou d'augmenter légèrement votre prix."
+                              : "Marge faible. Examinez vos coûts ou ajustez votre stratégie de prix."}
+                          </p>
+                        </div>
+                        
+                        <div className="bg-primary/5 p-4 rounded-lg">
+                          <h3 className="text-sm font-medium mb-2">Conseils personnalisés</h3>
+                          <ul className="text-sm text-muted-foreground space-y-2">
+                            {results.marginPercent < 20 && (
+                              <li>• Envisagez d'augmenter votre prix de vente de {((costPrice * 0.25) - results.marginAmount).toFixed(0)}€ pour atteindre une marge de 25%.</li>
+                            )}
+                            {results.markup < 50 && (
+                              <li>• Cherchez à réduire vos coûts de production pour améliorer votre taux de marque.</li>
+                            )}
+                            {results.marginPercent > 60 && (
+                              <li>• Votre marge est très élevée. Vous pourriez envisager de baisser légèrement votre prix pour augmenter votre volume de ventes.</li>
+                            )}
+                            {results.marginAmount <= 0 && (
+                              <li>• Attention ! Vous vendez à perte. Augmentez votre prix ou réduisez vos coûts immédiatement.</li>
+                            )}
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MarginCalculator;
