@@ -1,16 +1,18 @@
+
 import { useState } from "react";
 import { AdBudgetResult } from "./hooks/useAdBudgetState";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, ArrowDownToLine } from "lucide-react";
 import { exportAdBudgetComparisonToPdf } from "@/utils/pdf/exportAdBudget";
+import { Toast } from "@/hooks/use-toast";
 
 interface ComparisonViewProps {
   leftScenario: AdBudgetResult | null;
   rightScenario: AdBudgetResult | null;
   onClose: () => void;
   formatCurrency: (value: number) => string;
-  toast: any;
+  toast: any; // Using any for now to avoid breaking changes in type definition
 }
 
 const ComparisonView = ({
