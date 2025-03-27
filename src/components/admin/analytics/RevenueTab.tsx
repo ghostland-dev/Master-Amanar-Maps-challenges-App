@@ -58,7 +58,7 @@ export const RevenueTab = () => {
               showLegend={false}
             />
           </div>
-        </ChartChart>
+        </ChartCard>
       </div>
     </div>
   );
