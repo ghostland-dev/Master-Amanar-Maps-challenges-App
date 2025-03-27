@@ -20,6 +20,7 @@ import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Leaderboard from "./pages/Leaderboard";
 import Library from "./pages/Library";
+import LibraryItem from "./pages/LibraryItem";
 import SuperAdmin from "./pages/SuperAdmin";
 import ChallengeManager from "./pages/admin/ChallengeManager";
 import UserManager from "./pages/admin/UserManager";
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/library/:id" element={<LibraryItem />} />
           <Route path="/admin" element={<SuperAdmin />} />
           <Route path="/admin/challenges" element={<ChallengeManager />} />
           <Route path="/admin/users" element={<UserManager />} />
