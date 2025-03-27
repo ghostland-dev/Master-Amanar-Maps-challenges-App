@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Trophy, Google, Github, Eye, EyeOff } from "lucide-react";
+import { Trophy, Github, Eye, EyeOff, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const Auth = () => {
@@ -219,7 +218,7 @@ const Auth = () => {
                   className="flex-1"
                   onClick={() => handleSocialLogin("Google")}
                 >
-                  <Google className="mr-2 h-4 w-4" />
+                  <Mail className="mr-2 h-4 w-4" />
                   Google
                 </Button>
                 <Button

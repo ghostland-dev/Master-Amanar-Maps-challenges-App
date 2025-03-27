@@ -1,256 +1,385 @@
 
-import { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Award, Crown, Medal, Search, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Award, ChevronUp, Medal, TrophyIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
-interface LeaderboardUser {
+interface User {
   id: number;
-  rank: number;
   name: string;
   avatar: string;
-  level: number;
-  xp: number;
-  badges: number;
+  points: number;
+  rank: number;
+  badges: { name: string; type: "default" | "secondary" | "destructive" | "outline" }[];
+  progress: number;
   challenges: number;
-  category?: string;
 }
 
-const Leaderboard = () => {
-  useEffect(() => {
-    document.title = "FinQuest - Classement";
-  }, []);
+const mockUsers: User[] = [
+  {
+    id: 1,
+    name: "Sophie Martin",
+    avatar: "",
+    points: 3750,
+    rank: 1,
+    badges: [
+      { name: "Expert en Épargne", type: "secondary" },
+      { name: "Investisseur Pro", type: "secondary" },
+    ],
+    progress: 92,
+    challenges: 28,
+  },
+  {
+    id: 2,
+    name: "Thomas Dubois",
+    avatar: "",
+    points: 3420,
+    rank: 2,
+    badges: [
+      { name: "Maître Budget", type: "secondary" },
+      { name: "Challenger", type: "outline" },
+    ],
+    progress: 87,
+    challenges: 25,
+  },
+  {
+    id: 3,
+    name: "Emma Petit",
+    avatar: "",
+    points: 3100,
+    rank: 3,
+    badges: [
+      { name: "Débutant", type: "outline" },
+      { name: "Épargnant", type: "secondary" },
+    ],
+    progress: 75,
+    challenges: 20,
+  },
+  {
+    id: 4,
+    name: "Lucas Bernard",
+    avatar: "",
+    points: 2800,
+    rank: 4,
+    badges: [
+      { name: "Analyste", type: "secondary" },
+    ],
+    progress: 65,
+    challenges: 18,
+  },
+  {
+    id: 5,
+    name: "Camille Roux",
+    avatar: "",
+    points: 2450,
+    rank: 5,
+    badges: [
+      { name: "Débutant", type: "outline" },
+    ],
+    progress: 58,
+    challenges: 15,
+  },
+  {
+    id: 6,
+    name: "Hugo Leroy",
+    avatar: "",
+    points: 2100,
+    rank: 6,
+    badges: [
+      { name: "Novice", type: "outline" },
+    ],
+    progress: 45,
+    challenges: 12,
+  },
+  {
+    id: 7,
+    name: "Léa Moreau",
+    avatar: "",
+    points: 1900,
+    rank: 7,
+    badges: [
+      { name: "Débutant", type: "outline" },
+    ],
+    progress: 40,
+    challenges: 10,
+  },
+];
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState("all");
-
-  // Mock leaderboard data - will be replaced with Supabase data
-  const mockUsers: LeaderboardUser[] = [
-    { id: 1, rank: 1, name: "Sophie Martin", avatar: "", level: 15, xp: 15420, badges: 12, challenges: 27, category: "E-commerce" },
-    { id: 2, rank: 2, name: "Thomas Dubois", avatar: "", level: 14, xp: 14280, badges: 10, challenges: 23, category: "Investissement" },
-    { id: 3, rank: 3, name: "Emma Bernard", avatar: "", level: 13, xp: 13150, badges: 9, challenges: 20, category: "Crypto" },
-    { id: 4, rank: 4, name: "Lucas Petit", avatar: "", level: 12, xp: 12050, badges: 8, challenges: 19, category: "Marketing" },
-    { id: 5, rank: 5, name: "Camille Durand", avatar: "", level: 11, xp: 11700, badges: 7, challenges: 17, category: "E-commerce" },
-    { id: 6, rank: 6, name: "Hugo Moreau", avatar: "", level: 10, xp: 10950, badges: 9, challenges: 16, category: "Investissement" },
-    { id: 7, rank: 7, name: "Léa Leroy", avatar: "", level: 9, xp: 9800, badges: 6, challenges: 15, category: "Crypto" },
-    { id: 8, rank: 8, name: "Arthur Roux", avatar: "", level: 9, xp: 9450, badges: 5, challenges: 14, category: "Marketing" },
-    { id: 9, rank: 9, name: "Chloé Simon", avatar: "", level: 8, xp: 8720, badges: 6, challenges: 13, category: "E-commerce" },
-    { id: 10, rank: 10, name: "Gabriel Fournier", avatar: "", level: 8, xp: 8300, badges: 5, challenges: 12, category: "Investissement" },
-  ];
-
-  // Filter users based on search query and category filter
-  const filteredUsers = mockUsers.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filter === "all" || user.category?.toLowerCase() === filter.toLowerCase();
-    return matchesSearch && matchesCategory;
-  });
-
-  const renderLeaderboardItem = (user: LeaderboardUser, index: number) => {
-    // Determine styling for top 3 positions
-    const isTop3 = user.rank <= 3;
-    const rankColorClass = 
-      user.rank === 1 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-      user.rank === 2 ? "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400" :
-      user.rank === 3 ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400" :
-      "bg-secondary text-secondary-foreground";
-
-    const rankIcon = 
-      user.rank === 1 ? <Crown className="h-4 w-4 text-yellow-600 dark:text-yellow-400" /> :
-      user.rank === 2 ? <Medal className="h-4 w-4 text-slate-600 dark:text-slate-400" /> :
-      user.rank === 3 ? <Medal className="h-4 w-4 text-amber-600 dark:text-amber-400" /> : null;
-
-    return (
-      <div key={user.id} className={`flex items-center p-4 rounded-lg ${index % 2 === 0 ? "bg-secondary/10" : ""}`}>
-        <div className={`flex items-center justify-center h-8 w-8 rounded-full ${rankColorClass} mr-4`}>
-          {rankIcon || user.rank}
-        </div>
-        
-        <Avatar className="h-10 w-10 mr-4">
-          <AvatarImage src={user.avatar} alt={user.name} />
-          <AvatarFallback className="bg-primary/10">
-            <User className="h-5 w-5 text-primary" />
-          </AvatarFallback>
-        </Avatar>
-        
-        <div className="flex-1">
-          <div className="flex items-center">
-            <span className="font-medium">{user.name}</span>
-            {isTop3 && (
-              <Badge variant="primary" className="ml-2">
-                Top {user.rank}
-              </Badge>
-            )}
-          </div>
-          <div className="flex items-center text-xs text-muted-foreground">
-            <span className="mr-2">Niveau {user.level}</span>
-            {user.category && <span>• {user.category}</span>}
-          </div>
-        </div>
-        
-        <div className="text-right">
-          <div className="font-medium">{user.xp.toLocaleString()} XP</div>
-          <div className="text-xs text-muted-foreground">
-            {user.challenges} défis • {user.badges} badges
-          </div>
+const UserRankCard = ({ user, highlight = false }: { user: User; highlight?: boolean }) => (
+  <div className={`p-4 rounded-lg transition-all ${highlight ? "bg-primary/10 border border-primary/20" : "hover:bg-accent"}`}>
+    <div className="flex items-center">
+      <div className="flex-shrink-0 w-8 mr-3 text-muted-foreground font-medium">#{user.rank}</div>
+      <Avatar className="h-10 w-10 border-2 border-muted">
+        <AvatarImage src={user.avatar} />
+        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+      </Avatar>
+      <div className="ml-4 flex-1">
+        <div className="font-medium">{user.name}</div>
+        <div className="flex mt-1 space-x-1">
+          {user.badges.map((badge, idx) => (
+            <Badge key={idx} variant={badge.type}>
+              {badge.name}
+            </Badge>
+          ))}
         </div>
       </div>
-    );
-  };
+      <div className="flex items-center ml-2">
+        <div className="font-semibold text-lg">{user.points.toLocaleString()}</div>
+        <div className="text-xs ml-1 text-muted-foreground">pts</div>
+      </div>
+    </div>
+  </div>
+);
 
+const Achievement = ({ title, desc, icon }: { title: string; desc: string; icon: React.ReactNode }) => (
+  <div className="flex items-start p-4 rounded-lg border border-border">
+    <div className="flex-shrink-0 p-2 bg-primary/10 rounded-full mr-3 text-primary">
+      {icon}
+    </div>
+    <div>
+      <h4 className="font-medium">{title}</h4>
+      <p className="text-sm text-muted-foreground">{desc}</p>
+    </div>
+  </div>
+);
+
+const Leaderboard = () => {
+  const [period, setPeriod] = useState("all-time");
+  const [category, setCategory] = useState("all");
+  
+  const currentUser = mockUsers[3]; // Example: currently logged in user
+  
   return (
-    <div className="min-h-screen pb-16 md:pb-0">
-      <Navbar />
-      <div className="pt-20">
-        <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-6">
+    <div className="container max-w-6xl mx-auto py-20 px-4">
+      <div className="flex items-center justify-between mb-8">
+        <div>
           <h1 className="text-3xl font-bold mb-2">Classement</h1>
-          <p className="text-muted-foreground mb-8">
-            Découvrez les meilleurs utilisateurs de la plateforme
+          <p className="text-muted-foreground">
+            Suivez votre progression et comparez-vous aux autres membres de la communauté
           </p>
-          
-          <Tabs defaultValue="global" className="mb-8">
-            <TabsList>
-              <TabsTrigger value="global">Classement global</TabsTrigger>
-              <TabsTrigger value="monthly">Ce mois-ci</TabsTrigger>
-              <TabsTrigger value="weekly">Cette semaine</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="global" className="mt-6">
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Award className="mr-2 h-5 w-5 text-primary" />
-                    Classement global
-                  </CardTitle>
-                  <CardDescription>
-                    Les utilisateurs classés par XP total accumulé
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Rechercher un utilisateur..."
-                        className="pl-9"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                    </div>
-                    <div className="w-full md:w-48">
-                      <Select value={filter} onValueChange={setFilter}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Filtrer par catégorie" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Toutes les catégories</SelectItem>
-                          <SelectItem value="e-commerce">E-commerce</SelectItem>
-                          <SelectItem value="investissement">Investissement</SelectItem>
-                          <SelectItem value="crypto">Crypto</SelectItem>
-                          <SelectItem value="marketing">Marketing</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+                <CardTitle>Classement Global</CardTitle>
+                <div className="flex mt-3 md:mt-0 space-x-3">
+                  <Select value={period} onValueChange={setPeriod}>
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue placeholder="Période" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="today">Aujourd'hui</SelectItem>
+                      <SelectItem value="this-week">Cette semaine</SelectItem>
+                      <SelectItem value="this-month">Ce mois</SelectItem>
+                      <SelectItem value="all-time">Tout le temps</SelectItem>
+                    </SelectContent>
+                  </Select>
                   
-                  <div className="space-y-1">
-                    {filteredUsers.length > 0 ? (
-                      filteredUsers.map((user, index) => renderLeaderboardItem(user, index))
-                    ) : (
-                      <div className="text-center py-8 text-muted-foreground">
-                        Aucun résultat trouvé
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="monthly" className="mt-6">
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Award className="mr-2 h-5 w-5 text-primary" />
-                    Classement mensuel
-                  </CardTitle>
-                  <CardDescription>
-                    Les utilisateurs classés par XP accumulé ce mois-ci
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-8 text-muted-foreground">
-                    Le classement mensuel sera disponible prochainement
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="weekly" className="mt-6">
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Award className="mr-2 h-5 w-5 text-primary" />
-                    Classement hebdomadaire
-                  </CardTitle>
-                  <CardDescription>
-                    Les utilisateurs classés par XP accumulé cette semaine
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-8 text-muted-foreground">
-                    Le classement hebdomadaire sera disponible prochainement
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-          
-          <Card className="glass">
-            <CardHeader>
-              <CardTitle className="text-lg">Comment gagner plus d'XP ?</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-secondary/20 rounded-lg">
-                  <div className="flex items-center mb-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-2">
-                      <Trophy className="h-4 w-4 text-primary" />
-                    </div>
-                    <h3 className="font-medium">Compléter des challenges</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Terminez des challenges pour gagner de l'XP et progresser dans le classement.
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-secondary/20 rounded-lg">
-                  <div className="flex items-center mb-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-2">
-                      <Award className="h-4 w-4 text-primary" />
-                    </div>
-                    <h3 className="font-medium">Obtenir des badges</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Débloquez des badges en atteignant des objectifs spécifiques sur la plateforme.
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-secondary/20 rounded-lg">
-                  <div className="flex items-center mb-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-2">
-                      <User className="h-4 w-4 text-primary" />
-                    </div>
-                    <h3 className="font-medium">Être actif régulièrement</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Connectez-vous quotidiennement et utilisez les simulateurs pour gagner de l'XP bonus.
-                  </p>
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue placeholder="Catégorie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les catégories</SelectItem>
+                      <SelectItem value="investment">Investissement</SelectItem>
+                      <SelectItem value="saving">Épargne</SelectItem>
+                      <SelectItem value="budget">Budget</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+            </CardHeader>
+            <Separator />
+            <CardContent className="pt-4">
+              {/* Top 3 users with medals */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+                {mockUsers.slice(1, 2).map((user) => (
+                  <div key={user.id} className="bg-muted rounded-lg p-4 flex flex-col items-center order-2">
+                    <div className="relative">
+                      <Avatar className="h-16 w-16 border-2 border-secondary">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground w-7 h-7 rounded-full flex items-center justify-center">
+                        <Medal className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <div className="font-semibold">{user.name}</div>
+                      <div className="text-sm text-muted-foreground">#{user.rank}</div>
+                      <div className="mt-1 flex items-center justify-center">
+                        <span className="font-bold">{user.points.toLocaleString()}</span>
+                        <span className="text-xs ml-1 text-muted-foreground">pts</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {mockUsers.slice(0, 1).map((user) => (
+                  <div key={user.id} className="bg-muted rounded-lg p-4 flex flex-col items-center relative order-1 md:mt-[-20px]">
+                    <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
+                      <TrophyIcon className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="relative pt-3">
+                      <Avatar className="h-20 w-20 border-2 border-primary">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -top-2 -right-2 bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                        1
+                      </div>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <div className="font-semibold">{user.name}</div>
+                      <div className="text-sm text-muted-foreground">#{user.rank}</div>
+                      <div className="mt-1 flex items-center justify-center">
+                        <span className="font-bold">{user.points.toLocaleString()}</span>
+                        <span className="text-xs ml-1 text-muted-foreground">pts</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {mockUsers.slice(2, 3).map((user) => (
+                  <div key={user.id} className="bg-muted rounded-lg p-4 flex flex-col items-center order-3">
+                    <div className="relative">
+                      <Avatar className="h-16 w-16 border-2 border-yellow-600/50">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -top-2 -right-2 bg-yellow-600/50 text-secondary-foreground w-7 h-7 rounded-full flex items-center justify-center">
+                        <Award className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <div className="font-semibold">{user.name}</div>
+                      <div className="text-sm text-muted-foreground">#{user.rank}</div>
+                      <div className="mt-1 flex items-center justify-center">
+                        <span className="font-bold">{user.points.toLocaleString()}</span>
+                        <span className="text-xs ml-1 text-muted-foreground">pts</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Full Leaderboard */}
+              <div className="space-y-2">
+                {mockUsers.slice(0, 7).map((user) => (
+                  <UserRankCard key={user.id} user={user} highlight={user.id === currentUser.id} />
+                ))}
+              </div>
+              
+              <div className="text-center mt-6">
+                <Button variant="outline" size="sm">Voir plus</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div>
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Votre Progression</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">Position Actuelle</span>
+                    <span className="text-sm font-medium">#{currentUser.rank}</span>
+                  </div>
+                  <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full" style={{ width: `${currentUser.progress}%` }} />
+                  </div>
+                  <div className="flex justify-between mt-1">
+                    <span className="text-xs text-muted-foreground">Prochain niveau: #{currentUser.rank - 1}</span>
+                    <span className="text-xs text-muted-foreground">
+                      +{mockUsers[currentUser.rank - 2].points - currentUser.points} pts
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="text-center">
+                    <div className="text-xl font-bold">{currentUser.points.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">Points totaux</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl font-bold">{currentUser.progress}%</div>
+                    <div className="text-xs text-muted-foreground">Progression</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl font-bold">{currentUser.challenges}</div>
+                    <div className="text-xs text-muted-foreground">Défis complétés</div>
+                  </div>
+                </div>
+                
+                <Button className="w-full gap-2">
+                  <ChevronUp className="h-4 w-4" />
+                  <span>Améliorer mon classement</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Vos Accomplissements</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="recent">
+                <TabsList className="mb-4 w-full">
+                  <TabsTrigger value="recent" className="flex-1">Récents</TabsTrigger>
+                  <TabsTrigger value="badges" className="flex-1">Badges</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="recent" className="space-y-4">
+                  <Achievement 
+                    title="Premier Investissement"
+                    desc="Vous avez réalisé votre premier investissement simulé"
+                    icon={<TrophyIcon className="h-4 w-4" />}
+                  />
+                  <Achievement 
+                    title="Maître du Budget"
+                    desc="Vous avez créé 5 budgets personnalisés"
+                    icon={<Award className="h-4 w-4" />}
+                  />
+                  <Achievement 
+                    title="Sur la bonne voie"
+                    desc="Connectez-vous 7 jours d'affilée"
+                    icon={<Medal className="h-4 w-4" />}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="badges" className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    {currentUser.badges.map((badge, idx) => (
+                      <div key={idx} className="border border-border rounded-lg p-3 text-center">
+                        <div className="bg-primary/10 rounded-full w-10 h-10 flex items-center justify-center mx-auto mb-2">
+                          <Award className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="font-medium text-sm">{badge.name}</div>
+                      </div>
+                    ))}
+                    <div className="border border-dashed border-muted-foreground/30 rounded-lg p-3 text-center">
+                      <div className="bg-muted rounded-full w-10 h-10 flex items-center justify-center mx-auto mb-2">
+                        <Award className="h-5 w-5 text-muted-foreground/50" />
+                      </div>
+                      <div className="text-sm text-muted-foreground">Accomplir plus de défis</div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
