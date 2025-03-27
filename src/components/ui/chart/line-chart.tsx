@@ -25,7 +25,7 @@ export const LineChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      {(containerProps) => (
+      {() => (
         <RechartsPrimitive.LineChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />
           <RechartsPrimitive.YAxis />

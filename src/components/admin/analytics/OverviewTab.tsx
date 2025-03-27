@@ -1,6 +1,6 @@
 
 import { Users, Eye, CreditCard, CheckCircle } from "lucide-react";
-import { StatCard } from "./StatCard";
+import { StatCard, TimeRange } from "./StatCard";
 import { ChartCard } from "./ChartCard";
 import { ChallengeTable } from "./ChallengeTable";
 import { LineChart, BarChart } from "@/components/ui/chart";
@@ -12,9 +12,10 @@ interface OverviewTabProps {
 
 export const OverviewTab = ({ timeRange }: OverviewTabProps) => {
   // Map string timeRange to TimeRange type
-  const mappedTimeRange = timeRange === "week" ? "day" : 
-                           timeRange === "month" ? "month" :
-                           timeRange === "year" ? "year" : "month";
+  const mappedTimeRange: TimeRange = 
+    timeRange === "week" ? "day" : 
+    timeRange === "month" ? "month" :
+    timeRange === "year" ? "year" : "month";
                            
   return (
     <div className="space-y-6">

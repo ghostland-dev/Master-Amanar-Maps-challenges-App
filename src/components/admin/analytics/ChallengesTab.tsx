@@ -1,10 +1,17 @@
 
 import { ChartCard } from "./ChartCard";
-import { ChallengeTable } from "./ChallengeTable";
+import { ChallengeTable, Challenge } from "./ChallengeTable";
 import { PieChart, BarChart } from "@/components/ui/chart";
 import { challengeCompletionData, challengeEngagementData, challengePerformanceData } from "./data";
 
 export const ChallengesTab = () => {
+  // Map the performance data to the Challenge type
+  const mappedChallengeData: Challenge[] = challengePerformanceData.map(challenge => ({
+    ...challenge,
+    participants: challenge.starts,
+    completionRate: 100 - (challenge.abandonRate || 0)
+  }));
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -40,11 +47,7 @@ export const ChallengesTab = () => {
         description="Analyse des taux de complétion et d'abandon"
       >
         <ChallengeTable 
-          challenges={challengePerformanceData.map(challenge => ({
-            ...challenge,
-            participants: challenge.starts,
-            completionRate: 100 - (challenge.abandonRate || 0)
-          }))} 
+          challenges={mappedChallengeData} 
           showRating={true} 
           showAbandonRate={true} 
         />
