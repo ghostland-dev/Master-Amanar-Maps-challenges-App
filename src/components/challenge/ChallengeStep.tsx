@@ -4,7 +4,7 @@ import { CheckCircle, LockIcon, UnlockIcon, Download, BookOpen, Calendar } from 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { motion } from "motion";
+import { animate } from "motion";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePdfFromData } from "@/utils/pdfGenerator";
 
@@ -97,12 +97,11 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
   };
 
   return (
-    <motion.div 
+    <div 
       className={`overflow-hidden rounded-xl transition-all duration-300 ${
         step.isLocked ? 'opacity-70' : isActive ? 'shadow-md' : 'hover:shadow-sm'
       }`}
-      whileHover={!step.isLocked ? { y: -2 } : {}}
-      animate={isActive ? { scale: 1.01 } : { scale: 1 }}
+      style={{ transform: isActive ? 'scale(1.01)' : 'scale(1)' }}
     >
       <Card
         className={`border overflow-hidden ${
@@ -169,7 +168,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
           />
         )}
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
