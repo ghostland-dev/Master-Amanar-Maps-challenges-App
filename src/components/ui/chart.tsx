@@ -239,7 +239,9 @@ const ChartTooltipContent = React.forwardRef<
                       </div>
                       {item.value && (
                         <span className="font-mono font-medium tabular-nums text-foreground">
-                          {item.value.toLocaleString()}
+                          {typeof item.value === 'number' 
+                            ? item.value.toLocaleString() 
+                            : item.value}
                         </span>
                       )}
                     </div>
@@ -362,7 +364,7 @@ const BarChart = React.forwardRef<
     index: string
     categories: string[]
     colors?: string[]
-    valueFormatter?: (value: number) => string
+    valueFormatter?: (value: number | string) => string
     showLegend?: boolean
   }
 >(({ data, index, categories, colors = ["#2563eb"], valueFormatter, showLegend = true, ...props }, ref) => {
@@ -429,7 +431,7 @@ const LineChart = React.forwardRef<
     index: string
     categories: string[]
     colors?: string[]
-    valueFormatter?: (value: number) => string
+    valueFormatter?: (value: number | string) => string
     showLegend?: boolean
   }
 >(({ data, index, categories, colors = ["#2563eb"], valueFormatter, showLegend = true, ...props }, ref) => {
@@ -497,7 +499,7 @@ const PieChart = React.forwardRef<
     index: string
     category: string
     colors?: string[]
-    valueFormatter?: (value: number) => string
+    valueFormatter?: (value: number | string) => string
     showLegend?: boolean
   }
 >(({ data, index, category, colors = ["#2563eb", "#4ade80", "#f97316", "#f43f5e"], valueFormatter, showLegend = true, ...props }, ref) => {

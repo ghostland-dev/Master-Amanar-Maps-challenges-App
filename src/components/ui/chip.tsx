@@ -16,12 +16,19 @@ const chipVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        primary: "border-transparent bg-primary/10 text-primary hover:bg-primary/20"
+        primary: "border-transparent bg-primary/10 text-primary hover:bg-primary/20",
+        // Adding new variants for compatibility
+        success: "border-transparent bg-green-500 text-white hover:bg-green-600",
+        warning: "border-transparent bg-yellow-500 text-white hover:bg-yellow-600",
+        danger: "border-transparent bg-red-500 text-white hover:bg-red-600",
+        neutral: "border-transparent bg-slate-500 text-white hover:bg-slate-600"
       },
       size: {
         default: "px-2.5 py-0.5 text-xs",
         sm: "px-2 py-0.5 text-xs",
-        lg: "px-3 py-1 text-sm"
+        lg: "px-3 py-1 text-sm",
+        // Adding new size for compatibility
+        md: "px-2.5 py-0.5 text-sm"
       }
     },
     defaultVariants: {
