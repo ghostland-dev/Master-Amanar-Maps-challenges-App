@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import { Button } from "@/components/ui/button";
@@ -60,6 +61,130 @@ interface Challenge {
   completedBy?: number;
   rating?: number;
 }
+
+interface ChallengeTableProps {
+  challenges: Challenge[];
+  onEdit: (challenge: Challenge) => void;
+  onDelete: (challenge: Challenge) => void;
+  onToggle: (id: string, isActive: boolean) => void;
+  getChallengeIcon: (category: string) => JSX.Element;
+  getDifficultyLabel: (difficulty: string) => JSX.Element;
+  getChallengeStatus: (challenge: Challenge) => JSX.Element;
+  categoryLabels: Record<string, string>;
+}
+
+// Challenge Table Component
+const ChallengeTable = ({
+  challenges,
+  onEdit,
+  onDelete,
+  onToggle,
+  getChallengeIcon,
+  getDifficultyLabel,
+  getChallengeStatus,
+  categoryLabels
+}: ChallengeTableProps) => {
+  return (
+    <div className="rounded-md border bg-card">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[250px]">Challenge</TableHead>
+            <TableHead className="w-[150px]">Catégorie</TableHead>
+            <TableHead className="w-[120px]">Difficulté</TableHead>
+            <TableHead className="w-[120px]">XP</TableHead>
+            <TableHead className="w-[120px]">Durée</TableHead>
+            <TableHead className="w-[120px]">Participants</TableHead>
+            <TableHead className="w-[120px]">Status</TableHead>
+            <TableHead className="w-[150px] text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {challenges.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="text-center py-8">
+                <div className="flex flex-col items-center justify-center text-muted-foreground">
+                  <Target className="h-8 w-8 mb-2" />
+                  <p>Aucun challenge trouvé</p>
+                  <p className="text-sm">Créez un nouveau challenge ou modifiez vos filtres.</p>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            challenges.map((challenge) => (
+              <TableRow key={challenge.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      {getChallengeIcon(challenge.category)}
+                    </div>
+                    <div>
+                      <div className="font-medium">{challenge.title}</div>
+                      <div className="text-xs text-muted-foreground line-clamp-1">
+                        {challenge.description}
+                      </div>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {categoryLabels[challenge.category] || challenge.category}
+                </TableCell>
+                <TableCell>
+                  {getDifficultyLabel(challenge.difficulty)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Award className="mr-1.5 h-4 w-4 text-primary" />
+                    {challenge.xp}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Clock className="mr-1.5 h-4 w-4 text-muted-foreground" />
+                    {challenge.duration}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    {challenge.participants || 0}
+                    <Badge className="ml-1.5 bg-primary/10 text-primary hover:bg-primary/20">
+                      {challenge.completedBy || 0} terminés
+                    </Badge>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {getChallengeStatus(challenge)}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end items-center gap-2">
+                    <Switch
+                      checked={challenge.isActive}
+                      onCheckedChange={(checked) => onToggle(challenge.id, checked)}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onEdit(challenge)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDelete(challenge)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
 
 const ChallengeManager = () => {
   const { toast } = useToast();
@@ -979,4 +1104,314 @@ const ChallengeManager = () => {
                               
                               <CardContent className="pt-6">
                                 <div className="flex items-start gap-4">
-                                  <div className={`rounded-full p
+                                  <div className={`rounded-full p-2 ${
+                                    step.isCompleted 
+                                      ? "bg-green-500/10 text-green-500" 
+                                      : step.isLocked
+                                      ? "bg-orange-500/10 text-orange-500"
+                                      : "bg-primary/10 text-primary"
+                                  }`}>
+                                    {step.isCompleted 
+                                      ? <CheckCircle className="h-5 w-5" /> 
+                                      : step.isLocked
+                                      ? <Lock className="h-5 w-5" />
+                                      : <Play className="h-5 w-5" />
+                                    }
+                                  </div>
+                                  
+                                  <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                      <div className="font-medium flex items-center">
+                                        {index + 1}. {step.title}
+                                        
+                                        {step.isCompleted && (
+                                          <Badge variant="outline" className="ml-2 bg-green-500/10 text-green-500 text-xs">
+                                            Complété
+                                          </Badge>
+                                        )}
+                                        
+                                        {step.isLocked && (
+                                          <Badge variant="outline" className="ml-2 bg-orange-500/10 text-orange-500 text-xs">
+                                            Verrouillé
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                      {step.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="add-step" className="space-y-4 pt-4">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Ajouter une nouvelle étape</CardTitle>
+                          <CardDescription>
+                            Les étapes définissent le parcours que les utilisateurs suivront pour compléter le challenge.
+                          </CardDescription>
+                        </CardHeader>
+                        
+                        <CardContent className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="step-title">Titre de l'étape</Label>
+                            <Input
+                              id="step-title"
+                              value={stepForm.title}
+                              onChange={(e) => setStepForm({...stepForm, title: e.target.value})}
+                              placeholder="Ex: Rechercher une niche rentable"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="step-description">Description</Label>
+                            <Textarea
+                              id="step-description"
+                              value={stepForm.description}
+                              onChange={(e) => setStepForm({...stepForm, description: e.target.value})}
+                              placeholder="Instructions et détails pour cette étape..."
+                              rows={3}
+                            />
+                          </div>
+                          
+                          <div className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="step-completed"
+                                checked={stepForm.isCompleted}
+                                onCheckedChange={(checked) => 
+                                  setStepForm({
+                                    ...stepForm, 
+                                    isCompleted: checked as boolean
+                                  })
+                                }
+                              />
+                              <Label htmlFor="step-completed">Marquer comme complété</Label>
+                            </div>
+                            
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="step-locked"
+                                checked={stepForm.isLocked}
+                                onCheckedChange={(checked) => 
+                                  setStepForm({
+                                    ...stepForm, 
+                                    isLocked: checked as boolean
+                                  })
+                                }
+                              />
+                              <Label htmlFor="step-locked">Verrouiller cette étape</Label>
+                            </div>
+                          </div>
+                          
+                          <Button 
+                            className="w-full" 
+                            onClick={handleAddStep}
+                            disabled={!stepForm.title || !stepForm.description}
+                          >
+                            <PlusCircle className="h-4 w-4 mr-2" />
+                            Ajouter l'étape
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  </Tabs>
+                </TabsContent>
+                
+                {/* Resources Tab */}
+                <TabsContent value="resources" className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Add Resource */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Ajouter une ressource</CardTitle>
+                        <CardDescription>
+                          Ajoutez des ressources pour aider les utilisateurs à compléter le challenge.
+                        </CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="resource-title">Titre</Label>
+                          <Input
+                            id="resource-title"
+                            value={resourceForm.title}
+                            onChange={(e) => setResourceForm({...resourceForm, title: e.target.value})}
+                            placeholder="Titre de la ressource"
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="resource-type">Type de ressource</Label>
+                          <Select
+                            value={resourceForm.type}
+                            onValueChange={(value: "pdf" | "template" | "simulator" | "video") => 
+                              setResourceForm({...resourceForm, type: value})
+                            }
+                          >
+                            <SelectTrigger id="resource-type">
+                              <SelectValue placeholder="Sélectionner un type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pdf">Document PDF</SelectItem>
+                              <SelectItem value="template">Modèle/Template</SelectItem>
+                              <SelectItem value="simulator">Simulateur</SelectItem>
+                              <SelectItem value="video">Vidéo</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="resource-url">URL ou lien</Label>
+                          <Input
+                            id="resource-url"
+                            value={resourceForm.url}
+                            onChange={(e) => setResourceForm({...resourceForm, url: e.target.value})}
+                            placeholder="Lien vers la ressource"
+                          />
+                        </div>
+                        
+                        <Button 
+                          className="w-full" 
+                          onClick={handleAddResource}
+                          disabled={!resourceForm.title || !resourceForm.url}
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          Ajouter la ressource
+                        </Button>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* List Resources */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Ressources du challenge</CardTitle>
+                        <CardDescription>
+                          Liste des ressources disponibles pour ce challenge.
+                        </CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        {currentChallenge.resources.length === 0 ? (
+                          <div className="text-center py-6">
+                            <BookOpen className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
+                            <p className="text-muted-foreground">Aucune ressource ajoutée.</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {currentChallenge.resources.map((resource) => (
+                              <div 
+                                key={resource.id} 
+                                className="flex items-center justify-between p-3 border rounded-md bg-card"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                    {resource.type === "pdf" && <BookOpen className="h-4 w-4 text-primary" />}
+                                    {resource.type === "template" && <Layers className="h-4 w-4 text-primary" />}
+                                    {resource.type === "simulator" && <PenTool className="h-4 w-4 text-primary" />}
+                                    {resource.type === "video" && <Play className="h-4 w-4 text-primary" />}
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-sm">{resource.title}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {resourceTypeLabels[resource.type]}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-7 w-7" 
+                                    asChild
+                                  >
+                                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                                      <Link className="h-3.5 w-3.5" />
+                                    </a>
+                                  </Button>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-7 w-7 text-destructive"
+                                    onClick={() => handleDeleteResource(resource.id)}
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            )}
+            
+            <DialogFooter className="mt-6">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Annuler
+              </Button>
+              <Button onClick={handleUpdateChallenge}>
+                Enregistrer les modifications
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Challenge Dialog */}
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Confirmer la suppression</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer ce challenge ? Cette action est irréversible.
+              </DialogDescription>
+            </DialogHeader>
+            
+            {currentChallenge && (
+              <div className="py-4">
+                <div className="flex items-center gap-3 p-3 border rounded-md bg-destructive/5">
+                  <div className="h-10 w-10 rounded-full bg-destructive/10 flex items-center justify-center">
+                    {getChallengeIcon(currentChallenge.category)}
+                  </div>
+                  <div>
+                    <p className="font-medium">{currentChallenge.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {currentChallenge.description.substring(0, 50)}
+                      {currentChallenge.description.length > 50 ? "..." : ""}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                Annuler
+              </Button>
+              <Button 
+                variant="destructive" 
+                onClick={handleDeleteChallenge}
+              >
+                Supprimer définitivement
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  );
+};
+
+export default ChallengeManager;
