@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import ROISimulator from "@/components/ROISimulator";
@@ -23,35 +24,35 @@ const Simulator = () => {
       title: "Simulateur de ROI",
       description: "Calculez le retour sur investissement de vos projets",
       icon: <TrendingUp className="h-6 w-6 text-primary" />,
-      to: "/simulators",
+      to: "/simulator",
       comingSoon: false,
     },
     {
       title: "Calculateur de marge",
       description: "Déterminez vos marges et prix optimaux",
       icon: <Calculator className="h-6 w-6 text-primary" />,
-      to: "/simulators/margin",
+      to: "/simulator/margin",
       comingSoon: false,
     },
     {
       title: "Budget publicitaire",
       description: "Optimisez votre budget marketing et publicitaire",
       icon: <DollarSign className="h-6 w-6 text-primary" />,
-      to: "/simulators/ad-budget",
+      to: "/simulator/ad-budget",
       comingSoon: false,
     },
     {
       title: "Revenus passifs",
       description: "Projetez vos revenus passifs sur le long terme",
       icon: <Percent className="h-6 w-6 text-primary" />,
-      to: "/simulators/passive-income",
+      to: "/simulator/passive-income",
       comingSoon: false,
     },
     {
       title: "Analyse de tendance",
       description: "Analysez les tendances du marché et leur impact",
       icon: <LineChart className="h-6 w-6 text-primary" />,
-      to: "/simulators/trend-analysis",
+      to: "/simulator/trend-analysis",
       comingSoon: false,
     },
   ];
