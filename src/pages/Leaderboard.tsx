@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Award, ChevronUp, Medal, TrophyIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/ui/user-avatar";
 
 interface User {
   id: number;
@@ -114,10 +113,11 @@ const UserRankCard = ({ user, highlight = false }: { user: User; highlight?: boo
   <div className={`p-4 rounded-lg transition-all ${highlight ? "bg-primary/10 border border-primary/20" : "hover:bg-accent"}`}>
     <div className="flex items-center">
       <div className="flex-shrink-0 w-8 mr-3 text-muted-foreground font-medium">#{user.rank}</div>
-      <Avatar className="h-10 w-10 border-2 border-muted">
-        <AvatarImage src={user.avatar} />
-        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-      </Avatar>
+      <UserAvatar 
+        user={{ name: user.name, avatar: user.avatar }}
+        border
+        borderColor={highlight ? "border-primary" : "border-muted"}
+      />
       <div className="ml-4 flex-1">
         <div className="font-medium">{user.name}</div>
         <div className="flex mt-1 space-x-1">
@@ -205,10 +205,12 @@ const Leaderboard = () => {
                 {mockUsers.slice(1, 2).map((user) => (
                   <div key={user.id} className="bg-muted rounded-lg p-4 flex flex-col items-center order-2">
                     <div className="relative">
-                      <Avatar className="h-16 w-16 border-2 border-secondary">
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        user={{ name: user.name, avatar: user.avatar }}
+                        size="lg"
+                        border
+                        borderColor="border-secondary"
+                      />
                       <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground w-7 h-7 rounded-full flex items-center justify-center">
                         <Medal className="h-4 w-4" />
                       </div>
@@ -230,10 +232,12 @@ const Leaderboard = () => {
                       <TrophyIcon className="h-8 w-8 text-primary" />
                     </div>
                     <div className="relative pt-3">
-                      <Avatar className="h-20 w-20 border-2 border-primary">
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        user={{ name: user.name, avatar: user.avatar }}
+                        size="xl"
+                        border
+                        borderColor="border-primary"
+                      />
                       <div className="absolute -top-2 -right-2 bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
                         1
                       </div>
@@ -252,10 +256,12 @@ const Leaderboard = () => {
                 {mockUsers.slice(2, 3).map((user) => (
                   <div key={user.id} className="bg-muted rounded-lg p-4 flex flex-col items-center order-3">
                     <div className="relative">
-                      <Avatar className="h-16 w-16 border-2 border-yellow-600/50">
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        user={{ name: user.name, avatar: user.avatar }}
+                        size="lg"
+                        border
+                        borderColor="border-yellow-600/50"
+                      />
                       <div className="absolute -top-2 -right-2 bg-yellow-600/50 text-secondary-foreground w-7 h-7 rounded-full flex items-center justify-center">
                         <Award className="h-4 w-4" />
                       </div>

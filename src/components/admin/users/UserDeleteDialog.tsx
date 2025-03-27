@@ -9,9 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { User } from "./types";
-import { getInitials } from "../utils";
 
 interface UserDeleteDialogProps {
   open: boolean;
@@ -24,7 +23,6 @@ export const UserDeleteDialog = ({
   open, 
   onOpenChange, 
   user,
-
   onConfirm 
 }: UserDeleteDialogProps) => {
   return (
@@ -36,9 +34,7 @@ export const UserDeleteDialog = ({
             Cette action ne peut pas être annulée. L'utilisateur sera définitivement supprimé de la plateforme.
             {user && (
               <div className="mt-2 p-3 bg-muted rounded-lg flex items-center gap-3">
-                <Avatar>
-                  <AvatarFallback>{user.name && getInitials(user.name)}</AvatarFallback>
-                </Avatar>
+                <UserAvatar user={user} />
                 <div>
                   <div className="font-medium">{user.name}</div>
                   <div className="text-sm text-muted-foreground">{user.email}</div>

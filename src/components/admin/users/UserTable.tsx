@@ -1,11 +1,10 @@
-
 import { 
   PenSquare, AlertCircle, 
   Edit, Lock, Unlock, Mail, Trash2
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import {
   Table,
   TableBody,
@@ -23,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import { User, roleLabels, statusLabels, planLabels } from "./types";
-import { getInitials, formatDate } from "../utils";
+import { formatDate } from "../utils";
 
 interface UserTableProps {
   users: User[];
@@ -67,10 +66,7 @@ export const UserTable = ({
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar user={user} />
                       <div>
                         <div className="font-medium">{user.name}</div>
                         <div className="text-sm text-muted-foreground">{user.email}</div>
