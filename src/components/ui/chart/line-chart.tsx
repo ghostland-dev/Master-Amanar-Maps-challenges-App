@@ -5,17 +5,27 @@ import { ChartContainer } from "./chart-container";
 import { ChartTooltip } from "./chart-tooltip";
 import { ChartConfig } from "./types";
 
-export const LineChart = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof ChartContainer> & {
-    data: any[];
-    index: string;
-    categories: string[];
-    colors?: string[];
-    valueFormatter?: (value: string | number) => string;
-    showLegend?: boolean;
-  }
->(({ data, index, categories, colors = ["#2563eb"], valueFormatter, showLegend = true, ...props }, ref) => {
+export interface LineChartProps extends React.ComponentProps<typeof ChartContainer> {
+  data: any[];
+  index: string;
+  categories: string[];
+  colors?: string[];
+  valueFormatter?: (value: string | number) => string;
+  showLegend?: boolean;
+}
+
+export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>((
+  { 
+    data, 
+    index, 
+    categories, 
+    colors = ["#2563eb"], 
+    valueFormatter, 
+    showLegend = true, 
+    ...props 
+  }, 
+  ref
+) => {
   const config: ChartConfig = React.useMemo(() => {
     return categories.reduce<ChartConfig>((acc, category, i) => {
       acc[category] = { color: colors[i % colors.length] };
@@ -25,7 +35,7 @@ export const LineChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      {(containerProps) => (
+      {({ chartId }) => (
         <RechartsPrimitive.LineChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />
           <RechartsPrimitive.YAxis />

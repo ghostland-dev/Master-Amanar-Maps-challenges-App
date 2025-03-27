@@ -5,17 +5,27 @@ import { ChartContainer } from "./chart-container";
 import { ChartTooltip } from "./chart-tooltip";
 import { ChartConfig } from "./types";
 
-export const PieChart = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof ChartContainer> & {
-    data: any[];
-    index: string;
-    category: string;
-    colors?: string[];
-    valueFormatter?: (value: string | number) => string;
-    showLegend?: boolean;
-  }
->(({ data, index, category, colors = ["#2563eb", "#4ade80", "#f97316", "#f43f5e"], valueFormatter, showLegend = true, ...props }, ref) => {
+export interface PieChartProps extends React.ComponentProps<typeof ChartContainer> {
+  data: any[];
+  index: string;
+  category: string;
+  colors?: string[];
+  valueFormatter?: (value: string | number) => string;
+  showLegend?: boolean;
+}
+
+export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
+  { 
+    data, 
+    index, 
+    category, 
+    colors = ["#2563eb", "#4ade80", "#f97316", "#f43f5e"], 
+    valueFormatter, 
+    showLegend = true, 
+    ...props 
+  }, 
+  ref
+) => {
   const config: ChartConfig = React.useMemo(() => {
     return data.reduce<ChartConfig>((acc, item, i) => {
       acc[item[index]] = { color: colors[i % colors.length], label: item[index] };
@@ -25,7 +35,7 @@ export const PieChart = React.forwardRef<
 
   return (
     <ChartContainer ref={ref} config={config} {...props}>
-      {(containerProps) => (
+      {({ chartId }) => (
         <RechartsPrimitive.PieChart>
           <RechartsPrimitive.Pie
             data={data}
