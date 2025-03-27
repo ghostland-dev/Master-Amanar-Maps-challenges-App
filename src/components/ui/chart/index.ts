@@ -1,5 +1,5 @@
 
-import { ChartContainer } from "./chart-container";
+import { ChartContainer, type ChartContainerProps } from "./chart-container";
 import { ChartTooltip, ChartTooltipContent } from "./chart-tooltip";
 import { ChartLegend, ChartLegendContent } from "./chart-legend";
 import { ChartStyle } from "./chart-style";
@@ -18,6 +18,7 @@ export {
   BarChart,
   LineChart,
   PieChart,
+  type ChartContainerProps,
   type BarChartProps,
   type LineChartProps,
   type PieChartProps,

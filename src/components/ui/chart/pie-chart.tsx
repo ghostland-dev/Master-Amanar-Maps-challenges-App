@@ -5,13 +5,14 @@ import { ChartContainer } from "./chart-container";
 import { ChartTooltip } from "./chart-tooltip";
 import { ChartConfig } from "./types";
 
-export interface PieChartProps extends React.ComponentProps<typeof ChartContainer> {
+export interface PieChartProps {
   data: any[];
   index: string;
   category: string;
   colors?: string[];
   valueFormatter?: (value: string | number) => string;
   showLegend?: boolean;
+  className?: string;
 }
 
 export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
@@ -21,8 +22,8 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
     category, 
     colors = ["#2563eb", "#4ade80", "#f97316", "#f43f5e"], 
     valueFormatter, 
-    showLegend = true, 
-    ...props 
+    showLegend = true,
+    className,
   }, 
   ref
 ) => {
@@ -34,7 +35,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
   }, [data, index, colors]);
 
   return (
-    <ChartContainer ref={ref} config={config} {...props}>
+    <ChartContainer ref={ref} config={config} className={className}>
       {({ chartId }) => (
         <RechartsPrimitive.PieChart>
           <RechartsPrimitive.Pie

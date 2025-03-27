@@ -5,13 +5,14 @@ import { ChartContainer } from "./chart-container";
 import { ChartTooltip } from "./chart-tooltip";
 import { ChartConfig } from "./types";
 
-export interface BarChartProps extends React.ComponentProps<typeof ChartContainer> {
+export interface BarChartProps {
   data: any[];
   index: string;
   categories: string[];
   colors?: string[];
   valueFormatter?: (value: string | number) => string;
   showLegend?: boolean;
+  className?: string;
 }
 
 export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
@@ -21,8 +22,8 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
     categories, 
     colors = ["#2563eb"], 
     valueFormatter, 
-    showLegend = true, 
-    ...props 
+    showLegend = true,
+    className,
   }, 
   ref
 ) => {
@@ -34,7 +35,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
   }, [categories, colors]);
 
   return (
-    <ChartContainer ref={ref} config={config} {...props}>
+    <ChartContainer ref={ref} config={config} className={className}>
       {({ chartId }) => (
         <RechartsPrimitive.BarChart data={data}>
           <RechartsPrimitive.XAxis dataKey={index} />
