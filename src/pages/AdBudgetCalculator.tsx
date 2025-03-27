@@ -1,21 +1,21 @@
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DollarSign, BarChart, ArrowRightLeft, Heart, RefreshCw } from "lucide-react";
+import { DollarSign, BarChart, ArrowRightLeft, Heart, RefreshCw, Download } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Navbar from "@/components/Navbar";
 import { slideIn } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
+import { exportAdBudgetToPdf } from "@/utils/pdf/exportAdBudget";
 
 const AdBudgetCalculator = () => {
   const { toast } = useToast();
-  const simulatorRef = useState<HTMLDivElement | null>(null)[0];
-  const resultsRef = useState<HTMLDivElement | null>(null)[0];
+  const simulatorRef = useRef<HTMLDivElement | null>(null);
+  const resultsRef = useRef<HTMLDivElement | null>(null);
   
   const [monthlyRevenue, setMonthlyRevenue] = useState<number>(10000);
   const [targetROAS, setTargetROAS] = useState<number>(3);
@@ -128,6 +128,20 @@ const AdBudgetCalculator = () => {
     if (resultsRef) {
       slideIn(resultsRef, 'up');
     }
+  };
+
+  const handleExportPdf = () => {
+    if (!results) return;
+    
+    const inputs = {
+      monthlyRevenue,
+      targetROAS,
+      industryType,
+      conversionRate,
+      averageOrderValue
+    };
+    
+    exportAdBudgetToPdf(results, inputs, toast);
   };
   
   return (
@@ -317,10 +331,21 @@ const AdBudgetCalculator = () => {
                 <div ref={(el) => { if (el && !resultsRef) slideIn(el, 'up') }}>
                   <Card className="glass">
                     <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <ArrowRightLeft className="mr-2 h-5 w-5 text-primary" />
-                        Budget recommandé
-                      </CardTitle>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="flex items-center">
+                          <ArrowRightLeft className="mr-2 h-5 w-5 text-primary" />
+                          Budget recommandé
+                        </CardTitle>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="hover:bg-primary/10"
+                          onClick={handleExportPdf}
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Exporter PDF
+                        </Button>
+                      </div>
                       <CardDescription>
                         Basé sur votre industrie et vos objectifs
                       </CardDescription>
