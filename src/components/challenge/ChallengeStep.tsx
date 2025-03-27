@@ -1,4 +1,3 @@
-
 import React from "react";
 import { CheckCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -18,10 +17,15 @@ interface StepProps {
     estimatedTime?: string;
     difficulty?: "easy" | "medium" | "hard";
     tips?: string[];
+    detailedInstructions?: string;
+    prerequisites?: string[];
+    expectedOutcome?: string;
+    commonMistakes?: string[];
     resources?: {
       title: string;
       url: string;
       type: string;
+      description?: string;
     }[];
   };
   isActive: boolean;
@@ -41,6 +45,8 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
         "Temps estimé": step.estimatedTime || "Non spécifié"
       },
       "Instructions": {
+        "Instructions détaillées": step.detailedInstructions || "Non spécifiées",
+        "Résultat attendu": step.expectedOutcome || "Non spécifié",
         "Points clés": step.tips || [
           "Recherchez au moins 3 sources d'information sur le sujet",
           "Comparez les différentes approches et méthodologies",
@@ -48,7 +54,10 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
           "Fixez des objectifs spécifiques et mesurables"
         ]
       },
-      "Ressources recommandées": step.resources?.map(r => r.title) || ["Aucune ressource spécifiée"]
+      "À éviter": {
+        "Erreurs courantes": step.commonMistakes || ["Aucune erreur courante spécifiée"]
+      },
+      "Ressources recommandées": step.resources?.map(r => `${r.title}${r.description ? ` - ${r.description}` : ''}`) || ["Aucune ressource spécifiée"]
     };
 
     try {
@@ -60,7 +69,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
       
       toast({
         title: "Guide téléchargé",
-        description: "Le guide de cette étape a été téléchargé avec succès",
+        description: "Le guide complet de cette étape a été téléchargé avec succès",
       });
     } catch (error) {
       toast({
@@ -86,6 +95,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
   };
 
   return (
+    
     <div 
       className={`overflow-hidden rounded-xl transition-all duration-300 ${
         step.isLocked ? 'opacity-70' : isActive ? 'shadow-md' : 'hover:shadow-sm'

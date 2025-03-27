@@ -8,10 +8,15 @@ export interface ChallengeStep {
   estimatedTime?: string; // Durée estimée pour compléter l'étape
   difficulty?: "easy" | "medium" | "hard"; // Niveau de difficulté de l'étape
   tips?: string[]; // Conseils pour réussir l'étape
+  detailedInstructions?: string; // Instructions détaillées pour l'étape
+  prerequisites?: string[]; // Prérequis nécessaires pour cette étape
+  expectedOutcome?: string; // Ce que l'utilisateur doit avoir accompli à la fin
+  commonMistakes?: string[]; // Erreurs courantes à éviter
   resources?: {
     title: string;
     url: string;
     type: string;
+    description?: string; // Description de la ressource
   }[]; // Ressources spécifiques à l'étape
 }
 
