@@ -17,7 +17,17 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    // For simulator routes, treat both /simulator and /simulators as active
+    if (path === "/simulator" && 
+        (location.pathname === "/simulator" || 
+         location.pathname.startsWith("/simulator/") || 
+         location.pathname === "/simulators")) {
+      return true;
+    }
+    
+    return location.pathname === path;
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"}`}>
@@ -37,7 +47,7 @@ const Navbar = () => {
             <Link to="/challenges" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/challenges") ? "text-primary" : "text-foreground/80"}`}>
               Challenges
             </Link>
-            <Link to="/simulators" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/simulators") ? "text-primary" : "text-foreground/80"}`}>
+            <Link to="/simulator" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/simulator") ? "text-primary" : "text-foreground/80"}`}>
               Simulateurs
             </Link>
             <Link to="/library" className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/library") ? "text-primary" : "text-foreground/80"}`}>
@@ -91,7 +101,7 @@ const Navbar = () => {
           <Trophy className="h-5 w-5" />
           <span className="text-xs mt-1">Challenges</span>
         </Link>
-        <Link to="/simulators" className={`flex flex-col items-center p-2 ${isActive("/simulators") ? "text-primary" : "text-muted-foreground"}`}>
+        <Link to="/simulator" className={`flex flex-col items-center p-2 ${isActive("/simulator") ? "text-primary" : "text-muted-foreground"}`}>
           <BarChart3 className="h-5 w-5" />
           <span className="text-xs mt-1">Simulateurs</span>
         </Link>

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Challenges from "./pages/Challenges";
 import Challenge from "./pages/challenge";
 import Simulator from "./pages/Simulator";
+import Simulators from "./pages/Simulators";
 import MarginCalculator from "./pages/MarginCalculator";
 import AdBudgetCalculator from "./pages/AdBudgetCalculator";
 import PassiveIncomeCalculator from "./pages/PassiveIncomeCalculator";
@@ -41,6 +43,7 @@ const App = () => (
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/challenge/:id" element={<Challenge />} />
           <Route path="/simulator" element={<Simulator />} />
+          <Route path="/simulators" element={<Simulators />} />
           <Route path="/simulator/margin" element={<MarginCalculator />} />
           <Route path="/simulator/ad-budget" element={<AdBudgetCalculator />} />
           <Route path="/simulator/passive-income" element={<PassiveIncomeCalculator />} />
