@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +25,7 @@ import ChallengeManager from "./pages/admin/ChallengeManager";
 import UserManager from "./pages/admin/UserManager";
 import SubscriptionManager from "./pages/admin/SubscriptionManager";
 import AnalyticsManager from "./pages/admin/AnalyticsManager";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -52,11 +52,15 @@ const App = () => (
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/library" element={<Library />} />
           <Route path="/library/:id" element={<LibraryItem />} />
+          
+          {/* Admin routes */}
           <Route path="/admin" element={<SuperAdmin />} />
           <Route path="/admin/challenges" element={<ChallengeManager />} />
           <Route path="/admin/users" element={<UserManager />} />
           <Route path="/admin/subscriptions" element={<SubscriptionManager />} />
           <Route path="/admin/analytics" element={<AnalyticsManager />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

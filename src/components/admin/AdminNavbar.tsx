@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Shield, Menu, X, Home, LogOut, Users, Award, CreditCard, BarChart3, Calculator } from "lucide-react";
+import { Shield, Menu, X, Home, LogOut, Users, Award, CreditCard, BarChart3, Calculator, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -24,9 +24,15 @@ const AdminNavbar = () => {
     { label: "Abonnements", href: "/admin/subscriptions", icon: CreditCard },
     { label: "Analytique", href: "/admin/analytics", icon: BarChart3 },
     { label: "Simulateurs", href: "/simulator", icon: Calculator },
+    { label: "Paramètres", href: "/admin/settings", icon: Settings },
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    if (isMobile) setOpen(false);
+  };
 
   const renderNavItems = () => (
     <div className="flex flex-col space-y-1">
@@ -35,10 +41,7 @@ const AdminNavbar = () => {
           key={item.href}
           variant={isActive(item.href) ? "default" : "ghost"}
           className={`justify-start ${isActive(item.href) ? "bg-primary text-primary-foreground" : ""} transition-colors`}
-          onClick={() => {
-            navigate(item.href);
-            if (isMobile) setOpen(false);
-          }}
+          onClick={() => handleNavigation(item.href)}
         >
           <item.icon className="mr-2 h-4 w-4" />
           {item.label}
@@ -50,10 +53,10 @@ const AdminNavbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <div className="flex items-center mr-4">
+        <Link to="/admin" className="flex items-center mr-4">
           <Shield className="h-6 w-6 text-primary mr-2" />
           <span className="font-bold text-lg hidden md:inline-block">Admin</span>
-        </div>
+        </Link>
 
         {isMobile ? (
           <>
