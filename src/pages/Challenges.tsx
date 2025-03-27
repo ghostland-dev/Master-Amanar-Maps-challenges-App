@@ -141,7 +141,7 @@ const Challenges = () => {
                     <SelectValue placeholder="Filtrer par catégorie" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Toutes les catégories</SelectItem>
+                    <SelectItem value="all">Toutes les catégories</SelectItem>
                     {Object.entries(categoryLabels).map(([value, label]) => (
                       <SelectItem key={value} value={value}>{label}</SelectItem>
                     ))}
@@ -155,7 +155,7 @@ const Challenges = () => {
                     <SelectValue placeholder="Filtrer par difficulté" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Toutes les difficultés</SelectItem>
+                    <SelectItem value="all">Toutes les difficultés</SelectItem>
                     <SelectItem value="beginner">Débutant</SelectItem>
                     <SelectItem value="intermediate">Intermédiaire</SelectItem>
                     <SelectItem value="advanced">Avancé</SelectItem>
