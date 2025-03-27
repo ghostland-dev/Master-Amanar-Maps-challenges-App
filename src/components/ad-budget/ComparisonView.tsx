@@ -1,10 +1,10 @@
+
 import { useState } from "react";
 import { AdBudgetResult } from "./hooks/useAdBudgetState";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, ArrowDownToLine } from "lucide-react";
 import { exportAdBudgetComparisonToPdf } from "@/utils/pdf/exportAdBudget";
-import { type ToastProps } from "@/hooks/use-toast";
 
 interface ComparisonViewProps {
   leftScenario: AdBudgetResult | null;
@@ -178,7 +178,8 @@ const ComparisonView = ({
             )}
             {renderComparisonItem(
               "Social", 
-              leftScenario.breakdown.social, 
+              leftScenario.breakdown.social,
+              rightScenario.breakdown.social, 
               formatCurrency
             )}
             {renderComparisonItem(
