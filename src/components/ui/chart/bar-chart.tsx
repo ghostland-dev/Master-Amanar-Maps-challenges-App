@@ -12,6 +12,7 @@ export interface BarChartProps {
   colors?: string[];
   valueFormatter?: (value: string | number) => string;
   showLegend?: boolean;
+  layout?: "vertical" | "horizontal";
   className?: string;
 }
 
@@ -23,6 +24,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
     colors = ["#2563eb"], 
     valueFormatter, 
     showLegend = true,
+    layout = "vertical",
     className,
   }, 
   ref
@@ -41,7 +43,10 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
       className={className}
     >
       {({ chartId }) => (
-        <RechartsPrimitive.BarChart data={data}>
+        <RechartsPrimitive.BarChart 
+          data={data}
+          layout={layout}
+        >
           <RechartsPrimitive.XAxis dataKey={index} />
           <RechartsPrimitive.YAxis />
           <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
