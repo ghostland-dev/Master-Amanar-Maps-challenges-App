@@ -1,7 +1,7 @@
 
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "motion";
+import { motion } from "framer-motion";
 
 interface Category {
   id: string;
