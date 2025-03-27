@@ -6,6 +6,8 @@ import { arbitrageChallenge } from "./arbitrageChallenge";
 import { affiliationChallenge } from "./affiliationChallenge";
 import { copywritingChallenge } from "./copywritingChallenge";
 import { nftChallenge } from "./nftChallenge";
+import { achatReventeChallenge } from "./achatReventeChallenge";
+import { marketingChallenge } from "./marketingChallenge";
 
 // Map of challenges
 const challengesMap: Record<string, Challenge> = {
@@ -15,6 +17,8 @@ const challengesMap: Record<string, Challenge> = {
   "4": affiliationChallenge,
   "5": copywritingChallenge,
   "6": nftChallenge,
+  "7": achatReventeChallenge,
+  "8": marketingChallenge
 };
 
 export const getChallengeData = (id: string): Challenge => {
@@ -28,5 +32,7 @@ export {
   arbitrageChallenge,
   affiliationChallenge,
   copywritingChallenge,
-  nftChallenge
+  nftChallenge,
+  achatReventeChallenge,
+  marketingChallenge
 };
