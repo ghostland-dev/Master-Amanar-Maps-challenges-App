@@ -1,51 +1,56 @@
 
-import { ReactNode } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { scaleIn } from "@/lib/animations";
 
 interface SimulatorCardProps {
   title: string;
   description: string;
-  icon: ReactNode;
+  icon: React.ReactNode;
   to: string;
   comingSoon?: boolean;
 }
 
-const SimulatorCard = ({
-  title,
-  description,
-  icon,
-  to,
-  comingSoon = false,
-}: SimulatorCardProps) => {
-  const card = (
-    <div className={`glass p-6 rounded-xl transition-all duration-300 h-full flex flex-col ${comingSoon ? "opacity-75" : "hover:shadow-lg hover:-translate-y-1"}`}>
-      <div className="flex items-start justify-between mb-4">
-        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-          {icon}
+const SimulatorCard = ({ title, description, icon, to, comingSoon = false }: SimulatorCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (cardRef.current) {
+      scaleIn(cardRef.current);
+    }
+  }, []);
+  
+  return (
+    <Card 
+      ref={cardRef}
+      className="group relative overflow-hidden h-full hover:shadow-md transition-all duration-300 border-border/50 bg-card/50 hover:bg-card/80"
+    >
+      <div className="absolute -right-20 -top-20 w-40 h-40 bg-primary/5 rounded-full blur-2xl transform group-hover:scale-150 transition-transform duration-500" />
+      
+      <Link to={to} className="block p-6">
+        <div className="flex items-start space-x-4">
+          <div className="bg-primary/10 rounded-full p-3 group-hover:bg-primary/20 transition-colors duration-300">
+            {icon}
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors duration-300">{title}</h3>
+              {comingSoon ? (
+                <Badge variant="outline" className="text-xs bg-primary/10 hover:bg-primary/20">Bientôt disponible</Badge>
+              ) : (
+                <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">{description}</p>
+          </div>
         </div>
-        {comingSoon && (
-          <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
-            Bientôt disponible
-          </span>
-        )}
-      </div>
-      
-      <h3 className="text-xl font-medium mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 flex-grow">{description}</p>
-      
-      <div className={`text-sm flex items-center justify-end ${comingSoon ? "text-muted-foreground" : "text-primary font-medium"}`}>
-        {comingSoon ? "En développement" : "Ouvrir le simulateur"}
-        <ArrowRight className="ml-1 h-4 w-4" />
-      </div>
-    </div>
+      </Link>
+    </Card>
   );
-
-  if (comingSoon) {
-    return card;
-  }
-
-  return <Link to={to} className="h-full">{card}</Link>;
 };
 
 export default SimulatorCard;

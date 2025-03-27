@@ -1,76 +1,100 @@
 
-import { useState, useEffect, useRef } from "react";
-import { Heart } from "lucide-react";
-import { slideIn } from "@/lib/animations";
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ROIForm from "./roi-simulator/ROIForm";
 import ROIResults from "./roi-simulator/ROIResults";
-import { calculateROI, ROIResults as ROIResultsType } from "./roi-simulator/utils";
+import InterpretationPanel from "./roi-simulator/InterpretationPanel";
+import { scaleIn, slideIn } from "@/lib/animations";
 
 const ROISimulator = () => {
-  const simulatorRef = useRef<HTMLDivElement>(null);
+  const [investment, setInvestment] = useState(1000);
+  const [returns, setReturns] = useState(1500);
+  const [period, setPeriod] = useState(12);
+  const [activeTab, setActiveTab] = useState("form"); 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   
-  const [investment, setInvestment] = useState<number>(1000);
-  const [revenue, setRevenue] = useState<number>(1500);
-  const [costs, setCosts] = useState<number>(500);
-  const [period, setPeriod] = useState<string>("month");
-  const [results, setResults] = useState<ROIResultsType | null>(null);
-  
-  const calculate = () => {
-    const calculationResults = calculateROI(investment, revenue, costs);
-    setResults(calculationResults);
-    
-    if (resultsRef.current) {
-      slideIn(resultsRef.current, 'up');
-    }
-  };
-  
-  const reset = () => {
-    setInvestment(1000);
-    setRevenue(1500);
-    setCosts(500);
-    setPeriod("month");
-    setResults(null);
+  const handleCalculate = (investmentAmount: number, returnsAmount: number, timePeriod: number) => {
+    setInvestment(investmentAmount);
+    setReturns(returnsAmount);
+    setPeriod(timePeriod);
+    setActiveTab("results");
   };
   
   useEffect(() => {
-    if (simulatorRef.current) {
-      slideIn(simulatorRef.current, 'right');
+    if (cardRef.current) {
+      scaleIn(cardRef.current);
     }
   }, []);
   
+  useEffect(() => {
+    if (resultsRef.current && activeTab === "results") {
+      slideIn(resultsRef.current, 'right');
+    }
+  }, [activeTab]);
+  
+  // Calcul du ROI
+  const roi = ((returns - investment) / investment) * 100;
+  const monthlyROI = roi / period;
+  
+  // Interprétation des résultats
+  const interpretation = roi > 100 
+    ? `Excellente performance ! Votre retour sur investissement de ${roi.toFixed(2)}% est très élevé.` 
+    : roi > 50 
+    ? `Bonne performance ! Votre retour sur investissement de ${roi.toFixed(2)}% est solide.` 
+    : roi > 20 
+    ? `Performance correcte. Votre retour sur investissement de ${roi.toFixed(2)}% est positif.` 
+    : roi > 0 
+    ? `Performance modeste. Votre retour sur investissement de ${roi.toFixed(2)}% est positif mais limité.` 
+    : `Attention, votre investissement n'est pas rentable avec un ROI de ${roi.toFixed(2)}%.`;
+  
+  // Conseils personnalisés
+  const tips = [
+    roi < 20 ? "Essayez d'optimiser vos coûts pour améliorer votre rentabilité." : "Continuez sur cette voie pour maintenir votre rentabilité.",
+    period > 6 ? "Envisagez de raccourcir la période d'investissement pour augmenter le ROI mensuel." : "Votre période d'investissement est courte, ce qui est favorable au ROI mensuel.",
+    investment > 5000 ? "Pour un investissement important, diversifiez pour réduire les risques." : "Votre investissement modéré vous permet de tester avant de vous engager davantage."
+  ];
+  
   return (
-    <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div ref={simulatorRef}>
-          <ROIForm 
-            investment={investment}
-            setInvestment={setInvestment}
-            revenue={revenue}
-            setRevenue={setRevenue}
-            costs={costs}
-            setCosts={setCosts}
-            period={period}
-            setPeriod={setPeriod}
-            calculateResults={calculate}
-            reset={reset}
-          />
+    <Card ref={cardRef} className="border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl font-bold">Calculateur de ROI (Retour sur Investissement)</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-2 mb-6">
+            <TabsTrigger value="form" className="text-sm">
+              Paramètres
+            </TabsTrigger>
+            <TabsTrigger value="results" className="text-sm" disabled={activeTab === "form"}>
+              Résultats
+            </TabsTrigger>
+          </TabsList>
           
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            <p className="flex items-center justify-center">
-              <Heart className="mr-1 h-4 w-4 text-red-500" />
-              Développé pour vous aider à prendre de meilleures décisions financières
-            </p>
-          </div>
-        </div>
-        
-        {results && (
-          <div ref={resultsRef}>
-            <ROIResults results={results} period={period} />
-          </div>
-        )}
-      </div>
-    </div>
+          <TabsContent value="form" className="mt-0 p-1">
+            <ROIForm onCalculate={handleCalculate} />
+          </TabsContent>
+          
+          <TabsContent value="results" className="mt-0 space-y-4 p-1">
+            <div ref={resultsRef}>
+              <ROIResults 
+                investment={investment} 
+                returns={returns} 
+                period={period} 
+                roi={roi} 
+                monthlyROI={monthlyROI} 
+              />
+              
+              <InterpretationPanel 
+                interpretation={interpretation}
+                tips={tips}
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 
