@@ -13,8 +13,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (statsRef.current) fadeIn(statsRef.current);
-    if (progressRef.current) slideIn(progressRef.current, 'right', 0.2);
-    if (challengesRef.current) slideIn(challengesRef.current, 'up', 0.4);
+    if (progressRef.current) slideIn(progressRef.current, 'right');
+    if (challengesRef.current) slideIn(challengesRef.current, 'up');
   }, []);
 
   // Données factices

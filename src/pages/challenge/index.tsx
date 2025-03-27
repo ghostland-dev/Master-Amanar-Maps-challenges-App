@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -26,8 +25,8 @@ const Challenge = () => {
   // Animation des éléments au chargement
   useEffect(() => {
     if (infoRef.current) fadeIn(infoRef.current);
-    if (stepsRef.current) slideIn(stepsRef.current, 'right', 0.3);
-    if (resourcesRef.current) slideIn(resourcesRef.current, 'up', 0.6);
+    if (stepsRef.current) slideIn(stepsRef.current, 'right');
+    if (resourcesRef.current) slideIn(resourcesRef.current, 'up');
   }, []);
   
   // Get challenge data based on ID
