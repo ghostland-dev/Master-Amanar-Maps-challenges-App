@@ -1,9 +1,8 @@
-
 import { useState } from "react";
-import { AdBudgetResult } from "./AdBudgetCalculator";
+import { AdBudgetResult } from "./hooks/useAdBudgetState";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { X, Save, ArrowDownToLine } from "lucide-react";
+import { X, ArrowDownToLine } from "lucide-react";
 import { exportAdBudgetComparisonToPdf } from "@/utils/pdf/exportAdBudget";
 
 interface ComparisonViewProps {
