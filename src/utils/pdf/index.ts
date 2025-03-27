@@ -1,4 +1,4 @@
 
-export { PdfGenerationOptions } from './types';
+export type { PdfGenerationOptions } from './types';
 export { generatePdfFromElement } from './elementToPdf';
 export { generatePdfFromData } from './dataToPdf';

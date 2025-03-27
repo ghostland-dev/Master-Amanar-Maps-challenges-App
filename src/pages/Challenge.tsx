@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { generatePdfFromData } from "@/utils/pdfGenerator";
+import { generatePdfFromData } from "@/utils/pdf";
 import { useToast } from "@/components/ui/use-toast";
 
 const Challenge = () => {
