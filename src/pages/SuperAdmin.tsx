@@ -61,12 +61,6 @@ const SuperAdmin = () => {
       description: "Visualiser les statistiques d'utilisation et les performances de la plateforme.",
       icon: <BarChart3 className="h-8 w-8 text-primary" />,
       path: "/admin/analytics"
-    },
-    {
-      title: "Passerelles de Paiement",
-      description: "Configurer et gérer les intégrations de paiement (Stripe, PayPal).",
-      icon: <CreditCard className="h-8 w-8 text-primary" />,
-      path: "/admin/payment-gateways"
     }
   ];
 
@@ -85,7 +79,7 @@ const SuperAdmin = () => {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
           {adminModules.map((module, index) => (
             <Card 
               key={index} 
