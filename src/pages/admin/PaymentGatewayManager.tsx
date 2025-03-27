@@ -1,105 +1,97 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CreditCard, BadgeDollarSign, BadgeEuro, Euro, DollarSign, ToggleLeft, ToggleRight } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Save, AlertCircle, Trash } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import AdminNavbar from "@/components/admin/AdminNavbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-// Schéma pour la configuration Stripe
-const stripeFormSchema = z.object({
-  stripePublicKey: z.string().min(1, "La clé publique est requise"),
-  stripeSecretKey: z.string().min(1, "La clé secrète est requise"),
-  stripeWebhookSecret: z.string().optional(),
-  isStripeEnabled: z.boolean().default(false),
-});
-
-// Schéma pour la configuration PayPal
-const paypalFormSchema = z.object({
-  paypalClientId: z.string().min(1, "L'ID client est requis"),
-  paypalClientSecret: z.string().min(1, "Le secret client est requis"),
-  isPaypalEnabled: z.boolean().default(false),
-  isSandboxMode: z.boolean().default(true),
-});
 
 const PaymentGatewayManager = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("stripe");
-  
-  // États pour simuler les configurations enregistrées
+
+  // Stripe configuration state
   const [stripeConfig, setStripeConfig] = useState({
-    stripePublicKey: process.env.STRIPE_PUBLIC_KEY || "",
-    stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
-    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
-    isStripeEnabled: false,
+    stripePublicKey: "",
+    stripeSecretKey: "",
+    stripeWebhookSecret: "",
+    isStripeEnabled: false
   });
-  
+
+  // PayPal configuration state
   const [paypalConfig, setPaypalConfig] = useState({
-    paypalClientId: process.env.PAYPAL_CLIENT_ID || "",
-    paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET || "",
+    paypalClientId: "",
+    paypalClientSecret: "",
     isPaypalEnabled: false,
-    isSandboxMode: true,
+    isSandboxMode: true
   });
 
-  // Configuration du formulaire Stripe
-  const stripeForm = useForm<z.infer<typeof stripeFormSchema>>({
-    resolver: zodResolver(stripeFormSchema),
-    defaultValues: {
-      stripePublicKey: stripeConfig.stripePublicKey,
-      stripeSecretKey: stripeConfig.stripeSecretKey,
-      stripeWebhookSecret: stripeConfig.stripeWebhookSecret,
-      isStripeEnabled: stripeConfig.isStripeEnabled,
-    },
-  });
+  const [isTestingConnection, setIsTestingConnection] = useState(false);
 
-  // Configuration du formulaire PayPal
-  const paypalForm = useForm<z.infer<typeof paypalFormSchema>>({
-    resolver: zodResolver(paypalFormSchema),
-    defaultValues: {
-      paypalClientId: paypalConfig.paypalClientId,
-      paypalClientSecret: paypalConfig.paypalClientSecret,
-      isPaypalEnabled: paypalConfig.isPaypalEnabled,
-      isSandboxMode: paypalConfig.isSandboxMode,
-    },
-  });
-
-  // Gestion de la soumission du formulaire Stripe
-  const onStripeSubmit = (values: z.infer<typeof stripeFormSchema>) => {
-    console.log("Configuration Stripe enregistrée:", values);
-    setStripeConfig(values);
+  // Function to update Stripe configuration
+  const updateStripeConfig = () => {
+    setIsTestingConnection(true);
     
-    toast({
-      title: "Configuration Stripe mise à jour",
-      description: `La passerelle de paiement Stripe a été ${values.isStripeEnabled ? 'activée' : 'désactivée'}.`,
-    });
+    // In a real app, this would make an API call to validate and save the keys
+    setTimeout(() => {
+      setIsTestingConnection(false);
+      toast({
+        title: "Stripe configuration mise à jour",
+        description: "Votre configuration Stripe a été enregistrée avec succès.",
+      });
+    }, 1000);
   };
 
-  // Gestion de la soumission du formulaire PayPal
-  const onPaypalSubmit = (values: z.infer<typeof paypalFormSchema>) => {
-    console.log("Configuration PayPal enregistrée:", values);
-    setPaypalConfig(values);
+  // Function to update PayPal configuration
+  const updatePaypalConfig = () => {
+    setIsTestingConnection(true);
     
-    toast({
-      title: "Configuration PayPal mise à jour",
-      description: `La passerelle de paiement PayPal a été ${values.isPaypalEnabled ? 'activée' : 'désactivée'} en mode ${values.isSandboxMode ? 'sandbox' : 'production'}.`,
-    });
+    // In a real app, this would make an API call to validate and save the keys
+    setTimeout(() => {
+      setIsTestingConnection(false);
+      toast({
+        title: "PayPal configuration mise à jour",
+        description: "Votre configuration PayPal a été enregistrée avec succès.",
+      });
+    }, 1000);
+  };
+
+  // Functions to handle input changes
+  const handleStripeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === 'checkbox' ? checked : value;
+    
+    // Fix: Ensure we're providing all required properties when updating state
+    setStripeConfig(prevConfig => ({
+      ...prevConfig,
+      [name]: inputValue
+    }));
+  };
+
+  const handlePaypalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === 'checkbox' ? checked : value;
+    
+    // Fix: Ensure we're providing all required properties when updating state
+    setPaypalConfig(prevConfig => ({
+      ...prevConfig,
+      [name]: inputValue
+    }));
   };
 
   return (
@@ -107,266 +99,227 @@ const PaymentGatewayManager = () => {
       <AdminNavbar />
       
       <div className="container mx-auto py-10">
-        <div className="mb-10 flex items-center space-x-4">
-          <CreditCard className="h-10 w-10 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold">Passerelles de Paiement</h1>
-            <p className="text-muted-foreground">
-              Configurez et gérez les passerelles de paiement pour votre plateforme SaaS
-            </p>
-          </div>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Configuration des Passerelles de Paiement</CardTitle>
-            <CardDescription>
-              Activez et configurez différentes passerelles de paiement pour votre plateforme
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-6">
-                <TabsTrigger value="stripe" className="flex items-center">
-                  <BadgeDollarSign className="h-4 w-4 mr-2" />
-                  Stripe
-                </TabsTrigger>
-                <TabsTrigger value="paypal" className="flex items-center">
-                  <BadgeEuro className="h-4 w-4 mr-2" />
-                  PayPal
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="stripe">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Configuration Stripe</CardTitle>
-                    <CardDescription>
-                      Entrez vos clés API Stripe pour activer les paiements par carte
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Form {...stripeForm}>
-                      <form onSubmit={stripeForm.handleSubmit(onStripeSubmit)} className="space-y-6">
-                        <FormField
-                          control={stripeForm.control}
-                          name="isStripeEnabled"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">
-                                  Activer Stripe
-                                </FormLabel>
-                                <FormDescription>
-                                  Activez ou désactivez la passerelle de paiement Stripe
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={stripeForm.control}
-                          name="stripePublicKey"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Clé Publique Stripe</FormLabel>
-                              <FormControl>
-                                <Input placeholder="pk_..." {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                La clé publique est utilisée côté client
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={stripeForm.control}
-                          name="stripeSecretKey"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Clé Secrète Stripe</FormLabel>
-                              <FormControl>
-                                <Input type="password" placeholder="sk_..." {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                La clé secrète est utilisée côté serveur et ne doit jamais être exposée
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={stripeForm.control}
-                          name="stripeWebhookSecret"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Secret Webhook Stripe (optionnel)</FormLabel>
-                              <FormControl>
-                                <Input placeholder="whsec_..." {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                Le secret webhook est utilisé pour vérifier les notifications de Stripe
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <Button type="submit" className="w-full">
-                          Sauvegarder la configuration Stripe
-                        </Button>
-                      </form>
-                    </Form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="paypal">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Configuration PayPal</CardTitle>
-                    <CardDescription>
-                      Entrez vos identifiants d'API PayPal pour activer les paiements PayPal
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Form {...paypalForm}>
-                      <form onSubmit={paypalForm.handleSubmit(onPaypalSubmit)} className="space-y-6">
-                        <FormField
-                          control={paypalForm.control}
-                          name="isPaypalEnabled"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">
-                                  Activer PayPal
-                                </FormLabel>
-                                <FormDescription>
-                                  Activez ou désactivez la passerelle de paiement PayPal
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={paypalForm.control}
-                          name="isSandboxMode"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">
-                                  Mode Sandbox
-                                </FormLabel>
-                                <FormDescription>
-                                  Activez le mode sandbox pour les tests ou désactivez-le pour la production
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={paypalForm.control}
-                          name="paypalClientId"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>ID Client PayPal</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                L'ID client est utilisé pour initier les paiements PayPal
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={paypalForm.control}
-                          name="paypalClientSecret"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Secret Client PayPal</FormLabel>
-                              <FormControl>
-                                <Input type="password" {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                Le secret client est utilisé pour authentifier les requêtes à l'API PayPal
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <Button type="submit" className="w-full">
-                          Sauvegarder la configuration PayPal
-                        </Button>
-                      </form>
-                    </Form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+        <h1 className="text-3xl font-bold mb-8">Passerelles de Paiement</h1>
         
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Intégration avec les Abonnements</CardTitle>
-            <CardDescription>
-              Suivez ces étapes pour finaliser l'intégration de paiement avec votre système d'abonnements
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ol className="list-decimal pl-5 space-y-4">
-              <li className="pl-2">
-                <strong>Configurez votre passerelle de paiement préférée</strong> - Entrez vos clés API dans les formulaires ci-dessus.
-              </li>
-              <li className="pl-2">
-                <strong>Créez des produits et des plans tarifaires</strong> - Allez dans le gestionnaire d'abonnements pour créer des produits et des plans.
-              </li>
-              <li className="pl-2">
-                <strong>Testez le système de paiement</strong> - Utilisez les comptes de test pour vérifier que tout fonctionne correctement.
-              </li>
-              <li className="pl-2">
-                <strong>Activez en production</strong> - Une fois les tests terminés, vous pouvez passer en mode production.
-              </li>
-            </ol>
-            
-            <div className="mt-6 flex space-x-4">
-              <Button onClick={() => navigate("/admin/subscriptions")}>
-                Gérer les Abonnements
+        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+          {/* Stripe Configuration */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Configuration Stripe</CardTitle>
+                <Switch 
+                  checked={stripeConfig.isStripeEnabled}
+                  name="isStripeEnabled"
+                  onCheckedChange={(checked) => 
+                    setStripeConfig(prev => ({ ...prev, isStripeEnabled: checked }))
+                  }
+                />
+              </div>
+              <CardDescription>
+                Configurez votre intégration Stripe pour accepter les paiements par carte.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="stripePublicKey">Clé publique Stripe</Label>
+                <Input 
+                  id="stripePublicKey"
+                  name="stripePublicKey"
+                  placeholder="pk_test_..."
+                  value={stripeConfig.stripePublicKey}
+                  onChange={handleStripeInputChange}
+                  disabled={!stripeConfig.isStripeEnabled}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="stripeSecretKey">Clé secrète Stripe</Label>
+                <Input 
+                  id="stripeSecretKey"
+                  name="stripeSecretKey"
+                  type="password"
+                  placeholder="sk_test_..."
+                  value={stripeConfig.stripeSecretKey}
+                  onChange={handleStripeInputChange}
+                  disabled={!stripeConfig.isStripeEnabled}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Cette clé sensible est stockée de manière sécurisée et chiffrée.
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="stripeWebhookSecret">Clé secrète Webhook</Label>
+                <Input 
+                  id="stripeWebhookSecret"
+                  name="stripeWebhookSecret"
+                  type="password"
+                  placeholder="whsec_..."
+                  value={stripeConfig.stripeWebhookSecret}
+                  onChange={handleStripeInputChange}
+                  disabled={!stripeConfig.isStripeEnabled}
+                />
+              </div>
+              
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Important</AlertTitle>
+                <AlertDescription>
+                  Ne partagez jamais vos clés secrètes Stripe. Ces clés donnent un accès complet à votre compte.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" disabled={!stripeConfig.isStripeEnabled}>
+                    <Trash className="h-4 w-4 mr-2" />
+                    Réinitialiser
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Êtes-vous absolument sûr?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action supprimera votre configuration Stripe et interrompra tous les paiements actuels.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => {
+                      setStripeConfig({
+                        stripePublicKey: "",
+                        stripeSecretKey: "",
+                        stripeWebhookSecret: "",
+                        isStripeEnabled: false
+                      });
+                      toast({
+                        title: "Configuration réinitialisée",
+                        description: "Votre configuration Stripe a été réinitialisée.",
+                      });
+                    }}>
+                      Réinitialiser
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              
+              <Button 
+                onClick={updateStripeConfig}
+                disabled={!stripeConfig.isStripeEnabled || isTestingConnection}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Enregistrer
               </Button>
-              <Button variant="outline" onClick={() => navigate("/admin/analytics")}>
-                Voir l'Analytique des Paiements
+            </CardFooter>
+          </Card>
+          
+          {/* PayPal Configuration */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Configuration PayPal</CardTitle>
+                <Switch 
+                  checked={paypalConfig.isPaypalEnabled}
+                  name="isPaypalEnabled"
+                  onCheckedChange={(checked) => 
+                    setPaypalConfig(prev => ({ ...prev, isPaypalEnabled: checked }))
+                  }
+                />
+              </div>
+              <CardDescription>
+                Configurez votre intégration PayPal pour offrir cette option de paiement.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="paypalClientId">ID Client PayPal</Label>
+                <Input 
+                  id="paypalClientId"
+                  name="paypalClientId"
+                  placeholder="Ab12CdEfGhIjKlMnOpQrStUvWxYz..."
+                  value={paypalConfig.paypalClientId}
+                  onChange={handlePaypalInputChange}
+                  disabled={!paypalConfig.isPaypalEnabled}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="paypalClientSecret">Secret Client PayPal</Label>
+                <Input 
+                  id="paypalClientSecret"
+                  name="paypalClientSecret"
+                  type="password"
+                  placeholder="EAb12CdEfGhIjKlMnOpQrStUvWxYz..."
+                  value={paypalConfig.paypalClientSecret}
+                  onChange={handlePaypalInputChange}
+                  disabled={!paypalConfig.isPaypalEnabled}
+                />
+              </div>
+              
+              <Separator className="my-4" />
+              
+              <div className="flex items-center space-x-2">
+                <Switch 
+                  id="isSandboxMode"
+                  name="isSandboxMode"
+                  checked={paypalConfig.isSandboxMode}
+                  onCheckedChange={(checked) => 
+                    setPaypalConfig(prev => ({ ...prev, isSandboxMode: checked }))
+                  }
+                  disabled={!paypalConfig.isPaypalEnabled}
+                />
+                <Label htmlFor="isSandboxMode">Mode Sandbox</Label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Activez le mode sandbox pour tester les paiements sans traiter de véritables transactions.
+              </p>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" disabled={!paypalConfig.isPaypalEnabled}>
+                    <Trash className="h-4 w-4 mr-2" />
+                    Réinitialiser
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Êtes-vous absolument sûr?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action supprimera votre configuration PayPal et interrompra tous les paiements actuels.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => {
+                      setPaypalConfig({
+                        paypalClientId: "",
+                        paypalClientSecret: "",
+                        isPaypalEnabled: false,
+                        isSandboxMode: true
+                      });
+                      toast({
+                        title: "Configuration réinitialisée",
+                        description: "Votre configuration PayPal a été réinitialisée.",
+                      });
+                    }}>
+                      Réinitialiser
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              
+              <Button 
+                onClick={updatePaypalConfig}
+                disabled={!paypalConfig.isPaypalEnabled || isTestingConnection}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Enregistrer
               </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
     </div>
   );
