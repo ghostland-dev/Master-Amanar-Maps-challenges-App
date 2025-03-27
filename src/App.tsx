@@ -20,6 +20,11 @@ import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Leaderboard from "./pages/Leaderboard";
 import Library from "./pages/Library";
+import SuperAdmin from "./pages/SuperAdmin";
+import ChallengeManager from "./pages/admin/ChallengeManager";
+import UserManager from "./pages/admin/UserManager";
+import SubscriptionManager from "./pages/admin/SubscriptionManager";
+import AnalyticsManager from "./pages/admin/AnalyticsManager";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +50,11 @@ const App = () => (
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/admin" element={<SuperAdmin />} />
+          <Route path="/admin/challenges" element={<ChallengeManager />} />
+          <Route path="/admin/users" element={<UserManager />} />
+          <Route path="/admin/subscriptions" element={<SubscriptionManager />} />
+          <Route path="/admin/analytics" element={<AnalyticsManager />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
