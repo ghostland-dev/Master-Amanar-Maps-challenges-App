@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowRightLeft, Download } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { generatePdfFromElement, generatePdfFromData } from "@/utils/pdfGenerator";
+import { generatePdfFromElement, generatePdfFromData } from "@/utils/pdf";
 import ResultCard from "./ResultCard";
 import InterpretationPanel from "./InterpretationPanel";
 import { formatCurrency, translatePeriod, getInterpretation } from "./utils";
