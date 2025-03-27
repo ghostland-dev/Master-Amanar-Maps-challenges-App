@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Shield, Menu, X, Home, LogOut, Users, Award, CreditCard, BarChart3 } from "lucide-react";
+import { Shield, Menu, X, Home, LogOut, Users, Award, CreditCard, BarChart3, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -23,6 +23,7 @@ const AdminNavbar = () => {
     { label: "Utilisateurs", href: "/admin/users", icon: Users },
     { label: "Abonnements", href: "/admin/subscriptions", icon: CreditCard },
     { label: "Analytique", href: "/admin/analytics", icon: BarChart3 },
+    { label: "Simulateurs", href: "/simulator", icon: Calculator },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -33,7 +34,7 @@ const AdminNavbar = () => {
         <Button
           key={item.href}
           variant={isActive(item.href) ? "default" : "ghost"}
-          className={`justify-start ${isActive(item.href) ? "bg-primary text-primary-foreground" : ""}`}
+          className={`justify-start ${isActive(item.href) ? "bg-primary text-primary-foreground" : ""} transition-colors`}
           onClick={() => {
             navigate(item.href);
             if (isMobile) setOpen(false);
@@ -99,6 +100,7 @@ const AdminNavbar = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => navigate("/")}
+                className="transition-all hover:bg-secondary/20"
               >
                 <Home className="mr-2 h-4 w-4" />
                 Retour au site

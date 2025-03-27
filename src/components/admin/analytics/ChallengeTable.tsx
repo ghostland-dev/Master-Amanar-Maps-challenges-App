@@ -20,7 +20,7 @@ interface ChallengeTableProps {
 
 export const ChallengeTable = ({ challenges, showRating = false, showAbandonRate = false }: ChallengeTableProps) => {
   return (
-    <div className="overflow-x-auto border rounded-lg">
+    <div className="overflow-x-auto border rounded-lg animate-fade-in">
       <table className="w-full">
         <thead>
           <tr className="bg-muted/50">
@@ -60,7 +60,7 @@ export const ChallengeTable = ({ challenges, showRating = false, showAbandonRate
                   <div className="flex items-center justify-center gap-2">
                     <div className="bg-secondary w-24 h-2 rounded-full overflow-hidden">
                       <div 
-                        className={`h-full rounded-full ${
+                        className={`h-full rounded-full transition-all duration-1000 ${
                           challenge.completionRate > 70 ? "bg-green-500" : 
                           challenge.completionRate > 50 ? "bg-blue-500" : "bg-amber-500"
                         }`} 

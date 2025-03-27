@@ -31,7 +31,7 @@ const AnalyticsManager = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
       <AdminNavbar />
-      <div className="container px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
+      <div className="container px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto animate-fade-in">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold mb-2">Tableau de bord Analytique</h1>
@@ -55,7 +55,7 @@ const AnalyticsManager = () => {
                 <SelectItem value="all">Tout</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={handleExportData}>
+            <Button variant="outline" onClick={handleExportData} className="transition-all hover:bg-primary/10">
               <FileDown className="h-4 w-4 mr-2" />
               Exporter
             </Button>
@@ -64,16 +64,16 @@ const AnalyticsManager = () => {
 
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="space-y-8">
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 h-auto p-1">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2 transition-all">
               Vue d'ensemble
             </TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2">
+            <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2 transition-all">
               Utilisateurs
             </TabsTrigger>
-            <TabsTrigger value="challenges" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2">
+            <TabsTrigger value="challenges" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2 transition-all">
               Challenges
             </TabsTrigger>
-            <TabsTrigger value="revenue" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2">
+            <TabsTrigger value="revenue" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2 transition-all">
               Revenus
             </TabsTrigger>
           </TabsList>
