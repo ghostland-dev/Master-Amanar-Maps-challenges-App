@@ -1,4 +1,3 @@
-
 import { generatePdfFromData } from "./index";
 import { PdfGenerationOptions } from "./types";
 
@@ -134,7 +133,7 @@ export const exportAdBudgetComparisonToPdf = (
       
       [`Pourcentage du CA - ${leftLabel}`]: `${leftScenario.percentageOfRevenue.toFixed(1)}%`,
       [`Pourcentage du CA - ${rightLabel}`]: `${rightScenario.percentageOfRevenue.toFixed(1)}%`,
-      "Différence (%)": getDifference(leftScenario.percentageOfRevenue, rightScenario.percentageOfRevenue, (n) => `${n.toFixed(1)}%`)
+      "Différence (pourcentage)": getDifference(leftScenario.percentageOfRevenue, rightScenario.percentageOfRevenue, (n) => `${n.toFixed(1)}%`)
     },
     "Performance projetée": {
       [`ROAS estimé - ${leftLabel}`]: `${leftScenario.estimatedROI.toFixed(1)}x`,
@@ -143,7 +142,7 @@ export const exportAdBudgetComparisonToPdf = (
       
       [`Revenu projeté - ${leftLabel}`]: formatCurrency(leftScenario.projectedRevenue),
       [`Revenu projeté - ${rightLabel}`]: formatCurrency(rightScenario.projectedRevenue),
-      "Différence": getDifference(leftScenario.projectedRevenue, rightScenario.projectedRevenue, formatCurrency)
+      "Différence (revenu)": getDifference(leftScenario.projectedRevenue, rightScenario.projectedRevenue, formatCurrency)
     },
     "Répartition du budget": {
       [`Search - ${leftLabel}`]: formatCurrency(leftScenario.breakdown.search),
