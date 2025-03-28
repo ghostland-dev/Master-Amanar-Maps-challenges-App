@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import Challenges from "./pages/Challenges";
+import Challenges from "./pages/challenges";
 import Challenge from "./pages/challenge";
 import Simulator from "./pages/Simulator";
 import Simulators from "./pages/Simulators";
