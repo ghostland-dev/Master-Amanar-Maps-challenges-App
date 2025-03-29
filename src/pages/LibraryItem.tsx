@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -332,8 +331,8 @@ const LibraryItem = () => {
                   </div>
                   <Progress 
                     value={progress} 
-                    className="h-2" 
-                    indicatorClassName={cn(getProgressColor(progress))}
+                    className="h-2"
+                    indicatorClassName={getProgressColor(progress)}
                   />
                   <div className="flex justify-between mt-3 gap-2">
                     <Button
