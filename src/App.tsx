@@ -22,6 +22,10 @@ import Library from "./pages/Library";
 import LibraryItem from "./pages/LibraryItem";
 import Subscriptions from "./pages/Subscriptions";
 import Unauthorized from "./pages/Unauthorized";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Pages protégées (utilisateur connecté)
 import Dashboard from "./pages/Dashboard";
@@ -68,6 +72,10 @@ const App = () => (
               <Route path="/library" element={<Library />} />
               <Route path="/library/:id" element={<LibraryItem />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               
               {/* Routes protégées (utilisateur connecté) */}
               <Route path="/dashboard" element={

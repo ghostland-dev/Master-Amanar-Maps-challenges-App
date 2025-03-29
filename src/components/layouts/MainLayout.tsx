@@ -2,6 +2,7 @@
 import { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -52,20 +53,20 @@ const MainLayout = ({ children, title, description, className = "" }: MainLayout
             
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
               <div className="flex space-x-6">
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/terms-of-service" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Conditions d'utilisation
-                </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                </Link>
+                <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Politique de confidentialité
-                </a>
+                </Link>
               </div>
               <div className="flex space-x-6 justify-center md:justify-start">
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Contact
-                </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                </Link>
+                <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   À propos
-                </a>
+                </Link>
               </div>
             </div>
           </div>
