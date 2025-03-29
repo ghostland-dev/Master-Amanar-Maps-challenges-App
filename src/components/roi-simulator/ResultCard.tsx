@@ -1,7 +1,6 @@
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Card } from "@/components/ui/card";
-import { animateNumber } from "@/lib/animations";
 
 interface ResultCardProps {
   title: string;
@@ -12,7 +11,7 @@ interface ResultCardProps {
   formatter?: (value: number) => string;
   delay?: number;
   animate?: boolean;
-  variant?: string;  // Add this prop to support the variant prop
+  variant?: string;
 }
 
 const ResultCard = ({
@@ -43,13 +42,6 @@ const ResultCard = ({
       // Add more variants as needed
     }
   }
-  
-  useEffect(() => {
-    if (valueRef.current && typeof value === 'number' && animate) {
-      const formatWithAffixes = (v: number) => `${prefix}${formatter(v)}${suffix}`;
-      animateNumber(valueRef.current, 0, value, formatWithAffixes);
-    }
-  }, [value, formatter, prefix, suffix, animate]);
   
   return (
     <Card className="p-4 text-center border-border/40 hover:border-border/60 transition-colors duration-300 hover:shadow-sm bg-card/40">
