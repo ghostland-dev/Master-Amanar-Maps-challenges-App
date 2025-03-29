@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    /* Light theme variables */
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
@@ -37,6 +38,7 @@
   }
 
   .dark {
+    /* Dark theme variables */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -46,7 +48,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 100% 50%;
+    --primary: 210 100% 60%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -79,7 +81,7 @@
 
   /* Glass effect components */
   .glass {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm;
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm dark:bg-black/40 dark:border-white/10;
   }
 
   .glass-dark {
@@ -97,6 +99,30 @@
   }
   
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent dark:from-blue-300 dark:to-indigo-300;
+  }
+
+  /* Animations and transitions */
+  .animated-card {
+    @apply transition-all duration-300 hover:shadow-lg;
+  }
+
+  /* Card styles */
+  .feature-card {
+    @apply p-6 rounded-xl bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-all;
+  }
+  
+  /* Section styles */
+  .section-container {
+    @apply container mx-auto px-4 py-12 md:py-20;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
   }
 }

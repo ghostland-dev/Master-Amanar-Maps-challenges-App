@@ -1,84 +1,71 @@
 
-import { animate } from "motion";
+export const fadeIn = (
+  element: HTMLElement,
+  delay: number = 0,
+  duration: number = 300
+): void => {
+  element.style.opacity = "0";
+  element.style.transition = `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`;
+  element.style.transform = "translateY(20px)";
 
-/**
- * Slides an element in with an animation
- * @param element The DOM element or React ref to animate
- * @param direction The direction to slide from ('up', 'down', 'left', 'right')
- */
+  setTimeout(() => {
+    element.style.opacity = "1";
+    element.style.transform = "translateY(0)";
+  }, 10);
+};
+
 export const slideIn = (
-  element: HTMLElement | React.RefObject<HTMLElement>,
-  direction: 'up' | 'down' | 'left' | 'right'
-) => {
-  // Get the actual DOM element from a potential ref
-  const targetElement = element instanceof HTMLElement ? element : element.current;
-  
-  if (!targetElement) return;
-  
-  // Direction mapping
-  const directionMap = {
-    up: { y: [50, 0] },
-    down: { y: [-50, 0] },
-    left: { x: [50, 0] },
-    right: { x: [-50, 0] }
-  };
-  
-  // Get animation properties
-  const animationProps = directionMap[direction];
-  
-  // Animate the element
-  animate(
-    targetElement,
-    {
-      opacity: [0, 1],
-      ...animationProps
-    },
-    {
-      duration: 0.5,
-      easing: [0.22, 0.03, 0.26, 1]
-    }
-  );
+  element: HTMLElement,
+  direction: "up" | "down" | "left" | "right" = "up",
+  delay: number = 0,
+  duration: number = 400
+): void => {
+  element.style.opacity = "0";
+  element.style.transition = `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`;
+
+  switch (direction) {
+    case "up":
+      element.style.transform = "translateY(30px)";
+      break;
+    case "down":
+      element.style.transform = "translateY(-30px)";
+      break;
+    case "left":
+      element.style.transform = "translateX(30px)";
+      break;
+    case "right":
+      element.style.transform = "translateX(-30px)";
+      break;
+  }
+
+  setTimeout(() => {
+    element.style.opacity = "1";
+    element.style.transform = "translate(0)";
+  }, 10);
 };
 
-/**
- * Scale element in with an animation
- * @param element The DOM element or React ref to animate
- */
-export const scaleIn = (element: HTMLElement | React.RefObject<HTMLElement>) => {
-  const targetElement = element instanceof HTMLElement ? element : element.current;
-  
-  if (!targetElement) return;
-  
-  animate(
-    targetElement,
-    { 
-      scale: [0.95, 1],
-      opacity: [0, 1]
-    },
-    {
-      duration: 0.5,
-      easing: [0.22, 0.03, 0.26, 1]
-    }
-  );
+export const scaleIn = (
+  element: HTMLElement,
+  delay: number = 0,
+  duration: number = 400
+): void => {
+  element.style.opacity = "0";
+  element.style.transition = `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`;
+  element.style.transform = "scale(0.95)";
+
+  setTimeout(() => {
+    element.style.opacity = "1";
+    element.style.transform = "scale(1)";
+  }, 10);
 };
 
-/**
- * Fade element in with an animation
- * @param element The DOM element or React ref to animate
- */
-export const fadeIn = (element: HTMLElement | React.RefObject<HTMLElement>) => {
-  const targetElement = element instanceof HTMLElement ? element : element.current;
-  
-  if (!targetElement) return;
-  
-  animate(
-    targetElement,
-    { opacity: [0, 1] },
-    {
-      duration: 0.5,
-      easing: [0.22, 0.03, 0.26, 1]
-    }
-  );
+export const stagger = (
+  elements: NodeListOf<HTMLElement> | HTMLElement[],
+  animation: (element: HTMLElement, delay: number, duration: number) => void,
+  delayBetween: number = 100,
+  duration: number = 300
+): void => {
+  elements.forEach((el, index) => {
+    animation(el, delayBetween * index, duration);
+  });
 };
-
-// Note: La fonction animateNumber a été supprimée car jugée perturbante pour les utilisateurs
