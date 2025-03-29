@@ -1,7 +1,6 @@
 
 import { useEffect, useRef } from "react";
 import { Progress } from "@/components/ui/progress";
-import { animateNumber } from "@/lib/animations";
 
 interface ProgressBarProps {
   value: number;
@@ -30,12 +29,6 @@ const ProgressBar = ({
     md: "h-2",
     lg: "h-3"
   };
-  
-  useEffect(() => {
-    if (animate && percentRef.current) {
-      animateNumber(percentRef.current, 0, percentage);
-    }
-  }, [percentage, animate]);
 
   return (
     <div className={`space-y-1.5 ${className}`}>
