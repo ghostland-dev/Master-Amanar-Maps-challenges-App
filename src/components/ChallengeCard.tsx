@@ -24,6 +24,7 @@ interface ChallengeCardProps {
   completedBy?: number;
   rating?: number;
   className?: string;
+  image?: string;
 }
 
 const ChallengeCard = ({
@@ -44,6 +45,7 @@ const ChallengeCard = ({
   completedBy = 0,
   rating = 0,
   className,
+  image,
 }: ChallengeCardProps) => {
   const difficultyMap = {
     beginner: {
@@ -60,6 +62,17 @@ const ChallengeCard = ({
     },
   };
 
+  // Default Pexels images for challenges
+  const defaultImages = [
+    "https://images.pexels.com/photos/6956800/pexels-photo-6956800.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/6693661/pexels-photo-6693661.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/6347546/pexels-photo-6347546.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/5483071/pexels-photo-5483071.jpeg?auto=compress&cs=tinysrgb&w=600"
+  ];
+
+  // Use the provided image or select a random one from the defaults
+  const cardImage = image || defaultImages[Math.floor(Math.random() * defaultImages.length)];
+
   return (
     <Link to={`/challenge/${id}`} className="block h-full">
       <div 
@@ -68,6 +81,15 @@ const ChallengeCard = ({
           className
         )}
       >
+        {/* Add image at the top of the card */}
+        <div className="h-40 overflow-hidden">
+          <img 
+            src={cardImage}
+            alt={title} 
+            className="w-full h-full object-cover"
+          />
+        </div>
+
         <div className="p-6">
           <div className="flex justify-between items-start mb-4">
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">

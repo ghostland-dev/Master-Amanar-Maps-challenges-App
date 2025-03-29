@@ -10,11 +10,21 @@ interface StepResourcesProps {
     url: string;
     type: string;
     description?: string;
+    thumbnail?: string;
   }[];
 }
 
 export const StepResources = ({ resources }: StepResourcesProps) => {
   if (!resources || resources.length === 0) return null;
+
+  // Default Pexels thumbnails for resources
+  const defaultThumbnails = {
+    video: "https://images.pexels.com/photos/7709086/pexels-photo-7709086.jpeg?auto=compress&cs=tinysrgb&w=300",
+    pdf: "https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=300",
+    article: "https://images.pexels.com/photos/5834/nature-grass-leaf-green.jpg?auto=compress&cs=tinysrgb&w=300",
+    tutorial: "https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=300",
+    default: "https://images.pexels.com/photos/4240505/pexels-photo-4240505.jpeg?auto=compress&cs=tinysrgb&w=300",
+  };
 
   const getResourceIcon = (type: string) => {
     switch (type.toLowerCase()) {
@@ -31,37 +41,56 @@ export const StepResources = ({ resources }: StepResourcesProps) => {
     }
   };
 
+  const getResourceThumbnail = (resource: {type: string, thumbnail?: string}) => {
+    if (resource.thumbnail) return resource.thumbnail;
+    
+    const type = resource.type.toLowerCase();
+    return defaultThumbnails[type as keyof typeof defaultThumbnails] || defaultThumbnails.default;
+  };
+
   return (
     <div className="mb-6">
       <p className="text-sm font-medium mb-3 flex items-center">
         <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
         Ressources recommandées:
       </p>
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-3">
         <TooltipProvider>
           {resources.map((resource, idx) => (
-            <div key={idx} className="bg-background/80 rounded-md p-2 border border-border">
-              <div className="flex justify-between items-start">
-                <div>
+            <div key={idx} className="bg-background/80 rounded-md p-3 border border-border hover:shadow-sm transition-shadow">
+              <div className="flex items-start gap-3">
+                {/* Thumbnail */}
+                <div className="w-16 h-12 rounded overflow-hidden shrink-0">
+                  <img 
+                    src={getResourceThumbnail(resource)}
+                    alt={resource.title} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                {/* Content */}
+                <div className="flex flex-col flex-1 min-w-0">
                   <div className="flex items-center">
                     {getResourceIcon(resource.type)}
-                    <span className="text-sm font-medium">{resource.title}</span>
+                    <span className="text-sm font-medium truncate">{resource.title}</span>
                     <span className="ml-2 text-xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
                       {resource.type}
                     </span>
                   </div>
                   {resource.description && (
-                    <p className="text-xs text-muted-foreground mt-1 ml-5">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {resource.description}
                     </p>
                   )}
                 </div>
+                
+                {/* Action */}
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="h-7 w-7 p-0"
+                      className="h-7 w-7 p-0 shrink-0"
                       asChild
                     >
                       <a href={resource.url} target="_blank" rel="noopener noreferrer">

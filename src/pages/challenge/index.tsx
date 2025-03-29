@@ -41,8 +41,20 @@ const Challenge = () => {
     }
     
     const challengeData = getChallengeData(id);
+    
+    // Ajouter une image de couverture si elle n'existe pas
+    if (!challengeData.image) {
+      const pexelsImages = [
+        "https://images.pexels.com/photos/8370752/pexels-photo-8370752.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://images.pexels.com/photos/7681094/pexels-photo-7681094.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://images.pexels.com/photos/8867434/pexels-photo-8867434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://images.pexels.com/photos/7567442/pexels-photo-7567442.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      ];
+      challengeData.image = pexelsImages[Math.floor(Math.random() * pexelsImages.length)];
+    }
+    
     setChallenge(challengeData);
-    document.title = `FinQuest - ${challengeData.title}`;
+    document.title = `Amanar Map - ${challengeData.title}`;
   }, [id, navigate]);
 
   const handleBookmark = () => {
