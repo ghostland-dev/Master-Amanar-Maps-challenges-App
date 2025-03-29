@@ -81,10 +81,21 @@ const DashboardPage = () => {
                 <p className="text-sm">
                   Continuez avec les challenges pour développer vos compétences en entrepreneuriat.
                 </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Link to="/challenge/1">
+                    <Badge variant="outline" className="hover:bg-secondary">Dropshipping</Badge>
+                  </Link>
+                  <Link to="/challenge/2">
+                    <Badge variant="outline" className="hover:bg-secondary">Crypto</Badge>
+                  </Link>
+                  <Link to="/challenge/3">
+                    <Badge variant="outline" className="hover:bg-secondary">Arbitrage</Badge>
+                  </Link>
+                </div>
               </CardContent>
               <CardFooter>
                 <div className="flex items-center text-primary text-sm">
-                  Voir les challenges
+                  Voir tous les challenges
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </div>
               </CardFooter>
@@ -114,7 +125,7 @@ const DashboardPage = () => {
             </Card>
           </Link>
           
-          <Link to="/simulator" className="block">
+          <Link to="/simulators" className="block">
             <Card className="h-full hover:shadow-md transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center">

@@ -11,9 +11,15 @@ interface ChallengeTabsProps {
   challenge: Challenge;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  onUpdateProgress?: (currentStep: number, progress: number) => void;
 }
 
-export const ChallengeTabs = ({ challenge, activeTab, setActiveTab }: ChallengeTabsProps) => {
+export const ChallengeTabs = ({ 
+  challenge, 
+  activeTab, 
+  setActiveTab,
+  onUpdateProgress
+}: ChallengeTabsProps) => {
   return (
     <div className="mb-6">
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -39,6 +45,7 @@ export const ChallengeTabs = ({ challenge, activeTab, setActiveTab }: ChallengeT
             steps={challenge.steps}
             currentStep={challenge.currentStep}
             totalSteps={challenge.totalSteps}
+            onProgressUpdate={onUpdateProgress}
           />
         </TabsContent>
         
