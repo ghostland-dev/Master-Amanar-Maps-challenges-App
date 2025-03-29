@@ -12,7 +12,8 @@ export const mockLibraryItems = [
     author: "Sarah Martin",
     url: "https://example.com/marketing-digital",
     image: "/placeholder.svg",
-    content: "Le marketing digital est l'utilisation des canaux numériques pour promouvoir des produits et services..."
+    content: "Le marketing digital est l'utilisation des canaux numériques pour promouvoir des produits et services...",
+    premium: false
   },
   {
     id: "2",
@@ -25,7 +26,8 @@ export const mockLibraryItems = [
     author: "Jean Dupont",
     url: "https://example.com/investissement-bases",
     image: "/placeholder.svg",
-    content: "L'investissement est l'acte d'allouer des ressources, généralement de l'argent, avec l'attente d'en tirer un revenu ou un profit..."
+    content: "L'investissement est l'acte d'allouer des ressources, généralement de l'argent, avec l'attente d'en tirer un revenu ou un profit...",
+    premium: false
   },
   {
     id: "3",
@@ -38,7 +40,8 @@ export const mockLibraryItems = [
     author: "Marie Dubois",
     url: "https://example.com/dropshipping-avance",
     image: "/placeholder.svg",
-    content: "Le dropshipping est un modèle de gestion de la chaîne d'approvisionnement dans lequel le détaillant ne garde pas les produits qu'il vend en stock..."
+    content: "Le dropshipping est un modèle de gestion de la chaîne d'approvisionnement dans lequel le détaillant ne garde pas les produits qu'il vend en stock...",
+    premium: true
   },
   {
     id: "4",
@@ -51,7 +54,8 @@ export const mockLibraryItems = [
     author: "Luc Bernard",
     url: "https://example.com/copywriting",
     image: "/placeholder.svg",
-    content: "Le copywriting est l'art et la science d'écrire des textes publicitaires et marketing qui incitent les gens à prendre une action spécifique..."
+    content: "Le copywriting est l'art et la science d'écrire des textes publicitaires et marketing qui incitent les gens à prendre une action spécifique...",
+    premium: true
   },
   {
     id: "5",
@@ -64,7 +68,8 @@ export const mockLibraryItems = [
     author: "Sophie Laurent",
     url: "https://example.com/trading-crypto",
     image: "/placeholder.svg",
-    content: "Le trading de cryptomonnaies est l'acte d'acheter et de vendre des actifs numériques à court terme, en cherchant à profiter des fluctuations de prix..."
+    content: "Le trading de cryptomonnaies est l'acte d'acheter et de vendre des actifs numériques à court terme, en cherchant à profiter des fluctuations de prix...",
+    premium: true
   },
   {
     id: "6",
@@ -77,7 +82,8 @@ export const mockLibraryItems = [
     author: "Pierre Martin",
     url: "https://example.com/automatisation-marketing",
     image: "/placeholder.svg",
-    content: "L'automatisation du marketing fait référence à l'utilisation de logiciels et de technologies pour automatiser les tâches marketing répétitives..."
+    content: "L'automatisation du marketing fait référence à l'utilisation de logiciels et de technologies pour automatiser les tâches marketing répétitives...",
+    premium: false
   }
 ];
 
@@ -99,3 +105,9 @@ export const mockUserProgress = [
     completed: false
   }
 ];
+
+// Mock subscription data
+export const mockSubscription = {
+  hasPremium: false,
+  expiresAt: null
+};

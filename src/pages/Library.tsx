@@ -6,34 +6,48 @@ import { LibraryHeader } from "@/components/library/LibraryHeader";
 import { LibrarySearch } from "@/components/library/LibrarySearch";
 import { LibraryFilterDialog } from "@/components/library/LibraryFilterDialog";
 import { LibraryItemsList } from "@/components/library/LibraryItemsList";
-import { mockLibraryItems, mockUserProgress } from "../data/mock";
+import { mockLibraryItems, mockUserProgress, mockSubscription } from "../data/mock";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const Library = () => {
   const [libraryItems, setLibraryItems] = useState(mockLibraryItems);
   const [userProgress, setUserProgress] = useState(mockUserProgress);
+  const [subscription, setSubscription] = useState(mockSubscription);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
+  const [premiumFilter, setPremiumFilter] = useState<"all" | "free" | "premium">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     document.title = "Amanar Map - Bibliothèque";
-  }, []);
+
+    // In a real application, we would fetch the user's subscription status from the backend
+    if (user && user.role === "admin") {
+      setSubscription({ hasPremium: true, expiresAt: null });
+    }
+  }, [user]);
 
   const handleFilterChange = (values: {
     category?: string;
     type?: string;
     difficulty?: string;
     completed?: boolean;
+    premium?: "all" | "free" | "premium";
     search?: string;
   }) => {
     setSelectedCategory(values.category || "");
     setSelectedType(values.type || "");
     setSelectedDifficulty(values.difficulty || "");
     setIsCompleted(values.completed || false);
+    setPremiumFilter(values.premium || "all");
     setSearchQuery(values.search || "");
     setIsFilterDialogOpen(false);
   };
@@ -43,7 +57,18 @@ const Library = () => {
     setSelectedType("");
     setSelectedDifficulty("");
     setIsCompleted(false);
+    setPremiumFilter("all");
     setSearchQuery("");
+  };
+
+  const handlePremiumItemClick = (isPremium: boolean) => {
+    if (isPremium && !subscription.hasPremium) {
+      toast({
+        title: "Contenu premium",
+        description: "Ce contenu est réservé aux membres premium. Abonnez-vous pour y accéder.",
+        variant: "destructive",
+      });
+    }
   };
 
   const filteredItems = libraryItems.filter((item) => {
@@ -61,13 +86,18 @@ const Library = () => {
       ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase())
       : true;
+    const premiumMatch = 
+      premiumFilter === "all" ? true :
+      premiumFilter === "free" ? !item.premium :
+      item.premium;
 
     return (
       categoryMatch &&
       typeMatch &&
       difficultyMatch &&
       completedMatch &&
-      searchMatch
+      searchMatch &&
+      premiumMatch
     );
   });
 
@@ -105,6 +135,54 @@ const Library = () => {
           />
         </div>
 
+        <div className="mb-5 flex flex-wrap gap-2">
+          {premiumFilter !== "all" && (
+            <Badge 
+              variant="outline" 
+              className="bg-secondary/30 hover:bg-secondary/50 cursor-pointer"
+              onClick={() => setPremiumFilter("all")}
+            >
+              {premiumFilter === "free" ? "Gratuit" : "Premium"} ×
+            </Badge>
+          )}
+          {selectedCategory && (
+            <Badge 
+              variant="outline" 
+              className="bg-secondary/30 hover:bg-secondary/50 cursor-pointer"
+              onClick={() => setSelectedCategory("")}
+            >
+              {selectedCategory} ×
+            </Badge>
+          )}
+          {selectedType && (
+            <Badge 
+              variant="outline" 
+              className="bg-secondary/30 hover:bg-secondary/50 cursor-pointer"
+              onClick={() => setSelectedType("")}
+            >
+              {selectedType} ×
+            </Badge>
+          )}
+          {selectedDifficulty && (
+            <Badge 
+              variant="outline" 
+              className="bg-secondary/30 hover:bg-secondary/50 cursor-pointer"
+              onClick={() => setSelectedDifficulty("")}
+            >
+              {selectedDifficulty} ×
+            </Badge>
+          )}
+          {isCompleted && (
+            <Badge 
+              variant="outline" 
+              className="bg-secondary/30 hover:bg-secondary/50 cursor-pointer"
+              onClick={() => setIsCompleted(false)}
+            >
+              Complété ×
+            </Badge>
+          )}
+        </div>
+
         <LibraryFilterDialog
           isOpen={isFilterDialogOpen}
           onOpenChange={setIsFilterDialogOpen}
@@ -113,6 +191,7 @@ const Library = () => {
             type: selectedType,
             difficulty: selectedDifficulty,
             completed: isCompleted,
+            premium: premiumFilter,
             search: searchQuery,
           }}
           onSubmit={handleFilterChange}
@@ -122,6 +201,8 @@ const Library = () => {
         <LibraryItemsList 
           items={sortedItems}
           userProgress={userProgress}
+          hasPremiumAccess={subscription.hasPremium}
+          onPremiumItemClick={handlePremiumItemClick}
         />
       </div>
     </MainLayout>

@@ -14,6 +14,7 @@ interface LibraryItemType {
   url: string;
   image: string;
   content: string;
+  premium: boolean;
 }
 
 interface UserProgressType {
@@ -25,9 +26,16 @@ interface UserProgressType {
 interface LibraryItemsListProps {
   items: LibraryItemType[];
   userProgress: UserProgressType[];
+  hasPremiumAccess: boolean;
+  onPremiumItemClick: (isPremium: boolean) => void;
 }
 
-export function LibraryItemsList({ items, userProgress }: LibraryItemsListProps) {
+export function LibraryItemsList({ 
+  items, 
+  userProgress, 
+  hasPremiumAccess, 
+  onPremiumItemClick 
+}: LibraryItemsListProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.map((item) => {
@@ -47,6 +55,9 @@ export function LibraryItemsList({ items, userProgress }: LibraryItemsListProps)
             duration={item.duration}
             progress={itemProgress}
             completed={isCompleted}
+            premium={item.premium}
+            hasPremiumAccess={hasPremiumAccess}
+            onPremiumClick={() => onPremiumItemClick(item.premium)}
           />
         );
       })}
