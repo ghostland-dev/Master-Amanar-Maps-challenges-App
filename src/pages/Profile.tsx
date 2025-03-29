@@ -49,6 +49,9 @@ const Profile = () => {
 
   if (!user) return null; // Safety check
   
+  // Ensure subscription has default values if it doesn't exist
+  const userSubscription = user.subscription || { tier: 'free', active: true, expiresAt: null };
+  
   const mockUserStats = {
     id: user.id,
     name: user.name,
@@ -60,7 +63,7 @@ const Profile = () => {
     completedChallenges: 8,
     inProgressChallenges: 2,
     badges: 15,
-    plan: user.subscription.tier === 'free' ? 'gratuit' : user.subscription.tier,
+    plan: userSubscription.tier === 'free' ? 'gratuit' : userSubscription.tier,
     joinDate: "12 Avril 2023",
   };
   
@@ -209,3 +212,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
