@@ -1,26 +1,19 @@
 
-import { useEffect, useRef } from "react";
-import Hero from "@/components/Hero";
-import CategoryCard from "@/components/CategoryCard";
-import { ShoppingCart, TrendingUp, Layers, Link as LinkIcon, PenTool, Code, LineChart, Palette } from "lucide-react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { slideIn } from "@/lib/animations";
-import Navbar from "@/components/Navbar";
+import { ShoppingCart, TrendingUp, Layers, Link as LinkIcon, PenTool, Code, LineChart, Palette } from "lucide-react";
+import Hero from "@/components/Hero";
+import CategoryCard from "@/components/CategoryCard";
+import MainLayout from "@/components/layouts/MainLayout";
 
 const Index = () => {
   const categoriesRef = useRef<HTMLDivElement>(null);
   
-  useEffect(() => {
-    if (categoriesRef.current) {
-      slideIn(categoriesRef.current, 'up');
-    }
-  }, []);
-  
   const categories = [
     {
       title: "Achat/Revente",
-      description: "Apprenez à acheter à bas prix et revendre avec une marge bénéficiaire.",
+      description: "Apprenez à acheter à bas prix et revendre pour gagner de l'argent",
       icon: <ShoppingCart className="h-6 w-6 text-primary" />,
       count: 5,
       difficulty: "beginner" as const,
@@ -28,7 +21,7 @@ const Index = () => {
     },
     {
       title: "Crypto",
-      description: "Explorez le monde des cryptomonnaies et des stratégies d'investissement.",
+      description: "Découvrez les investissements en cryptomonnaies",
       icon: <TrendingUp className="h-6 w-6 text-primary" />,
       count: 7,
       difficulty: "intermediate" as const,
@@ -36,7 +29,7 @@ const Index = () => {
     },
     {
       title: "E-commerce",
-      description: "Lancez et gérez votre propre boutique en ligne avec succès.",
+      description: "Créez et gérez votre boutique en ligne",
       icon: <Layers className="h-6 w-6 text-primary" />,
       count: 8,
       difficulty: "intermediate" as const,
@@ -44,7 +37,7 @@ const Index = () => {
     },
     {
       title: "Affiliation",
-      description: "Monétisez votre audience en promouvant des produits et services.",
+      description: "Gagnez de l'argent en recommandant des produits",
       icon: <LinkIcon className="h-6 w-6 text-primary" />,
       count: 6,
       difficulty: "beginner" as const,
@@ -52,7 +45,7 @@ const Index = () => {
     },
     {
       title: "Copywriting",
-      description: "Maîtrisez l'art d'écrire des textes qui convertissent.",
+      description: "Créez des textes qui vendent",
       icon: <PenTool className="h-6 w-6 text-primary" />,
       count: 4,
       difficulty: "intermediate" as const,
@@ -60,7 +53,7 @@ const Index = () => {
     },
     {
       title: "Développement",
-      description: "Développez des applications et services numériques rentables.",
+      description: "Créez des sites web et des applications",
       icon: <Code className="h-6 w-6 text-primary" />,
       count: 5,
       difficulty: "advanced" as const,
@@ -68,7 +61,7 @@ const Index = () => {
     },
     {
       title: "Marketing",
-      description: "Attirez et convertissez votre audience cible avec des stratégies efficaces.",
+      description: "Apprenez à attirer des clients",
       icon: <LineChart className="h-6 w-6 text-primary" />,
       count: 7,
       difficulty: "intermediate" as const,
@@ -76,7 +69,7 @@ const Index = () => {
     },
     {
       title: "Design",
-      description: "Créez des designs attrayants qui se démarquent sur le marché.",
+      description: "Créez de beaux designs qui attirent l'attention",
       icon: <Palette className="h-6 w-6 text-primary" />,
       count: 3,
       difficulty: "intermediate" as const,
@@ -85,8 +78,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
+    <MainLayout title="Accueil">
       <Hero />
       
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto pb-20">
@@ -105,7 +97,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

@@ -81,43 +81,4 @@ export const fadeIn = (element: HTMLElement | React.RefObject<HTMLElement>) => {
   );
 };
 
-/**
- * Animate a number with counting effect
- * @param element The DOM element to update
- * @param start Starting value
- * @param end Ending value
- * @param formatter Function to format the number (optional)
- */
-export const animateNumber = (
-  element: HTMLElement | React.RefObject<HTMLElement>, 
-  start: number, 
-  end: number, 
-  formatter: (value: number) => string = (val) => val.toString()
-) => {
-  const targetElement = element instanceof HTMLElement ? element : element.current;
-  
-  if (!targetElement) return;
-  
-  let currentValue = start;
-  const duration = 1000; // 1 second
-  const startTime = performance.now();
-  
-  const updateValue = (currentTime: number) => {
-    const elapsedTime = currentTime - startTime;
-    const progress = Math.min(elapsedTime / duration, 1);
-    
-    // Easing function for smoother animation
-    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-    
-    currentValue = start + (end - start) * easeOutQuart;
-    targetElement.textContent = formatter(currentValue);
-    
-    if (progress < 1) {
-      requestAnimationFrame(updateValue);
-    } else {
-      targetElement.textContent = formatter(end); // Ensure we end on the exact value
-    }
-  };
-  
-  requestAnimationFrame(updateValue);
-};
+// Note: La fonction animateNumber a été supprimée car jugée perturbante pour les utilisateurs
