@@ -10,9 +10,9 @@ import {
 export const LibraryMenu = () => {
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger>Bibliothèque</NavigationMenuTrigger>
+      <NavigationMenuTrigger aria-label="Ouvrir le menu de la bibliothèque">Bibliothèque</NavigationMenuTrigger>
       <NavigationMenuContent>
-        <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+        <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]" role="menu">
           <div className="grid grid-cols-2 gap-3">
             <LibraryMenuItem 
               to="/library?category=Marketing" 
@@ -36,7 +36,12 @@ export const LibraryMenu = () => {
             />
           </div>
           <div className="p-2">
-            <Link to="/library" className="text-sm text-primary hover:underline">
+            <Link 
+              to="/library" 
+              className="text-sm text-primary hover:underline"
+              role="menuitem"
+              aria-label="Explorer toute la bibliothèque"
+            >
               Explorer toute la bibliothèque →
             </Link>
           </div>
@@ -48,8 +53,8 @@ export const LibraryMenu = () => {
 
 // Helper components for library menu items
 const LibraryMenuItem = ({ to, title, description }: { to: string; title: string; description: string }) => (
-  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center">
-    <BookOpen className="mr-2 h-4 w-4 text-primary" />
+  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center" role="menuitem">
+    <BookOpen className="mr-2 h-4 w-4 text-primary" aria-hidden="true" />
     <div>
       <div className="text-sm font-medium">{title}</div>
       <div className="text-xs text-muted-foreground">{description}</div>
@@ -58,12 +63,19 @@ const LibraryMenuItem = ({ to, title, description }: { to: string; title: string
 );
 
 const PremiumLibraryMenuItem = ({ to, title, description }: { to: string; title: string; description: string }) => (
-  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center">
-    <BookOpen className="mr-2 h-4 w-4 text-primary" />
-    <div className="flex items-center gap-1">
-      <div className="text-sm font-medium">{title}</div>
-      <Crown className="h-3 w-3 text-yellow-500" />
+  <Link 
+    to={to} 
+    className="p-2 hover:bg-accent rounded-md flex items-center" 
+    role="menuitem"
+    aria-label={`${title} - Contenu exclusif premium`}
+  >
+    <BookOpen className="mr-2 h-4 w-4 text-primary" aria-hidden="true" />
+    <div>
+      <div className="flex items-center gap-1">
+        <div className="text-sm font-medium">{title}</div>
+        <Crown className="h-3 w-3 text-yellow-500" aria-hidden="true" title="Accès Premium requis" />
+      </div>
+      <div className="text-xs text-muted-foreground">{description}</div>
     </div>
-    <div className="text-xs text-muted-foreground">{description}</div>
   </Link>
 );

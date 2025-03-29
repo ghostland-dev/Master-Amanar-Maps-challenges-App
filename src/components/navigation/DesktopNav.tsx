@@ -1,10 +1,6 @@
 
-import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+import { NavigationMenuWrapper } from "./NavigationMenuWrapper";
 import { ChallengesMenu } from "./menus/ChallengesMenu";
 import { SimulatorsMenu } from "./menus/SimulatorsMenu";
 import { LibraryMenu } from "./menus/LibraryMenu";
@@ -22,18 +18,18 @@ interface DesktopNavProps {
 
 export const DesktopNav = ({ isAuthenticated, hasPremiumAccess, logout }: DesktopNavProps) => {
   return (
-    <div className="hidden md:flex items-center space-x-2">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <ChallengesMenu />
-          <SimulatorsMenu />
-          <LibraryMenu />
-          <SubscriptionButton hasPremiumAccess={hasPremiumAccess} />
-        </NavigationMenuList>
-      </NavigationMenu>
+    <div className="hidden md:flex items-center space-x-2" role="navigation" aria-label="Desktop Navigation">
+      <NavigationMenuWrapper>
+        <ChallengesMenu />
+        <SimulatorsMenu />
+        <LibraryMenu />
+        <SubscriptionButton hasPremiumAccess={hasPremiumAccess} />
+      </NavigationMenuWrapper>
       
       {/* Theme Toggle */}
-      <ThemeToggle />
+      <div className="flex items-center">
+        <ThemeToggle />
+      </div>
 
       {isAuthenticated ? (
         <AuthenticatedControls hasPremiumAccess={hasPremiumAccess} logout={logout} />
