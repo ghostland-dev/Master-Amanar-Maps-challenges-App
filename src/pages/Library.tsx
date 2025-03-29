@@ -542,12 +542,13 @@ const Library = () => {
                           <TooltipContent>
                             <p>Ressource terminée</p>
                           </TooltipContent>
-                        </TooltipProvider>
-                      ) : itemProgress > 0 ? (
-                        <div className="text-sm text-muted-foreground">
-                          Progression: {itemProgress}%
-                        </div>
-                      ) : null}
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : itemProgress > 0 ? (
+                      <div className="text-sm text-muted-foreground">
+                        Progression: {itemProgress}%
+                      </div>
+                    ) : null}
                   </div>
                   <Button asChild>
                     <a href={`/library/${item.id}`}>
