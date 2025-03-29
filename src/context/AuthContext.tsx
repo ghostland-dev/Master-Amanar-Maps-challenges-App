@@ -3,20 +3,29 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 
+type SubscriptionTier = 'free' | 'premium' | 'enterprise';
+
 type User = {
   id: string;
   name: string;
   email: string;
   role: 'user' | 'admin';
+  subscription: {
+    tier: SubscriptionTier;
+    active: boolean;
+    expiresAt: Date | null;
+  };
 } | null;
 
 type AuthContextType = {
   user: User;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasPremiumAccess: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   signup: (name: string, email: string, password: string) => Promise<void>;
+  upgradeSubscription: (tier: SubscriptionTier) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,7 +68,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: '1',
         name: email.split('@')[0],
         email: email,
-        role: email.includes('admin') ? 'admin' as const : 'user' as const
+        role: email.includes('admin') ? 'admin' as const : 'user' as const,
+        subscription: {
+          tier: 'free' as SubscriptionTier,
+          active: true,
+          expiresAt: null
+        }
       };
       
       setUser(mockUser);
@@ -93,7 +107,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: `${Date.now()}`,
         name: name,
         email: email,
-        role: 'user' as const
+        role: 'user' as const,
+        subscription: {
+          tier: 'free' as SubscriptionTier,
+          active: true,
+          expiresAt: null
+        }
       };
       
       setUser(mockUser);
@@ -116,6 +135,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const upgradeSubscription = async (tier: SubscriptionTier) => {
+    if (!user) return;
+
+    setIsLoading(true);
+    
+    try {
+      // Simulation d'un appel API pour la mise à jour de l'abonnement
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const updatedUser = {
+        ...user,
+        subscription: {
+          tier: tier,
+          active: true,
+          expiresAt: tier === 'free' ? null : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // expire dans 30 jours
+        }
+      };
+      
+      setUser(updatedUser);
+      localStorage.setItem('finquest_user', JSON.stringify(updatedUser));
+      
+      toast({
+        title: "Abonnement mis à jour",
+        description: `Votre abonnement a été mis à jour vers ${tier === 'premium' ? 'Premium' : 'Enterprise'}.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur de mise à jour",
+        description: "Impossible de mettre à jour votre abonnement",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('finquest_user');
@@ -126,15 +181,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     navigate('/');
   };
 
+  // Détermine si l'utilisateur a accès au contenu premium
+  const hasPremiumAccess = user?.subscription?.tier !== 'free' && user?.subscription?.active;
+
   return (
     <AuthContext.Provider
       value={{
         user,
         isAuthenticated: !!user,
         isLoading,
+        hasPremiumAccess,
         login,
         logout,
-        signup
+        signup,
+        upgradeSubscription
       }}
     >
       {children}
