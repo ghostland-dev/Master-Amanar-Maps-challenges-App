@@ -36,7 +36,7 @@ const Navbar = () => {
       <div className="container px-4 mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">FinQuest</span>
+          <span className="text-xl font-bold text-primary">Amanar Map</span>
         </Link>
 
         {/* Desktop Navigation */}
