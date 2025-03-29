@@ -6,7 +6,10 @@ import { CheckCircle, Crown, Gem } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const SubscriptionPalette = () => {
-  const { isAuthenticated, hasPremiumAccess } = useAuth();
+  const { isAuthenticated, hasPremiumAccess, user } = useAuth();
+  
+  // Get current plan if user is authenticated
+  const currentPlan = user?.subscription?.tier || 'free';
 
   const tiers = [
     {
@@ -18,9 +21,9 @@ const SubscriptionPalette = () => {
         "Challenges débutants",
         "Simulateurs essentiels"
       ],
-      highlighted: false,
+      highlighted: currentPlan === 'free',
       icon: <CheckCircle className="h-6 w-6 text-primary" />,
-      action: isAuthenticated ? "Votre forfait actuel" : "Commencer gratuitement"
+      action: isAuthenticated && currentPlan === 'free' ? "Votre forfait actuel" : "Commencer gratuitement"
     },
     {
       name: "Premium",
@@ -32,9 +35,9 @@ const SubscriptionPalette = () => {
         "Ressources exclusives premium",
         "Support prioritaire"
       ],
-      highlighted: true,
+      highlighted: currentPlan === 'premium',
       icon: <Crown className="h-6 w-6 text-amber-500" />,
-      action: hasPremiumAccess ? "Votre forfait actuel" : "S'abonner"
+      action: isAuthenticated && currentPlan === 'premium' ? "Votre forfait actuel" : "S'abonner"
     },
     {
       name: "Enterprise",
@@ -46,9 +49,9 @@ const SubscriptionPalette = () => {
         "Analytics avancées",
         "Webinaires exclusifs mensuels"
       ],
-      highlighted: false,
+      highlighted: currentPlan === 'enterprise',
       icon: <Gem className="h-6 w-6 text-indigo-500" />,
-      action: "Découvrir"
+      action: isAuthenticated && currentPlan === 'enterprise' ? "Votre forfait actuel" : "Découvrir"
     }
   ];
 
@@ -94,8 +97,9 @@ const SubscriptionPalette = () => {
             <CardFooter>
               <Link to={isAuthenticated ? "/subscriptions" : "/auth?tab=register"} className="w-full">
                 <Button 
-                  className={`w-full ${tier.highlighted ? '' : 'bg-muted-foreground/20 hover:bg-muted-foreground/30 text-foreground'}`}
+                  className={`w-full ${tier.highlighted ? 'bg-primary' : 'bg-muted-foreground/20 hover:bg-muted-foreground/30 text-foreground'}`}
                   variant={tier.highlighted ? "default" : "outline"}
+                  disabled={isAuthenticated && tier.highlighted}
                 >
                   {tier.action}
                 </Button>

@@ -42,7 +42,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const storedUser = localStorage.getItem('finquest_user');
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          const parsedUser = JSON.parse(storedUser);
+          
+          // Ensure the user object has the required subscription structure
+          if (!parsedUser.subscription) {
+            parsedUser.subscription = {
+              tier: 'free',
+              active: true,
+              expiresAt: null
+            };
+          }
+          
+          setUser(parsedUser);
         }
       } catch (error) {
         // Si erreur, on nettoie le localStorage
@@ -158,7 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       toast({
         title: "Abonnement mis à jour",
-        description: `Votre abonnement a été mis à jour vers ${tier === 'premium' ? 'Premium' : 'Enterprise'}.`,
+        description: `Votre abonnement a été mis à jour vers ${tier === 'premium' ? 'Premium' : tier === 'enterprise' ? 'Enterprise' : 'Gratuit'}.`,
       });
     } catch (error) {
       toast({
@@ -182,7 +193,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Détermine si l'utilisateur a accès au contenu premium
-  const hasPremiumAccess = user?.subscription?.tier !== 'free' && user?.subscription?.active;
+  const hasPremiumAccess = Boolean(user?.subscription?.tier !== 'free' && user?.subscription?.active);
 
   return (
     <AuthContext.Provider

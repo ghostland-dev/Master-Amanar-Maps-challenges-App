@@ -1,20 +1,29 @@
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import MainLayout from "@/components/layouts/MainLayout";
 
 /**
- * This component redirects /simulators route to /simulator
- * to maintain backward compatibility with old links
+ * This component handles the /simulators route
+ * It provides a proper page with links to all available simulators
  */
 const Simulators = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to the new simulator path
+    document.title = "FinQuest - Simulateurs";
     navigate("/simulator", { replace: true });
   }, [navigate]);
   
-  return null; // This component doesn't render anything
+  return (
+    <MainLayout title="Simulateurs" description="Accédez à tous nos simulateurs financiers">
+      <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-12">
+        <div className="text-center">
+          <p>Redirection vers la page des simulateurs...</p>
+        </div>
+      </div>
+    </MainLayout>
+  );
 };
 
 export default Simulators;
