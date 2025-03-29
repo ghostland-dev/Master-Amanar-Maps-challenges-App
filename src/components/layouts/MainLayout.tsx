@@ -23,7 +23,7 @@ const MainLayout = ({ children, title, description }: MainLayoutProps) => {
         {children}
       </main>
       
-      <footer className="bg-muted py-8 mt-auto">
+      <footer className="bg-muted py-8 mt-auto pb-24 md:pb-8">
         <div className="container max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
