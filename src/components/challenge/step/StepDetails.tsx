@@ -4,12 +4,13 @@ import { Download, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { StepTips } from "./StepTips"; // Changed to named import
-import { StepResources } from "./StepResources"; // Changed to named import
-import { StepCommonMistakes } from "./StepCommonMistakes"; // Changed to named import
-import { StepActions } from "./StepActions"; // Changed to named import
+import { StepTips } from "./StepTips";
+import { StepResources } from "./StepResources";
+import { StepCommonMistakes } from "./StepCommonMistakes";
+import { StepActions } from "./StepActions";
 import StepChecklist from "./StepChecklist";
 import StepAssistance from "./StepAssistance";
+import { useToast } from "@/components/ui/use-toast";
 
 interface StepDetailsProps {
   step: {
@@ -47,11 +48,14 @@ interface StepDetailsProps {
 }
 
 const StepDetails = ({ step, onDownload, onCompleteStep }: StepDetailsProps) => {
-  // Créer une fonction par défaut si onCompleteStep n'est pas fourni
-  const handleCompleteStep = () => {
-    if (onCompleteStep) {
-      onCompleteStep();
-    }
+  const { toast } = useToast();
+  
+  const handleViewJournal = () => {
+    // Pour l'instant, on affiche juste un toast pour indiquer que la fonctionnalité arrive bientôt
+    toast({
+      title: "Fonctionnalité à venir",
+      description: "Le journal de bord sera bientôt disponible !",
+    });
   };
 
   return (
@@ -77,7 +81,7 @@ const StepDetails = ({ step, onDownload, onCompleteStep }: StepDetailsProps) => 
       <StepChecklist 
         items={step.checklist || []}
         stepId={step.id}
-        onComplete={handleCompleteStep}
+        onComplete={onCompleteStep}
         isStepCompleted={step.isCompleted}
       />
 
@@ -109,7 +113,12 @@ const StepDetails = ({ step, onDownload, onCompleteStep }: StepDetailsProps) => 
       
       <Separator className="my-4" />
       
-      <StepActions isCompleted={step.isCompleted} onDownload={onDownload} />
+      <StepActions 
+        isCompleted={step.isCompleted}
+        onDownload={onDownload}
+        onComplete={onCompleteStep}
+        onViewJournal={handleViewJournal}
+      />
     </div>
   );
 };
