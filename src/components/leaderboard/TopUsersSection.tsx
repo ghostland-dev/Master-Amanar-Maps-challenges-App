@@ -23,9 +23,9 @@ interface TopUsersSectionProps {
 
 export const TopUsersSection = ({ users }: TopUsersSectionProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 md:mb-16 pt-10 md:pt-8 relative">
       {users.slice(1, 2).map((user) => (
-        <div key={user.id} className="top-user-card bg-muted/50 hover:bg-muted/80 rounded-xl p-4 flex flex-col items-center order-2 border border-border/30 shadow-sm transition-all hover:shadow-md">
+        <div key={user.id} className="top-user-card bg-muted/50 hover:bg-muted/80 rounded-xl p-4 flex flex-col items-center order-2 border border-border/30 shadow-sm transition-all hover:shadow-md h-full">
           <div className="relative">
             <UserAvatar
               user={{ name: user.name, avatar: user.avatar }}
@@ -62,8 +62,8 @@ export const TopUsersSection = ({ users }: TopUsersSectionProps) => {
       ))}
       
       {users.slice(0, 1).map((user) => (
-        <div key={user.id} className="top-user-card bg-gradient-to-b from-yellow-50 to-yellow-100/50 dark:from-yellow-900/10 dark:to-yellow-900/5 rounded-xl p-5 flex flex-col items-center relative order-1 md:mt-[-30px] border border-yellow-200 dark:border-yellow-700/30 shadow-md hover:shadow-lg transition-all">
-          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+        <div key={user.id} className="top-user-card bg-gradient-to-b from-yellow-50 to-yellow-100/50 dark:from-yellow-900/10 dark:to-yellow-900/5 rounded-xl p-5 flex flex-col items-center relative order-1 border border-yellow-200 dark:border-yellow-700/30 shadow-md hover:shadow-lg transition-all h-full z-10 md:transform md:scale-110">
+          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
             <Crown className="h-10 w-10 text-yellow-500 drop-shadow-md" />
           </div>
           <div className="relative pt-4">
@@ -85,7 +85,7 @@ export const TopUsersSection = ({ users }: TopUsersSectionProps) => {
               <span className="font-bold text-xl">{user.points.toLocaleString()}</span>
               <span className="text-xs ml-1 text-muted-foreground">pts</span>
             </div>
-            <div className="mt-1 space-x-1">
+            <div className="mt-1 space-x-1 flex flex-wrap justify-center gap-1">
               {user.badges.map((badge, idx) => (
                 <Badge key={idx} variant={badge.type} className="mt-1">
                   {badge.name}
@@ -97,7 +97,7 @@ export const TopUsersSection = ({ users }: TopUsersSectionProps) => {
       ))}
       
       {users.slice(2, 3).map((user) => (
-        <div key={user.id} className="top-user-card bg-muted/50 hover:bg-muted/80 rounded-xl p-4 flex flex-col items-center order-3 border border-border/30 shadow-sm transition-all hover:shadow-md">
+        <div key={user.id} className="top-user-card bg-muted/50 hover:bg-muted/80 rounded-xl p-4 flex flex-col items-center order-3 border border-border/30 shadow-sm transition-all hover:shadow-md h-full">
           <div className="relative">
             <UserAvatar
               user={{ name: user.name, avatar: user.avatar }}
