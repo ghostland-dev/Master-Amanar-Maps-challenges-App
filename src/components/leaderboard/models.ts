@@ -24,4 +24,5 @@ export interface BadgeData {
   name: string;
   value: number;
   icon?: string; // Added icon property
+  percentage?: number; // Added percentage property
 }

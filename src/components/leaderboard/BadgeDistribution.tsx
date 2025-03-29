@@ -2,9 +2,10 @@
 import React from "react";
 import { PieChart } from "@/components/ui/chart";
 import { Sparkles, Target, ChevronUp, Star } from "lucide-react";
+import { BadgeData } from "./models";
 
 interface BadgeDistributionProps {
-  data: { name: string; value: number }[];
+  data: BadgeData[];
 }
 
 export const BadgeDistribution = ({ data }: BadgeDistributionProps) => {
