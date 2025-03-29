@@ -5,7 +5,15 @@ export interface User {
   avatar: string;
   points: number;
   rank: number;
-  badges: { name: string; type: "default" | "secondary" | "destructive" | "outline" }[];
+  xp: number; // Added xp property
+  badges: {
+    id: string;
+    name: string;
+    type: "default" | "secondary" | "destructive" | "outline";
+    color?: string;
+    icon?: string;
+    description?: string;
+  }[];
   progress: number;
   challenges: number;
   previousRank?: number;
@@ -15,4 +23,5 @@ export interface User {
 export interface BadgeData {
   name: string;
   value: number;
+  icon?: string; // Added icon property
 }
