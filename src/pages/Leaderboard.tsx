@@ -21,9 +21,10 @@ import {
   Crown,
 } from "lucide-react";
 import { mockUsers, badgeDistributionData } from "@/components/leaderboard";
+import { CategoryData, UpcomingEvent, PastEvent, UserEvent } from "@/components/leaderboard/models";
 
 // Category stats data
-const CATEGORY_STATS = [
+const CATEGORY_STATS: CategoryData[] = [
   { 
     id: "general", 
     name: "Général", 
@@ -65,21 +66,21 @@ const SPECIAL_BADGES = [
 ];
 
 // Événements à venir
-const UPCOMING_EVENTS = [
+const UPCOMING_EVENTS: UpcomingEvent[] = [
   { name: "Challenge Hebdomadaire", date: "08 mars", xp: 150, type: "challenge", description: "Créez votre première campagne publicitaire rentable" },
   { name: "Tournoi des Investisseurs", date: "15 mars", xp: 300, type: "competition", description: "Compétition de trading sur 7 jours" },
   { name: "Hack Day Finance", date: "22 mars", xp: 200, type: "event", description: "Créez un outil financier innovant en 24h" },
 ];
 
 // Past events data
-const PAST_EVENTS = [
+const PAST_EVENTS: PastEvent[] = [
   { title: "Challenge E-commerce MVP", description: "Créez une boutique en ligne fonctionnelle en une semaine", winner: "Marie Dupont", xp: 250 },
   { title: "Hackathon Marketing Digital", description: "Développez une stratégie de marketing viral en 48h", winner: "Alexandre Petit", xp: 320 },
   { title: "Marathon Trading", description: "Réalisez le plus grand profit en une journée de trading", winner: "Lucas Martin", xp: 400 },
 ];
 
 // User events data
-const USER_EVENTS = [
+const USER_EVENTS: UserEvent[] = [
   { title: "Challenge Investissement", description: "Créez un portefeuille d'investissement rentable", date: "15 janvier 2023", status: "success", xp: 180 },
   { title: "Hackathon E-commerce", description: "Développez une plateforme e-commerce innovante", date: "28 février 2023", status: "failure", xp: 0 },
   { title: "Workshop Marketing Digital", description: "Maîtrisez les techniques de marketing numérique", date: "10 mars 2023", status: "success", xp: 150 },
