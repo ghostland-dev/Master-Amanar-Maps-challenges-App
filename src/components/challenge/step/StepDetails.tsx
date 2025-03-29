@@ -4,10 +4,10 @@ import { Download, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import StepTips from "./StepTips";
-import StepResources from "./StepResources";
-import StepCommonMistakes from "./StepCommonMistakes";
-import StepActions from "./StepActions";
+import { StepTips } from "./StepTips"; // Changed to named import
+import { StepResources } from "./StepResources"; // Changed to named import
+import { StepCommonMistakes } from "./StepCommonMistakes"; // Changed to named import
+import { StepActions } from "./StepActions"; // Changed to named import
 import StepChecklist from "./StepChecklist";
 import StepAssistance from "./StepAssistance";
 
