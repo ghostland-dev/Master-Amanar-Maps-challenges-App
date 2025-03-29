@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useState, useEffect } from "react";
 import MainLayout from "@/components/layouts/MainLayout";
@@ -5,7 +6,7 @@ import { LibraryHeader } from "@/components/library/LibraryHeader";
 import { LibrarySearch } from "@/components/library/LibrarySearch";
 import { LibraryFilterDialog } from "@/components/library/LibraryFilterDialog";
 import { LibraryItemsList } from "@/components/library/LibraryItemsList";
-import { mockLibraryItems, mockUserProgress } from "@/data/mock";
+import { mockLibraryItems, mockUserProgress } from "../data/mock";
 
 const Library = () => {
   const [libraryItems, setLibraryItems] = useState(mockLibraryItems);
