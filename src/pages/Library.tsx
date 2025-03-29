@@ -1,499 +1,559 @@
-
+import React from "react";
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, BookOpen, Video, Headphones, FileText, ArrowRight, Clock } from "lucide-react";
-import { LibraryCategory } from "@/components/library/LibraryCategory";
-import { LibraryItemCard } from "@/components/library/LibraryItemCard";
-import { LibraryFilters } from "@/components/library/LibraryFilters";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  BookOpen,
+  Bookmark,
+  Search,
+  Filter,
+  ArrowRight,
+  Clock,
+  Download,
+  Eye,
+  Star,
+  CheckCircle,
+  AlertTriangle,
+  Link as LinkIcon,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
-const MOCK_ITEMS = [
+// Mock data for Library Items
+const mockLibraryItems = [
   {
     id: "1",
-    title: "Comprendre les bases de l'épargne",
-    description: "Un guide complet pour commencer à épargner efficacement",
-    type: "article",
-    category: "épargne",
+    title: "The Intelligent Investor",
+    description: "The definitive book on value investing.",
+    category: "Investment",
+    type: "book",
+    content: "...",
+    url: "https://example.com/intelligent-investor",
     image: "/placeholder.svg",
-    duration: 10,
-    difficulty: "débutant",
-    progress: 0,
+    author: "Benjamin Graham",
+    duration: null,
+    difficulty: "intermediate",
   },
   {
     id: "2",
-    title: "Investir en bourse pour débutants",
-    description: "Les fondamentaux pour débuter en bourse sans risque",
+    title: "How to Start a Startup",
+    description: "A series of lectures on how to start a startup.",
+    category: "Entrepreneurship",
     type: "video",
-    category: "investissement",
+    content: "...",
+    url: "https://example.com/how-to-start-a-startup",
     image: "/placeholder.svg",
-    duration: 25,
-    difficulty: "débutant",
-    progress: 30,
+    author: "Sam Altman",
+    duration: 60,
+    difficulty: "beginner",
   },
   {
     id: "3",
-    title: "Stratégies de remboursement de dettes",
-    description: "Méthodes efficaces pour se libérer de ses dettes",
+    title: "Marketing in the Digital Age",
+    description: "Strategies for marketing in the digital age.",
+    category: "Marketing",
     type: "article",
-    category: "dettes",
+    content: "...",
+    url: "https://example.com/marketing-in-the-digital-age",
     image: "/placeholder.svg",
-    duration: 15,
-    difficulty: "intermédiaire",
-    progress: 100,
+    author: "Neil Patel",
+    duration: null,
+    difficulty: "intermediate",
   },
   {
     id: "4",
-    title: "Podcast: Gérer son budget au quotidien",
-    description: "Astuces pratiques pour optimiser son budget mensuel",
-    type: "podcast",
-    category: "budget",
+    title: "Cryptocurrency for Beginners",
+    description: "A guide to understanding cryptocurrency.",
+    category: "Crypto",
+    type: "pdf",
+    content: "...",
+    url: "https://example.com/cryptocurrency-for-beginners",
     image: "/placeholder.svg",
-    duration: 45,
-    difficulty: "débutant",
-    progress: 65,
+    author: null,
+    duration: null,
+    difficulty: "beginner",
   },
   {
     id: "5",
-    title: "Guide d'investissement immobilier",
-    description: "Comment construire et gérer un patrimoine immobilier",
-    type: "ebook",
-    category: "investissement",
+    title: "Personal Finance 101",
+    description: "A comprehensive guide to personal finance.",
+    category: "Finance",
+    type: "book",
+    content: "...",
+    url: "https://example.com/personal-finance-101",
     image: "/placeholder.svg",
-    duration: 60,
-    difficulty: "avancé",
-    progress: 0,
+    author: "Robert Kiyosaki",
+    duration: null,
+    difficulty: "beginner",
   },
   {
     id: "6",
-    title: "Planifier sa retraite dès 30 ans",
-    description: "Stratégies d'épargne long terme pour préparer sa retraite",
-    type: "article",
-    category: "retraite",
+    title: "The Lean Startup",
+    description: "A methodology for developing businesses and products.",
+    category: "Entrepreneurship",
+    type: "book",
+    content: "...",
+    url: "https://example.com/the-lean-startup",
     image: "/placeholder.svg",
-    duration: 20,
-    difficulty: "intermédiaire",
-    progress: 15,
+    author: "Eric Ries",
+    duration: null,
+    difficulty: "intermediate",
   },
   {
     id: "7",
-    title: "Les crypto-monnaies expliquées simplement",
-    description: "Tout ce que vous devez savoir pour débuter dans les cryptos",
+    title: "Social Media Marketing",
+    description: "A guide to social media marketing.",
+    category: "Marketing",
     type: "video",
-    category: "investissement",
+    content: "...",
+    url: "https://example.com/social-media-marketing",
     image: "/placeholder.svg",
-    duration: 30,
-    difficulty: "débutant",
-    progress: 0,
+    author: "Gary Vaynerchuk",
+    duration: 45,
+    difficulty: "intermediate",
   },
   {
     id: "8",
-    title: "Optimisation fiscale pour freelances",
-    description: "Comment réduire légalement vos impôts en tant qu'indépendant",
-    type: "ebook",
-    category: "fiscalité",
+    title: "Blockchain Basics",
+    description: "An introduction to blockchain technology.",
+    category: "Crypto",
+    type: "article",
+    content: "...",
+    url: "https://example.com/blockchain-basics",
     image: "/placeholder.svg",
-    duration: 40,
-    difficulty: "intermédiaire",
-    progress: 0,
+    author: null,
+    duration: null,
+    difficulty: "beginner",
   },
   {
     id: "9",
-    title: "Masterclass: NFTs et Économie Web3",
-    description: "Comprendre les NFTs et leurs applications pratiques",
-    type: "video",
-    category: "investissement",
+    title: "Retirement Planning",
+    description: "A guide to planning for retirement.",
+    category: "Finance",
+    type: "book",
+    content: "...",
+    url: "https://example.com/retirement-planning",
     image: "/placeholder.svg",
-    duration: 50,
-    difficulty: "avancé",
-    progress: 0,
+    author: "Suze Orman",
+    duration: null,
+    difficulty: "intermediate",
   },
   {
     id: "10",
-    title: "Budget familial: Méthodes qui fonctionnent",
-    description: "Conseils pratiques pour gérer les finances d'un foyer",
-    type: "article",
-    category: "budget",
+    title: "Venture Capital",
+    description: "An overview of venture capital.",
+    category: "Investment",
+    type: "video",
+    content: "...",
+    url: "https://example.com/venture-capital",
     image: "/placeholder.svg",
-    duration: 15,
-    difficulty: "débutant",
-    progress: 0,
-  },
-  {
-    id: "11",
-    title: "Podcast: Devenir rentier avant 40 ans",
-    description: "Témoignages et stratégies de personnes ayant atteint l'indépendance financière",
-    type: "podcast",
-    category: "retraite",
-    image: "/placeholder.svg",
-    duration: 60,
-    difficulty: "intermédiaire",
-    progress: 0,
-  },
-  {
-    id: "12",
-    title: "Gagner de l'argent avec le marketing d'affiliation",
-    description: "Guide pas à pas pour générer des revenus passifs",
-    type: "article",
-    category: "revenus",
-    image: "/placeholder.svg",
-    duration: 25,
-    difficulty: "débutant",
-    progress: 0,
+    author: "Naval Ravikant",
+    duration: 30,
+    difficulty: "advanced",
   },
 ];
 
-const CATEGORIES = [
-  { id: "épargne", name: "Épargne", icon: BookOpen, count: 12 },
-  { id: "investissement", name: "Investissement", icon: BookOpen, count: 24 },
-  { id: "budget", name: "Budget", icon: BookOpen, count: 18 },
-  { id: "dettes", name: "Dettes", icon: BookOpen, count: 9 },
-  { id: "retraite", name: "Retraite", icon: BookOpen, count: 6 },
-  { id: "fiscalité", name: "Fiscalité", icon: BookOpen, count: 10 },
-  { id: "revenus", name: "Revenus", icon: BookOpen, count: 7 },
+// Mock data for User Progress
+const mockUserProgress = [
+  { itemId: "1", progress: 80, completed: false },
+  { itemId: "2", progress: 50, completed: false },
+  { itemId: "3", progress: 100, completed: true },
+  { itemId: "4", progress: 20, completed: false },
+  { itemId: "5", progress: 100, completed: true },
+  { itemId: "6", progress: 70, completed: false },
+  { itemId: "7", progress: 100, completed: true },
+  { itemId: "8", progress: 40, completed: false },
+  { itemId: "9", progress: 60, completed: false },
+  { itemId: "10", progress: 90, completed: false },
 ];
 
-const COLLECTIONS = [
-  { id: "1", title: "Débuter en investissement", count: 5, image: "/placeholder.svg" },
-  { id: "2", title: "Gérer son budget", count: 4, image: "/placeholder.svg" },
-  { id: "3", title: "Indépendance financière", count: 7, image: "/placeholder.svg" },
-];
-
-const POPULAR_COURSES = MOCK_ITEMS.slice(0, 4);
+const filterSchema = z.object({
+  category: z.string().optional(),
+  type: z.string().optional(),
+  difficulty: z.string().optional(),
+  duration: z.string().optional(),
+  completed: z.boolean().optional(),
+  search: z.string().optional(),
+});
 
 const Library = () => {
+  const [libraryItems, setLibraryItems] = useState(mockLibraryItems);
+  const [userProgress, setUserProgress] = useState(mockUserProgress);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("relevance");
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+
+  const form = useForm<z.infer<typeof filterSchema>>({
+    resolver: zodResolver(filterSchema),
+    defaultValues: {
+      category: "",
+      type: "",
+      difficulty: "",
+      duration: "",
+      completed: false,
+      search: "",
+    },
+  });
+
   useEffect(() => {
     document.title = "FinQuest - Bibliothèque";
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [libraryItems, setLibraryItems] = useState(MOCK_ITEMS);
-  const [courseProgress, setCourseProgress] = useState(35);
-  
-  // Filter library items based on search query and filters
-  const filteredItems = libraryItems.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || item.category === selectedCategory;
-    const matchesDifficulty = !selectedDifficulty || item.difficulty === selectedDifficulty;
-    const matchesType = !selectedType || item.type === selectedType;
-    
-    return matchesSearch && matchesCategory && matchesDifficulty && matchesType;
+  const handleFilterChange = (values: z.infer<typeof filterSchema>) => {
+    setSelectedCategory(values.category || "");
+    setSelectedType(values.type || "");
+    setSelectedDifficulty(values.difficulty || "");
+    setIsCompleted(values.completed || false);
+    setSearchQuery(values.search || "");
+    setIsFilterDialogOpen(false);
+  };
+
+  const filteredItems = libraryItems.filter((item) => {
+    const categoryMatch = selectedCategory
+      ? item.category === selectedCategory
+      : true;
+    const typeMatch = selectedType ? item.type === selectedType : true;
+    const difficultyMatch = selectedDifficulty
+      ? item.difficulty === selectedDifficulty
+      : true;
+    const completedMatch = isCompleted
+      ? userProgress.find((progress) => progress.itemId === item.id)?.completed
+      : true;
+    const searchMatch = searchQuery
+      ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+
+    return (
+      categoryMatch &&
+      typeMatch &&
+      difficultyMatch &&
+      completedMatch &&
+      searchMatch
+    );
   });
-  
-  // Get count of items by progress state
-  const completedCount = libraryItems.filter(item => item.progress === 100).length;
-  const inProgressCount = libraryItems.filter(item => item.progress > 0 && item.progress < 100).length;
-  const notStartedCount = libraryItems.filter(item => item.progress === 0).length;
-  
-  // Get icon based on content type
-  const getContentTypeIcon = (type: string) => {
-    switch (type) {
-      case "article":
-        return FileText;
-      case "video":
-        return Video;
-      case "podcast":
-        return Headphones;
-      case "ebook":
-        return BookOpen;
-      default:
-        return FileText;
+
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    if (sortOrder === "relevance") {
+      return 0;
+    } else if (sortOrder === "title") {
+      return a.title.localeCompare(b.title);
+    } else if (sortOrder === "duration") {
+      const durationA = a.duration || 0;
+      const durationB = b.duration || 0;
+      return durationA - durationB;
     }
+    return 0;
+  });
+
+  const handleResetFilters = () => {
+    setSelectedCategory("");
+    setSelectedType("");
+    setSelectedDifficulty("");
+    setIsCompleted(false);
+    setSearchQuery("");
+    form.reset();
   };
 
   return (
-    <div className="min-h-screen pb-16 md:pb-0">
-      <Navbar />
-      <div className="pt-20">
-        <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-6">
-          <h1 className="text-3xl font-bold mb-2">Bibliothèque</h1>
-          <p className="text-muted-foreground mb-8">
-            Explorez notre collection de ressources éducatives sur la finance
+    <div className="container max-w-6xl mx-auto py-20 px-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            Bibliothèque
+          </h1>
+          <p className="text-muted-foreground">
+            Découvrez des ressources pour développer vos compétences financières
           </p>
-          
-          {/* Dashboard de progression */}
-          <Card className="mb-8 bg-gradient-to-r from-primary/10 to-secondary/10 border-none">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="md:col-span-2">
-                  <h3 className="font-medium text-lg mb-2">Votre progression globale</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Vous avez complété {completedCount} ressources sur {libraryItems.length}
-                  </p>
-                  <div className="mb-2 flex justify-between text-sm">
-                    <span>Progression</span>
-                    <span>{courseProgress}%</span>
-                  </div>
-                  <Progress value={courseProgress} className="h-2 mb-4" />
-                  <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="bg-background rounded-md p-3">
-                      <p className="text-xl font-medium">{completedCount}</p>
-                      <p className="text-xs text-muted-foreground">Terminés</p>
-                    </div>
-                    <div className="bg-background rounded-md p-3">
-                      <p className="text-xl font-medium">{inProgressCount}</p>
-                      <p className="text-xs text-muted-foreground">En cours</p>
-                    </div>
-                    <div className="bg-background rounded-md p-3">
-                      <p className="text-xl font-medium">{notStartedCount}</p>
-                      <p className="text-xs text-muted-foreground">À commencer</p>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-medium text-lg mb-2">Continuer</h3>
-                  <div className="space-y-3">
-                    {libraryItems
-                      .filter(item => item.progress > 0 && item.progress < 100)
-                      .slice(0, 2)
-                      .map(item => (
-                        <Link to={`/library/${item.id}`} key={item.id}>
-                          <div className="flex items-center gap-3 bg-background hover:bg-muted rounded-lg p-3 transition-colors cursor-pointer">
-                            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                              {React.createElement(getContentTypeIcon(item.type), { className: "h-5 w-5 text-primary" })}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium truncate">{item.title}</p>
-                              <Progress value={item.progress} className="h-1.5 mt-1" />
-                            </div>
-                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                          </div>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-medium text-lg mb-2">Suggestion</h3>
-                  <div className="bg-background hover:bg-muted rounded-lg p-4 transition-colors h-full cursor-pointer">
-                    {libraryItems
-                      .filter(item => item.progress === 0)
-                      .slice(0, 1)
-                      .map(item => (
-                        <Link to={`/library/${item.id}`} key={item.id} className="block h-full">
-                          <div className="flex flex-col h-full">
-                            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center mb-2">
-                              {React.createElement(getContentTypeIcon(item.type), { className: "h-5 w-5 text-primary" })}
-                            </div>
-                            <h4 className="font-medium text-sm mb-1">{item.title}</h4>
-                            <p className="text-xs text-muted-foreground mb-auto">{item.description}</p>
-                            <div className="flex items-center text-xs text-muted-foreground mt-2">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {item.duration} min
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Collections populaires */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Collections</h2>
-              <Button variant="link" className="font-medium">
-                Voir toutes les collections
-                <ArrowRight className="ml-1 h-4 w-4" />
+        </div>
+
+        <div className="flex gap-2 mt-4 md:mt-0">
+          <Input
+            type="search"
+            placeholder="Rechercher une ressource..."
+            className="md:w-64"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <Filter className="h-4 w-4" />
+                Filtrer
               </Button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {COLLECTIONS.map(collection => (
-                <Card key={collection.id} className="overflow-hidden hover:shadow-md transition-all cursor-pointer group">
-                  <div className="h-32 overflow-hidden relative">
-                    <img 
-                      src={collection.image} 
-                      alt={collection.title} 
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                      <div>
-                        <h3 className="text-white font-medium">{collection.title}</h3>
-                        <p className="text-white/80 text-sm">{collection.count} ressources</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-          
-          {/* Contenu populaire */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Contenu populaire</h2>
-              <Button variant="link" className="font-medium">
-                Voir tout le contenu populaire
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {POPULAR_COURSES.map((item) => (
-                <LibraryItemCard 
-                  key={item.id}
-                  item={item}
-                  typeIcon={getContentTypeIcon(item.type)}
-                />
-              ))}
-            </div>
-          </div>
-          
-          <Separator className="my-8" />
-          
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Left sidebar with categories */}
-            <div className="w-full md:w-1/4 space-y-6">
-              <div className="bg-card rounded-lg border p-4">
-                <h3 className="font-medium mb-3">Catégories</h3>
-                <div className="space-y-1">
-                  {CATEGORIES.map(category => (
-                    <LibraryCategory 
-                      key={category.id}
-                      category={category}
-                      isSelected={selectedCategory === category.id}
-                      onSelect={() => {
-                        setSelectedCategory(
-                          selectedCategory === category.id ? null : category.id
-                        );
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-              
-              <div className="hidden md:block">
-                <LibraryFilters 
-                  selectedDifficulty={selectedDifficulty}
-                  setSelectedDifficulty={setSelectedDifficulty}
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
-                />
-              </div>
-            </div>
-            
-            {/* Main content area */}
-            <div className="w-full md:w-3/4 space-y-6">
-              {/* Search and filters */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input 
-                    placeholder="Rechercher dans la bibliothèque..." 
-                    className="pl-9"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </div>
-                <Button 
-                  variant="outline" 
-                  className="md:hidden"
-                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Filtrer les ressources</DialogTitle>
+                <DialogDescription>
+                  Affinez votre recherche en utilisant les filtres ci-dessous.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleFilterChange)}
+                  className="space-y-4"
                 >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filtres
-                </Button>
-              </div>
-              
-              {/* Mobile filters */}
-              {isFilterOpen && (
-                <div className="md:hidden">
-                  <LibraryFilters 
-                    selectedDifficulty={selectedDifficulty}
-                    setSelectedDifficulty={setSelectedDifficulty}
-                    selectedType={selectedType}
-                    setSelectedType={setSelectedType}
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Catégorie</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Sélectionner une catégorie" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="">Toutes les catégories</SelectItem>
+                            <SelectItem value="Investment">Investissement</SelectItem>
+                            <SelectItem value="Entrepreneurship">
+                              Entrepreneuriat
+                            </SelectItem>
+                            <SelectItem value="Marketing">Marketing</SelectItem>
+                            <SelectItem value="Crypto">Crypto</SelectItem>
+                            <SelectItem value="Finance">Finance</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-              )}
-              
-              {/* Content tabs */}
-              <Tabs defaultValue="all">
-                <TabsList>
-                  <TabsTrigger value="all">Tous</TabsTrigger>
-                  <TabsTrigger value="started">Commencés</TabsTrigger>
-                  <TabsTrigger value="completed">Terminés</TabsTrigger>
-                  <TabsTrigger value="bookmarked">Sauvegardés</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="all" className="mt-6">
-                  {filteredItems.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {filteredItems.map((item) => (
-                        <LibraryItemCard 
-                          key={item.id}
-                          item={item}
-                          typeIcon={getContentTypeIcon(item.type)}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <p className="text-muted-foreground">Aucun résultat trouvé</p>
-                      <Button 
-                        variant="outline" 
-                        className="mt-4"
-                        onClick={() => {
-                          setSearchQuery("");
-                          setSelectedCategory(null);
-                          setSelectedDifficulty(null);
-                          setSelectedType(null);
-                        }}
-                      >
-                        Réinitialiser les filtres
-                      </Button>
+
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Type de ressource</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Sélectionner un type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="">Tous les types</SelectItem>
+                            <SelectItem value="book">Livre</SelectItem>
+                            <SelectItem value="video">Vidéo</SelectItem>
+                            <SelectItem value="article">Article</SelectItem>
+                            <SelectItem value="pdf">PDF</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="difficulty"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Niveau de difficulté</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Sélectionner un niveau" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="">Tous les niveaux</SelectItem>
+                            <SelectItem value="beginner">Débutant</SelectItem>
+                            <SelectItem value="intermediate">Intermédiaire</SelectItem>
+                            <SelectItem value="advanced">Avancé</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="completed"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-md border px-3 py-2">
+                        <div className="space-y-0.5">
+                          <FormLabel>Ressources terminées</FormLabel>
+                          <FormDescription>
+                            Afficher uniquement les ressources que vous avez
+                            terminées.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={handleResetFilters}
+                    >
+                      Réinitialiser
+                    </Button>
+                    <Button type="submit" size="sm">
+                      Appliquer les filtres
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold">
+          {filteredItems.length} Ressources disponibles
+        </h2>
+        <Select onValueChange={setSortOrder} defaultValue={sortOrder}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Trier par" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="relevance">Pertinence</SelectItem>
+            <SelectItem value="title">Titre</SelectItem>
+            <SelectItem value="duration">Durée</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedItems.map((item) => {
+          const progress = userProgress.find(
+            (progress) => progress.itemId === item.id
+          );
+          const itemProgress = progress ? progress.progress : 0;
+          const isCompleted = progress ? progress.completed : false;
+
+          return (
+            <Card key={item.id} className="glass hover:shadow-md transition-all">
+              <CardHeader>
+                <CardTitle className="line-clamp-1">{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {item.description}
+                </p>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{item.category}</Badge>
+                  {item.duration && (
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <Clock className="mr-1 h-3 w-3" />
+                      <span>{item.duration} minutes</span>
                     </div>
                   )}
-                </TabsContent>
-                
-                <TabsContent value="started" className="mt-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredItems
-                      .filter(item => item.progress > 0 && item.progress < 100)
-                      .map((item) => (
-                        <LibraryItemCard 
-                          key={item.id}
-                          item={item}
-                          typeIcon={getContentTypeIcon(item.type)}
-                        />
-                      ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="completed" className="mt-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredItems
-                      .filter(item => item.progress === 100)
-                      .map((item) => (
-                        <LibraryItemCard 
-                          key={item.id}
-                          item={item}
-                          typeIcon={getContentTypeIcon(item.type)}
-                        />
-                      ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="bookmarked" className="mt-6">
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">Fonctionnalité bientôt disponible</p>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </div>
-        </div>
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  {isCompleted ? (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Ressource terminée</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : itemProgress > 0 ? (
+                    <div className="text-sm text-muted-foreground">
+                      Progression: {itemProgress}%
+                    </div>
+                  ) : null}
+                </div>
+                <Button asChild>
+                  <a href={`/library/${item.id}`}>
+                    Voir plus <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              </CardFooter>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
