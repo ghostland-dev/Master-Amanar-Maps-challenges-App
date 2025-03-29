@@ -13,7 +13,7 @@ interface MainLayoutProps {
 const MainLayout = ({ children, title, description, className = "" }: MainLayoutProps) => {
   // Mise à jour du titre de la page
   if (title) {
-    document.title = `FinQuest - ${title}`;
+    document.title = `Amanar Map - ${title}`;
   }
 
   // Ajout d'une méta description
@@ -42,7 +42,7 @@ const MainLayout = ({ children, title, description, className = "" }: MainLayout
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start mb-2">
-                <span className="text-xl font-bold text-primary mr-2">FinQuest</span>
+                <span className="text-xl font-bold text-primary mr-2">Amanar Map</span>
                 <span className="text-sm text-muted-foreground">©{new Date().getFullYear()}</span>
               </div>
               <p className="text-sm text-muted-foreground text-center md:text-left">

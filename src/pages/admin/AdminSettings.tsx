@@ -12,7 +12,7 @@ import { Save } from "lucide-react";
 const AdminSettings = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("general");
-  const [siteName, setSiteName] = useState("FinQuest");
+  const [siteName, setSiteName] = useState("Amanar Map");
   const [siteDescription, setSiteDescription] = useState("Plateforme d'apprentissage financier");
   
   const handleSaveGeneral = () => {
