@@ -21,6 +21,7 @@ import NotFound from "./pages/NotFound";
 import Library from "./pages/Library";
 import LibraryItem from "./pages/LibraryItem";
 import Subscriptions from "./pages/Subscriptions";
+import Unauthorized from "./pages/Unauthorized";
 
 // Pages protégées (utilisateur connecté)
 import Dashboard from "./pages/Dashboard";
@@ -30,6 +31,11 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Leaderboard from "./pages/Leaderboard";
+
+// Pages spéciales par rôle
+import PartnerPortal from "./pages/partner/PartnerPortal";
+import AffiliateDashboard from "./pages/affiliate/AffiliateDashboard";
+import CommercialDashboard from "./pages/commercial/CommercialDashboard";
 
 // Pages admin
 import SuperAdmin from "./pages/SuperAdmin";
@@ -61,6 +67,7 @@ const App = () => (
               <Route path="/simulator/trend-analysis" element={<TrendAnalysis />} />
               <Route path="/library" element={<Library />} />
               <Route path="/library/:id" element={<LibraryItem />} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
               
               {/* Routes protégées (utilisateur connecté) */}
               <Route path="/dashboard" element={
@@ -104,6 +111,23 @@ const App = () => (
                 </ProtectedRoute>
               } />
               
+              {/* Routes spécifiques par rôle */}
+              <Route path="/partner-portal" element={
+                <ProtectedRoute requiredAccess="canAccessPartnerPortal" roles={['partner', 'admin', 'super_admin']}>
+                  <PartnerPortal />
+                </ProtectedRoute>
+              } />
+              <Route path="/affiliate-dashboard" element={
+                <ProtectedRoute requiredAccess="canAccessAffiliateTools" roles={['affiliate', 'admin', 'super_admin']}>
+                  <AffiliateDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/commercial-dashboard" element={
+                <ProtectedRoute requiredAccess="canAccessCommercialDashboard" roles={['commercial', 'admin', 'super_admin']}>
+                  <CommercialDashboard />
+                </ProtectedRoute>
+              } />
+              
               {/* Routes admin */}
               <Route path="/admin" element={
                 <ProtectedRoute adminOnly>
@@ -111,22 +135,22 @@ const App = () => (
                 </ProtectedRoute>
               } />
               <Route path="/admin/challenges" element={
-                <ProtectedRoute adminOnly>
+                <ProtectedRoute requiredAccess="canManageChallenges" roles={['admin', 'super_admin']}>
                   <ChallengeManager />
                 </ProtectedRoute>
               } />
               <Route path="/admin/users" element={
-                <ProtectedRoute adminOnly>
+                <ProtectedRoute requiredAccess="canManageUsers" roles={['admin', 'super_admin']}>
                   <UserManager />
                 </ProtectedRoute>
               } />
               <Route path="/admin/subscriptions" element={
-                <ProtectedRoute adminOnly>
+                <ProtectedRoute requiredAccess="canManageSubscriptions" roles={['admin', 'super_admin']}>
                   <SubscriptionManager />
                 </ProtectedRoute>
               } />
               <Route path="/admin/analytics" element={
-                <ProtectedRoute adminOnly>
+                <ProtectedRoute requiredAccess="canViewAnalytics" roles={['admin', 'super_admin', 'commercial']}>
                   <AnalyticsManager />
                 </ProtectedRoute>
               } />

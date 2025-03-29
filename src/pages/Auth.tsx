@@ -7,10 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Trophy, Github, Eye, EyeOff, Mail } from "lucide-react";
+import { Trophy, Github, Eye, EyeOff, Mail, Info } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Auth = () => {
   const { login, signup, isAuthenticated, isLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+  const [showRoleInfo, setShowRoleInfo] = useState(false);
   
   // Form states
   const [loginEmail, setLoginEmail] = useState("");
@@ -106,6 +108,11 @@ const Auth = () => {
     setActiveTab(value);
     navigate(`/auth?tab=${value}`);
   };
+
+  const setDemoAccount = (role: string) => {
+    setLoginEmail(`${role}@example.com`);
+    setLoginPassword("password");
+  };
   
   return (
     <MainLayout title="Authentification">
@@ -176,16 +183,91 @@ const Auth = () => {
                       {isLoading ? "Connexion en cours..." : "Se connecter"}
                     </Button>
                     
-                    <p className="text-center text-sm text-muted-foreground">
-                      Pas encore de compte?{" "}
+                    <div className="flex justify-between items-center">
                       <button
                         type="button"
-                        className="text-primary hover:underline font-medium"
-                        onClick={() => handleTabChange("register")}
+                        className="text-xs text-primary flex items-center hover:underline"
+                        onClick={() => setShowRoleInfo(!showRoleInfo)}
                       >
-                        S'inscrire
+                        <Info size={14} className="mr-1" />
+                        Comptes de démonstration
                       </button>
-                    </p>
+                      <p className="text-xs text-muted-foreground">
+                        Pas encore de compte?{" "}
+                        <button
+                          type="button"
+                          className="text-primary hover:underline font-medium"
+                          onClick={() => handleTabChange("register")}
+                        >
+                          S'inscrire
+                        </button>
+                      </p>
+                    </div>
+                    
+                    {showRoleInfo && (
+                      <Alert className="mt-2">
+                        <AlertTitle>Comptes de démonstration par rôle</AlertTitle>
+                        <AlertDescription>
+                          <div className="text-xs space-y-1 mt-2">
+                            <p className="flex justify-between">
+                              <span>Client:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("client")}
+                              >
+                                client@example.com
+                              </button>
+                            </p>
+                            <p className="flex justify-between">
+                              <span>Partenaire:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("partner")}
+                              >
+                                partner@example.com
+                              </button>
+                            </p>
+                            <p className="flex justify-between">
+                              <span>Affilié:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("affiliate")}
+                              >
+                                affiliate@example.com
+                              </button>
+                            </p>
+                            <p className="flex justify-between">
+                              <span>Commercial:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("commercial")}
+                              >
+                                commercial@example.com
+                              </button>
+                            </p>
+                            <p className="flex justify-between">
+                              <span>Admin:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("admin")}
+                              >
+                                admin@example.com
+                              </button>
+                            </p>
+                            <p className="flex justify-between">
+                              <span>Super Admin:</span>
+                              <button 
+                                className="text-primary hover:underline" 
+                                onClick={() => setDemoAccount("superadmin")}
+                              >
+                                superadmin@example.com
+                              </button>
+                            </p>
+                            <p className="mt-1 text-muted-foreground">Mot de passe: "password" pour tous les comptes</p>
+                          </div>
+                        </AlertDescription>
+                      </Alert>
+                    )}
                   </form>
                 </TabsContent>
                 
