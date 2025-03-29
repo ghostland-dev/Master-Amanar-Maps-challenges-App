@@ -9,35 +9,52 @@ interface AuthenticatedControlsProps {
 }
 
 export const AuthenticatedControls = ({ hasPremiumAccess, logout }: AuthenticatedControlsProps) => (
-  <div className="flex items-center space-x-1 ml-2">
-    <Button variant="ghost" size="icon" className="relative">
+  <div className="flex items-center space-x-1 ml-2" role="navigation" aria-label="User Navigation">
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      className="relative"
+      aria-label="Notifications"
+    >
       <Link to="/notifications">
-        <Bell className="h-5 w-5" />
-        <span className="absolute top-1 right-1 bg-primary w-2 h-2 rounded-full"></span>
+        <Bell className="h-5 w-5" aria-hidden="true" />
+        <span 
+          className="absolute top-1 right-1 bg-primary w-2 h-2 rounded-full"
+          aria-label="Nouvelles notifications"
+        ></span>
       </Link>
     </Button>
-    <Link to="/dashboard">
+    <Link to="/dashboard" aria-label="Accéder à votre tableau de bord">
       <Button variant="ghost">Dashboard</Button>
     </Link>
-    <Link to="/profile">
-      <Button variant="ghost" size="icon">
-        <UserCircle className="h-5 w-5" />
-        {hasPremiumAccess && <span className="absolute top-0 right-0 bg-yellow-500 w-2 h-2 rounded-full"></span>}
+    <Link to="/profile" aria-label="Accéder à votre profil">
+      <Button variant="ghost" size="icon" className="relative">
+        <UserCircle className="h-5 w-5" aria-hidden="true" />
+        {hasPremiumAccess && (
+          <span 
+            className="absolute top-0 right-0 bg-yellow-500 w-2 h-2 rounded-full"
+            aria-label="Statut premium actif"
+          ></span>
+        )}
       </Button>
     </Link>
-    <Button variant="ghost" onClick={logout}>
+    <Button 
+      variant="ghost" 
+      onClick={logout} 
+      aria-label="Se déconnecter"
+    >
       Déconnexion
     </Button>
   </div>
 );
 
 export const UnauthenticatedControls = () => (
-  <>
-    <Link to="/auth?tab=login">
+  <div role="navigation" aria-label="Authentication Controls">
+    <Link to="/auth?tab=login" aria-label="Se connecter">
       <Button variant="outline">Connexion</Button>
     </Link>
-    <Link to="/auth?tab=register">
+    <Link to="/auth?tab=register" aria-label="Créer un compte">
       <Button>Inscription</Button>
     </Link>
-  </>
+  </div>
 );

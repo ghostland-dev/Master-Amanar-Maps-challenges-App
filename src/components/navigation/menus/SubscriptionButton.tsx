@@ -11,10 +11,16 @@ interface SubscriptionButtonProps {
 export const SubscriptionButton = ({ hasPremiumAccess }: SubscriptionButtonProps) => {
   return (
     <NavigationMenuItem>
-      <Link to="/subscriptions">
-        <Button variant="ghost" className="font-normal">
+      <Link to="/subscriptions" aria-label="Voir les options d'abonnement">
+        <Button variant="ghost" className="font-normal" aria-current={location.pathname === "/subscriptions" ? "page" : undefined}>
           Abonnements
-          {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
+          {hasPremiumAccess && (
+            <Crown 
+              className="ml-1 h-3 w-3 text-yellow-500" 
+              aria-hidden="true"
+              title="Accès Premium actif"
+            />
+          )}
         </Button>
       </Link>
     </NavigationMenuItem>

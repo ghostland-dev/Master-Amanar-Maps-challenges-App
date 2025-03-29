@@ -10,9 +10,9 @@ import {
 export const ChallengesMenu = () => {
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger>Challenges</NavigationMenuTrigger>
+      <NavigationMenuTrigger aria-label="Ouvrir le menu des challenges">Challenges</NavigationMenuTrigger>
       <NavigationMenuContent>
-        <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+        <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]" role="menu">
           <div className="grid grid-cols-2 gap-3">
             <ChallengeMenuItem 
               to="/challenges?category=Finance" 
@@ -36,7 +36,12 @@ export const ChallengesMenu = () => {
             />
           </div>
           <div className="p-2">
-            <Link to="/challenges" className="text-sm text-primary hover:underline">
+            <Link 
+              to="/challenges" 
+              className="text-sm text-primary hover:underline"
+              role="menuitem"
+              aria-label="Voir tous les challenges"
+            >
               Voir tous les challenges →
             </Link>
           </div>
@@ -48,8 +53,8 @@ export const ChallengesMenu = () => {
 
 // Helper component for menu items
 const ChallengeMenuItem = ({ to, title, description }: { to: string; title: string; description: string }) => (
-  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center">
-    <Award className="mr-2 h-4 w-4 text-primary" />
+  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center" role="menuitem">
+    <Award className="mr-2 h-4 w-4 text-primary" aria-hidden="true" />
     <div>
       <div className="text-sm font-medium">{title}</div>
       <div className="text-xs text-muted-foreground">{description}</div>
