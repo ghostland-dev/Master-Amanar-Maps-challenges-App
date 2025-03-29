@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages publiques
@@ -42,97 +43,99 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <Routes>
-            {/* Routes publiques */}
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/simulator" element={<Simulator />} />
-            <Route path="/simulators" element={<Simulators />} />
-            <Route path="/simulator/margin" element={<MarginCalculator />} />
-            <Route path="/simulator/ad-budget" element={<AdBudgetCalculator />} />
-            <Route path="/simulator/passive-income" element={<PassiveIncomeCalculator />} />
-            <Route path="/simulator/trend-analysis" element={<TrendAnalysis />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/library/:id" element={<LibraryItem />} />
-            
-            {/* Routes protégées (utilisateur connecté) */}
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/challenges" element={
-              <ProtectedRoute>
-                <Challenges />
-              </ProtectedRoute>
-            } />
-            <Route path="/challenge/:id" element={
-              <ProtectedRoute>
-                <Challenge />
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            } />
-            <Route path="/notifications" element={
-              <ProtectedRoute>
-                <Notifications />
-              </ProtectedRoute>
-            } />
-            <Route path="/leaderboard" element={
-              <ProtectedRoute>
-                <Leaderboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Routes admin */}
-            <Route path="/admin" element={
-              <ProtectedRoute adminOnly>
-                <SuperAdmin />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/challenges" element={
-              <ProtectedRoute adminOnly>
-                <ChallengeManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/users" element={
-              <ProtectedRoute adminOnly>
-                <UserManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/subscriptions" element={
-              <ProtectedRoute adminOnly>
-                <SubscriptionManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/analytics" element={
-              <ProtectedRoute adminOnly>
-                <AnalyticsManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/settings" element={
-              <ProtectedRoute adminOnly>
-                <AdminSettings />
-              </ProtectedRoute>
-            } />
-            
-            {/* Route 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              {/* Routes publiques */}
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/simulator" element={<Simulator />} />
+              <Route path="/simulators" element={<Simulators />} />
+              <Route path="/simulator/margin" element={<MarginCalculator />} />
+              <Route path="/simulator/ad-budget" element={<AdBudgetCalculator />} />
+              <Route path="/simulator/passive-income" element={<PassiveIncomeCalculator />} />
+              <Route path="/simulator/trend-analysis" element={<TrendAnalysis />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/library/:id" element={<LibraryItem />} />
+              
+              {/* Routes protégées (utilisateur connecté) */}
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/challenges" element={
+                <ProtectedRoute>
+                  <Challenges />
+                </ProtectedRoute>
+              } />
+              <Route path="/challenge/:id" element={
+                <ProtectedRoute>
+                  <Challenge />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } />
+              <Route path="/notifications" element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              } />
+              <Route path="/leaderboard" element={
+                <ProtectedRoute>
+                  <Leaderboard />
+                </ProtectedRoute>
+              } />
+              
+              {/* Routes admin */}
+              <Route path="/admin" element={
+                <ProtectedRoute adminOnly>
+                  <SuperAdmin />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/challenges" element={
+                <ProtectedRoute adminOnly>
+                  <ChallengeManager />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/users" element={
+                <ProtectedRoute adminOnly>
+                  <UserManager />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/subscriptions" element={
+                <ProtectedRoute adminOnly>
+                  <SubscriptionManager />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/analytics" element={
+                <ProtectedRoute adminOnly>
+                  <AnalyticsManager />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/settings" element={
+                <ProtectedRoute adminOnly>
+                  <AdminSettings />
+                </ProtectedRoute>
+              } />
+              
+              {/* Route 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
