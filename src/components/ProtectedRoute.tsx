@@ -1,14 +1,14 @@
 
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, AccessRights, UserRole } from '@/context/AuthContext';
 
 type ProtectedRouteProps = {
   children: React.ReactNode;
   adminOnly?: boolean;
   superAdminOnly?: boolean;
   premiumOnly?: boolean;
-  requiredAccess?: keyof typeof import('@/context/AuthContext').AccessRights;
-  roles?: Array<import('@/context/AuthContext').UserRole>;
+  requiredAccess?: keyof AccessRights;
+  roles?: Array<UserRole>;
 };
 
 const ProtectedRoute = ({ 
