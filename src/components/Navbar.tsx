@@ -3,8 +3,17 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { Search, Menu, X, UserCircle, Bell } from "lucide-react";
+import { Search, Menu, X, UserCircle, Bell, BookOpen, Gauge, Award } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,16 +49,130 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-1">
-          <Link to="/challenges">
-            <Button variant="ghost">Challenges</Button>
-          </Link>
-          <Link to="/simulators">
-            <Button variant="ghost">Simulateurs</Button>
-          </Link>
-          <Link to="/library">
-            <Button variant="ghost">Bibliothèque</Button>
-          </Link>
+        <div className="hidden md:flex items-center space-x-2">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Challenges</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Link to="/challenges?category=Finance" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <Award className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Finance</div>
+                          <div className="text-xs text-muted-foreground">Gestion d'argent et investissements</div>
+                        </div>
+                      </Link>
+                      <Link to="/challenges?category=E-commerce" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <Award className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">E-commerce</div>
+                          <div className="text-xs text-muted-foreground">Vente et achat en ligne</div>
+                        </div>
+                      </Link>
+                      <Link to="/challenges?category=Marketing" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <Award className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Marketing</div>
+                          <div className="text-xs text-muted-foreground">Stratégies marketing</div>
+                        </div>
+                      </Link>
+                      <Link to="/challenges?category=Crypto" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <Award className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Crypto</div>
+                          <div className="text-xs text-muted-foreground">Cryptomonnaies et NFTs</div>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="p-2">
+                      <Link to="/challenges" className="text-sm text-primary hover:underline">
+                        Voir tous les challenges →
+                      </Link>
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Simulateurs</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+                    <Link to="/margin-calculator" className="p-2 hover:bg-accent rounded-md flex items-center">
+                      <Gauge className="mr-2 h-4 w-4 text-primary" />
+                      <div>
+                        <div className="text-sm font-medium">Calculateur de marges</div>
+                        <div className="text-xs text-muted-foreground">Estimez vos marges bénéficiaires</div>
+                      </div>
+                    </Link>
+                    <Link to="/ad-budget-calculator" className="p-2 hover:bg-accent rounded-md flex items-center">
+                      <Gauge className="mr-2 h-4 w-4 text-primary" />
+                      <div>
+                        <div className="text-sm font-medium">Budget publicitaire</div>
+                        <div className="text-xs text-muted-foreground">Calculez vos budgets de publicité</div>
+                      </div>
+                    </Link>
+                    <Link to="/roi-simulator" className="p-2 hover:bg-accent rounded-md flex items-center">
+                      <Gauge className="mr-2 h-4 w-4 text-primary" />
+                      <div>
+                        <div className="text-sm font-medium">Simulateur ROI</div>
+                        <div className="text-xs text-muted-foreground">Calculez votre retour sur investissement</div>
+                      </div>
+                    </Link>
+                    <div className="p-2">
+                      <Link to="/simulators" className="text-sm text-primary hover:underline">
+                        Voir tous les simulateurs →
+                      </Link>
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Bibliothèque</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Link to="/library?category=Marketing" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Marketing</div>
+                          <div className="text-xs text-muted-foreground">Articles et guides</div>
+                        </div>
+                      </Link>
+                      <Link to="/library?category=Finance" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Finance</div>
+                          <div className="text-xs text-muted-foreground">Investissements et épargne</div>
+                        </div>
+                      </Link>
+                      <Link to="/library?category=E-commerce" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">E-commerce</div>
+                          <div className="text-xs text-muted-foreground">Guides de vente en ligne</div>
+                        </div>
+                      </Link>
+                      <Link to="/library?premium=true" className="p-2 hover:bg-accent rounded-md flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">Contenu Premium</div>
+                          <div className="text-xs text-muted-foreground">Accès aux ressources exclusives</div>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="p-2">
+                      <Link to="/library" className="text-sm text-primary hover:underline">
+                        Explorer toute la bibliothèque →
+                      </Link>
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
           
           {/* Theme Toggle */}
           <ThemeToggle />
@@ -109,15 +232,56 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border py-4 shadow-lg animate-fade-in">
           <div className="container px-4 mx-auto flex flex-col space-y-3">
-            <Link to="/challenges" className="p-2 hover:bg-accent rounded-md">
-              Challenges
-            </Link>
-            <Link to="/simulators" className="p-2 hover:bg-accent rounded-md">
-              Simulateurs
-            </Link>
-            <Link to="/library" className="p-2 hover:bg-accent rounded-md">
-              Bibliothèque
-            </Link>
+            <div className="border-b border-border pb-2">
+              <h3 className="font-medium mb-2">Challenges</h3>
+              <div className="flex flex-col space-y-2 pl-2">
+                <Link to="/challenges?category=Finance" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Finance
+                </Link>
+                <Link to="/challenges?category=E-commerce" className="p-1 hover:bg-accent rounded-md text-sm">
+                  E-commerce
+                </Link>
+                <Link to="/challenges?category=Marketing" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Marketing
+                </Link>
+                <Link to="/challenges" className="p-1 hover:bg-accent rounded-md text-sm text-primary">
+                  Tous les challenges
+                </Link>
+              </div>
+            </div>
+
+            <div className="border-b border-border pb-2">
+              <h3 className="font-medium mb-2">Simulateurs</h3>
+              <div className="flex flex-col space-y-2 pl-2">
+                <Link to="/margin-calculator" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Calculateur de marges
+                </Link>
+                <Link to="/ad-budget-calculator" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Budget publicitaire
+                </Link>
+                <Link to="/simulators" className="p-1 hover:bg-accent rounded-md text-sm text-primary">
+                  Tous les simulateurs
+                </Link>
+              </div>
+            </div>
+
+            <div className="border-b border-border pb-2">
+              <h3 className="font-medium mb-2">Bibliothèque</h3>
+              <div className="flex flex-col space-y-2 pl-2">
+                <Link to="/library?category=Marketing" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Marketing
+                </Link>
+                <Link to="/library?category=Finance" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Finance
+                </Link>
+                <Link to="/library?premium=true" className="p-1 hover:bg-accent rounded-md text-sm">
+                  Contenu Premium
+                </Link>
+                <Link to="/library" className="p-1 hover:bg-accent rounded-md text-sm text-primary">
+                  Toute la bibliothèque
+                </Link>
+              </div>
+            </div>
 
             <div className="border-t border-border my-2 pt-2">
               {isAuthenticated ? (
