@@ -73,7 +73,11 @@ const PremiumLibraryMenuItem = ({ to, title, description }: { to: string; title:
     <div>
       <div className="flex items-center gap-1">
         <div className="text-sm font-medium">{title}</div>
-        <Crown className="h-3 w-3 text-yellow-500" aria-hidden="true" title="Accès Premium requis" />
+        <Crown 
+          className="h-3 w-3 text-yellow-500" 
+          aria-hidden="true"
+          aria-label="Accès Premium requis"
+        />
       </div>
       <div className="text-xs text-muted-foreground">{description}</div>
     </div>
