@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, TrendingUp, Timer, BookOpen, Award, Users, BarChart2, ShieldCheck } from "lucide-react";
@@ -29,10 +28,10 @@ const Hero = () => {
             <span className="text-xs font-medium">La plateforme qui gamifie l'apprentissage financier</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-            Maîtrisez vos <span className="text-gradient">compétences financières</span> par la pratique
+            Apprenez à <span className="text-gradient">gagner de l'argent</span> en ligne
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Progressez à travers des défis interactifs, gagnez des badges et montez dans les classements tout en développant de véritables compétences business.
+            Réalisez des petits challenges guidés pour réussir vos premiers euros sur internet, même sans diplôme ni expérience. Suivez simplement les étapes et progressez à votre rythme.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-all">
@@ -79,7 +78,7 @@ const Hero = () => {
         {/* Features */}
         <div ref={featuresRef} className="mt-24">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            Une approche unique pour <span className="text-gradient">apprendre</span> la finance
+            Une approche simple pour <span className="text-gradient">gagner</span> vos premiers euros
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="glass p-8 rounded-xl hover-lift">
@@ -206,10 +205,10 @@ const Hero = () => {
         {/* CTA */}
         <div ref={ctaRef} className="mt-24 glass p-12 rounded-2xl text-center bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Prêt à développer vos compétences financières ?
+            Prêt à gagner vos premiers euros en ligne ?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
-            Rejoignez notre communauté et commencez dès aujourd'hui votre parcours vers la maîtrise financière.
+            Rejoignez notre communauté et commencez dès aujourd'hui avec des défis adaptés aux débutants.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-all">
