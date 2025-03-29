@@ -1,3 +1,4 @@
+
 import React from "react";
 import { CheckCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -21,6 +22,16 @@ interface StepProps {
     prerequisites?: string[];
     expectedOutcome?: string;
     commonMistakes?: string[];
+    checklist?: {
+      id: string;
+      text: string;
+      isCompleted: boolean;
+    }[];
+    assistanceQuestions?: {
+      id: string;
+      question: string;
+      answer: string;
+    }[];
     resources?: {
       title: string;
       url: string;
@@ -31,9 +42,10 @@ interface StepProps {
   isActive: boolean;
   totalSteps: number;
   onClick: (stepId: number) => void;
+  onCompleteStep: (stepId: number) => void;
 }
 
-const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
+const ChallengeStep = ({ step, isActive, totalSteps, onClick, onCompleteStep }: StepProps) => {
   const { toast } = useToast();
 
   const downloadStepGuide = () => {
@@ -80,6 +92,10 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
     }
   };
 
+  const handleCompleteStep = () => {
+    onCompleteStep(step.id);
+  };
+
   // Helper function needed for PDF generation
   const getDifficultyLabel = (difficulty?: string) => {
     switch (difficulty) {
@@ -95,7 +111,6 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
   };
 
   return (
-    
     <div 
       className={`overflow-hidden rounded-xl transition-all duration-300 ${
         step.isLocked ? 'opacity-70' : isActive ? 'shadow-md' : 'hover:shadow-sm'
@@ -135,6 +150,7 @@ const ChallengeStep = ({ step, isActive, totalSteps, onClick }: StepProps) => {
           <StepDetails 
             step={step}
             onDownload={downloadStepGuide}
+            onCompleteStep={handleCompleteStep}
           />
         )}
       </Card>

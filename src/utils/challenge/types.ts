@@ -12,6 +12,16 @@ export interface ChallengeStep {
   prerequisites?: string[]; // Prérequis nécessaires pour cette étape
   expectedOutcome?: string; // Ce que l'utilisateur doit avoir accompli à la fin
   commonMistakes?: string[]; // Erreurs courantes à éviter
+  checklist?: {
+    id: string;
+    text: string;
+    isCompleted: boolean;
+  }[]; // Liste des tâches à compléter pour cette étape
+  assistanceQuestions?: {
+    id: string;
+    question: string;
+    answer: string;
+  }[]; // Questions fréquentes pour cette étape
   resources?: {
     title: string;
     url: string;

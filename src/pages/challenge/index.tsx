@@ -1,5 +1,6 @@
+
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { fadeIn, slideIn } from "@/lib/animations";
 import { getChallengeData } from "@/utils/challenge";
@@ -15,12 +16,16 @@ import { generateChallengePdf } from "./pdfHelpers";
 
 const Challenge = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const infoRef = useRef<HTMLDivElement>(null);
   const stepsRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [activeTab, setActiveTab] = useState("steps");
+  
+  // Get challenge data based on ID
+  const [challenge, setChallenge] = useState(getChallengeData(id || "1"));
   
   // Animation des éléments au chargement
   useEffect(() => {
@@ -29,12 +34,16 @@ const Challenge = () => {
     if (resourcesRef.current) slideIn(resourcesRef.current, 'up');
   }, []);
   
-  // Get challenge data based on ID
-  const challenge = getChallengeData(id || "1");
-  
   useEffect(() => {
-    document.title = `FinQuest - ${challenge.title}`;
-  }, [challenge.title]);
+    if (!id) {
+      navigate("/challenges");
+      return;
+    }
+    
+    const challengeData = getChallengeData(id);
+    setChallenge(challengeData);
+    document.title = `FinQuest - ${challengeData.title}`;
+  }, [id, navigate]);
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
@@ -59,6 +68,25 @@ const Challenge = () => {
 
   const downloadChallengeGuide = () => {
     generateChallengePdf(challenge, toast);
+  };
+
+  const handleProgressUpdate = (currentStep: number, progress: number) => {
+    setChallenge(prev => ({
+      ...prev,
+      currentStep,
+      progress
+    }));
+    
+    // Ici, vous pourriez enregistrer la progression dans une API
+    console.log(`Progress updated: Current Step: ${currentStep}, Progress: ${progress}%`);
+    
+    // Notifier l'utilisateur de sa progression
+    if (progress === 100) {
+      toast({
+        title: "Challenge terminé !",
+        description: `Félicitations ! Vous avez terminé le challenge "${challenge.title}" !`,
+      });
+    }
   };
 
   return (
@@ -108,6 +136,7 @@ const Challenge = () => {
                 challenge={challenge}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                onUpdateProgress={handleProgressUpdate}
               />
             </div>
           </div>
