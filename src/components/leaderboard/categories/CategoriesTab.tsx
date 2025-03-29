@@ -4,22 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CategoriesGrid } from "./CategoriesGrid";
 import { CategoryLeaderboard } from "./CategoryLeaderboard";
 import { ProgressionList } from "./ProgressionList";
-import { User } from "../models";
-
-// Type for category stats
-interface CategoryStats {
-  participants: number;
-  challengesCompleted: number;
-  avgXp: number;
-}
-
-// Type for category data
-interface CategoryData {
-  id: string;
-  name: string;
-  icon: React.ElementType;
-  stats: CategoryStats;
-}
+import { CategoryData, User } from "../models";
 
 interface CategoriesTabProps {
   categories: CategoryData[];

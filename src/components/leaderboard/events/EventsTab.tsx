@@ -3,30 +3,7 @@ import React from "react";
 import { EventCard } from "./EventCard";
 import { PastEventsCard } from "./PastEventsCard";
 import { UserParticipationsCard } from "./UserParticipationsCard";
-
-// Event types
-interface UpcomingEvent {
-  name: string;
-  date: string;
-  xp: number;
-  type: "challenge" | "competition" | "event";
-  description: string;
-}
-
-interface PastEvent {
-  title: string;
-  description: string;
-  winner: string;
-  xp: number;
-}
-
-interface UserEvent {
-  title: string;
-  description: string;
-  date: string;
-  status: "success" | "failure";
-  xp: number;
-}
+import { UpcomingEvent, PastEvent, UserEvent } from "../models";
 
 interface EventsTabProps {
   upcomingEvents: UpcomingEvent[];
