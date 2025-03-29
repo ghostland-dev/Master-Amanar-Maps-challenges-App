@@ -52,6 +52,7 @@ export interface Challenge {
   objective?: string; // Objectif principal du challenge
   prerequisites?: string[]; // Prérequis pour commencer le challenge
   learningOutcomes?: string[]; // Ce que l'utilisateur va apprendre
+  image?: string; // Adding the image property that was missing
   steps: ChallengeStep[];
   resources: ChallengeResource[];
   faqs?: {
