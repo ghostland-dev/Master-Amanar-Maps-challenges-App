@@ -164,6 +164,17 @@ const Auth = () => {
                     <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading ? "Connexion en cours..." : "Se connecter"}
                     </Button>
+                    
+                    <p className="text-center text-sm text-muted-foreground">
+                      Pas encore de compte?{" "}
+                      <button
+                        type="button"
+                        className="text-primary hover:underline font-medium"
+                        onClick={() => navigate("/auth?tab=register")}
+                      >
+                        S'inscrire
+                      </button>
+                    </p>
                   </form>
                 </TabsContent>
                 
@@ -229,6 +240,17 @@ const Auth = () => {
                     <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading ? "Inscription en cours..." : "S'inscrire"}
                     </Button>
+                    
+                    <p className="text-center text-sm text-muted-foreground">
+                      Déjà un compte?{" "}
+                      <button
+                        type="button"
+                        className="text-primary hover:underline font-medium"
+                        onClick={() => navigate("/auth?tab=login")}
+                      >
+                        Se connecter
+                      </button>
+                    </p>
                   </form>
                 </TabsContent>
                 

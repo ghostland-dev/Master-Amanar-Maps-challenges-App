@@ -5,10 +5,11 @@ import { useAuth } from '@/context/AuthContext';
 type ProtectedRouteProps = {
   children: React.ReactNode;
   adminOnly?: boolean;
+  premiumOnly?: boolean;
 };
 
-const ProtectedRoute = ({ children, adminOnly = false }: ProtectedRouteProps) => {
-  const { user, isAuthenticated, isLoading } = useAuth();
+const ProtectedRoute = ({ children, adminOnly = false, premiumOnly = false }: ProtectedRouteProps) => {
+  const { user, isAuthenticated, isLoading, hasPremiumAccess } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -25,12 +26,17 @@ const ProtectedRoute = ({ children, adminOnly = false }: ProtectedRouteProps) =>
 
   if (!isAuthenticated) {
     // Rediriger vers la page de connexion avec l'URL actuelle en state pour redirection après connexion
-    return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
+    return <Navigate to="/auth?tab=login" state={{ from: location.pathname }} replace />;
   }
 
   if (adminOnly && user?.role !== 'admin') {
     // Rediriger vers la page d'accueil si l'utilisateur n'est pas admin
     return <Navigate to="/" replace />;
+  }
+
+  if (premiumOnly && !hasPremiumAccess) {
+    // Rediriger vers la page d'abonnement si l'utilisateur n'a pas d'accès premium
+    return <Navigate to="/subscriptions" state={{ from: location.pathname }} replace />;
   }
 
   return <>{children}</>;

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { Search, Menu, X, UserCircle, Bell, BookOpen, Gauge, Award } from "lucide-react";
+import { Search, Menu, X, UserCircle, Bell, BookOpen, Gauge, Award, Trophy, Crown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import {
   NavigationMenu,
@@ -13,12 +13,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, hasPremiumAccess } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -45,7 +44,8 @@ const Navbar = () => {
       <div className="container px-4 mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">Amanar Map</span>
+          <Trophy className="h-6 w-6 text-primary" />
+          <span className="text-xl font-bold text-primary">FinQuest</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -157,10 +157,11 @@ const Navbar = () => {
                       </Link>
                       <Link to="/library?premium=true" className="p-2 hover:bg-accent rounded-md flex items-center">
                         <BookOpen className="mr-2 h-4 w-4 text-primary" />
-                        <div>
+                        <div className="flex items-center gap-1">
                           <div className="text-sm font-medium">Contenu Premium</div>
-                          <div className="text-xs text-muted-foreground">Accès aux ressources exclusives</div>
+                          <Crown className="h-3 w-3 text-yellow-500" />
                         </div>
+                        <div className="text-xs text-muted-foreground">Accès aux ressources exclusives</div>
                       </Link>
                     </div>
                     <div className="p-2">
@@ -171,6 +172,59 @@ const Navbar = () => {
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+              {isAuthenticated && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>
+                    Abonnements
+                    {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+                      <div className="p-3 border rounded-lg mb-2">
+                        <h3 className="font-medium mb-1">
+                          {hasPremiumAccess ? "Abonnement Premium actif" : "Abonnement Gratuit"}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {hasPremiumAccess 
+                            ? "Vous avez accès à tout le contenu premium." 
+                            : "Accès limité au contenu gratuit uniquement."}
+                        </p>
+                      </div>
+                      
+                      {!hasPremiumAccess && (
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="p-3 border rounded-lg bg-secondary/10 hover:bg-secondary/20 cursor-pointer">
+                            <h4 className="font-medium flex items-center">
+                              Premium <Crown className="ml-2 h-3 w-3 text-yellow-500" />
+                            </h4>
+                            <p className="text-sm text-muted-foreground">19,99€/mois</p>
+                            <ul className="text-xs mt-2 space-y-1">
+                              <li>✓ Accès à tout le contenu premium</li>
+                              <li>✓ Challenges exclusifs</li>
+                              <li>✓ Support prioritaire</li>
+                            </ul>
+                          </div>
+                          <div className="p-3 border rounded-lg bg-primary/10 hover:bg-primary/20 cursor-pointer">
+                            <h4 className="font-medium flex items-center">
+                              Enterprise <Crown className="ml-2 h-3 w-3 text-primary" />
+                            </h4>
+                            <p className="text-sm text-muted-foreground">49,99€/mois</p>
+                            <ul className="text-xs mt-2 space-y-1">
+                              <li>✓ Tout le contenu Premium</li>
+                              <li>✓ Mentorat personnalisé</li>
+                              <li>✓ Analytics avancées</li>
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                      
+                      <Link to="/subscriptions" className="text-sm text-primary hover:underline p-2">
+                        {hasPremiumAccess ? "Gérer mon abonnement" : "Voir tous les abonnements"} →
+                      </Link>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
             </NavigationMenuList>
           </NavigationMenu>
           
@@ -193,6 +247,7 @@ const Navbar = () => {
                 <Link to="/profile">
                   <Button variant="ghost" size="icon">
                     <UserCircle className="h-5 w-5" />
+                    {hasPremiumAccess && <span className="absolute top-0 right-0 bg-yellow-500 w-2 h-2 rounded-full"></span>}
                   </Button>
                 </Link>
                 <Button variant="ghost" onClick={logout}>
@@ -202,10 +257,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/auth">
+              <Link to="/auth?tab=login">
                 <Button variant="outline">Connexion</Button>
               </Link>
-              <Link to="/auth?register=true">
+              <Link to="/auth?tab=register">
                 <Button>Inscription</Button>
               </Link>
             </>
@@ -274,14 +329,29 @@ const Navbar = () => {
                 <Link to="/library?category=Finance" className="p-1 hover:bg-accent rounded-md text-sm">
                   Finance
                 </Link>
-                <Link to="/library?premium=true" className="p-1 hover:bg-accent rounded-md text-sm">
+                <Link to="/library?premium=true" className="p-1 hover:bg-accent rounded-md flex items-center text-sm">
                   Contenu Premium
+                  <Crown className="ml-1 h-3 w-3 text-yellow-500" />
                 </Link>
                 <Link to="/library" className="p-1 hover:bg-accent rounded-md text-sm text-primary">
                   Toute la bibliothèque
                 </Link>
               </div>
             </div>
+
+            {isAuthenticated && (
+              <div className="border-b border-border pb-2">
+                <h3 className="font-medium mb-2 flex items-center">
+                  Abonnements
+                  {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
+                </h3>
+                <div className="flex flex-col space-y-2 pl-2">
+                  <Link to="/subscriptions" className="p-1 hover:bg-accent rounded-md text-sm">
+                    {hasPremiumAccess ? "Gérer mon abonnement" : "Voir les abonnements"}
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div className="border-t border-border my-2 pt-2">
               {isAuthenticated ? (
@@ -305,10 +375,10 @@ const Navbar = () => {
                 </>
               ) : (
                 <div className="flex flex-col space-y-2">
-                  <Link to="/auth">
+                  <Link to="/auth?tab=login">
                     <Button variant="outline" className="w-full">Connexion</Button>
                   </Link>
-                  <Link to="/auth?register=true">
+                  <Link to="/auth?tab=register">
                     <Button className="w-full">Inscription</Button>
                   </Link>
                 </div>
