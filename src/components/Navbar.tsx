@@ -113,7 +113,7 @@ const Navbar = () => {
                         <div className="text-xs text-muted-foreground">Calculez vos budgets de publicité</div>
                       </div>
                     </Link>
-                    <Link to="/roi-simulator" className="p-2 hover:bg-accent rounded-md flex items-center">
+                    <Link to="/simulator/passive-income" className="p-2 hover:bg-accent rounded-md flex items-center">
                       <Gauge className="mr-2 h-4 w-4 text-primary" />
                       <div>
                         <div className="text-sm font-medium">Simulateur ROI</div>
@@ -172,59 +172,15 @@ const Navbar = () => {
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
-              {isAuthenticated && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>
+
+              <NavigationMenuItem>
+                <Link to="/subscriptions">
+                  <Button variant="ghost" className="font-normal">
                     Abonnements
                     {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
-                      <div className="p-3 border rounded-lg mb-2">
-                        <h3 className="font-medium mb-1">
-                          {hasPremiumAccess ? "Abonnement Premium actif" : "Abonnement Gratuit"}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {hasPremiumAccess 
-                            ? "Vous avez accès à tout le contenu premium." 
-                            : "Accès limité au contenu gratuit uniquement."}
-                        </p>
-                      </div>
-                      
-                      {!hasPremiumAccess && (
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="p-3 border rounded-lg bg-secondary/10 hover:bg-secondary/20 cursor-pointer">
-                            <h4 className="font-medium flex items-center">
-                              Premium <Crown className="ml-2 h-3 w-3 text-yellow-500" />
-                            </h4>
-                            <p className="text-sm text-muted-foreground">19,99€/mois</p>
-                            <ul className="text-xs mt-2 space-y-1">
-                              <li>✓ Accès à tout le contenu premium</li>
-                              <li>✓ Challenges exclusifs</li>
-                              <li>✓ Support prioritaire</li>
-                            </ul>
-                          </div>
-                          <div className="p-3 border rounded-lg bg-primary/10 hover:bg-primary/20 cursor-pointer">
-                            <h4 className="font-medium flex items-center">
-                              Enterprise <Crown className="ml-2 h-3 w-3 text-primary" />
-                            </h4>
-                            <p className="text-sm text-muted-foreground">49,99€/mois</p>
-                            <ul className="text-xs mt-2 space-y-1">
-                              <li>✓ Tout le contenu Premium</li>
-                              <li>✓ Mentorat personnalisé</li>
-                              <li>✓ Analytics avancées</li>
-                            </ul>
-                          </div>
-                        </div>
-                      )}
-                      
-                      <Link to="/subscriptions" className="text-sm text-primary hover:underline p-2">
-                        {hasPremiumAccess ? "Gérer mon abonnement" : "Voir tous les abonnements"} →
-                      </Link>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                  </Button>
+                </Link>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
           
@@ -339,19 +295,12 @@ const Navbar = () => {
               </div>
             </div>
 
-            {isAuthenticated && (
-              <div className="border-b border-border pb-2">
-                <h3 className="font-medium mb-2 flex items-center">
-                  Abonnements
-                  {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
-                </h3>
-                <div className="flex flex-col space-y-2 pl-2">
-                  <Link to="/subscriptions" className="p-1 hover:bg-accent rounded-md text-sm">
-                    {hasPremiumAccess ? "Gérer mon abonnement" : "Voir les abonnements"}
-                  </Link>
-                </div>
-              </div>
-            )}
+            <div className="border-b border-border pb-2">
+              <Link to="/subscriptions" className="font-medium mb-2 flex items-center hover:bg-accent p-2 rounded-md">
+                Abonnements
+                {hasPremiumAccess && <Crown className="ml-1 h-3 w-3 text-yellow-500" />}
+              </Link>
+            </div>
 
             <div className="border-t border-border my-2 pt-2">
               {isAuthenticated ? (

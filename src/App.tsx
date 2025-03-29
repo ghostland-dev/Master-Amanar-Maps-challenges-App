@@ -20,6 +20,7 @@ import TrendAnalysis from "./pages/TrendAnalysis";
 import NotFound from "./pages/NotFound";
 import Library from "./pages/Library";
 import LibraryItem from "./pages/LibraryItem";
+import Subscriptions from "./pages/Subscriptions";
 
 // Pages protégées (utilisateur connecté)
 import Dashboard from "./pages/Dashboard";
@@ -54,8 +55,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/simulator" element={<Simulator />} />
               <Route path="/simulators" element={<Simulators />} />
-              <Route path="/simulator/margin" element={<MarginCalculator />} />
-              <Route path="/simulator/ad-budget" element={<AdBudgetCalculator />} />
+              <Route path="/margin-calculator" element={<MarginCalculator />} />
+              <Route path="/ad-budget-calculator" element={<AdBudgetCalculator />} />
               <Route path="/simulator/passive-income" element={<PassiveIncomeCalculator />} />
               <Route path="/simulator/trend-analysis" element={<TrendAnalysis />} />
               <Route path="/library" element={<Library />} />
@@ -95,6 +96,11 @@ const App = () => (
               <Route path="/leaderboard" element={
                 <ProtectedRoute>
                   <Leaderboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/subscriptions" element={
+                <ProtectedRoute>
+                  <Subscriptions />
                 </ProtectedRoute>
               } />
               

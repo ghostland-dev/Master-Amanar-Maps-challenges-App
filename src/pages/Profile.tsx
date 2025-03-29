@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
-import { User, Trophy, Book, Award, Activity, Settings, FileText, LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
+import { User, Trophy, Book, Award, Activity, Settings, FileText, LogOut, Crown } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,26 +13,11 @@ import { ProfileBadges } from "@/components/profile/ProfileBadges";
 import { ProfileChallenges } from "@/components/profile/ProfileChallenges";
 import { ProfileSettings } from "@/components/profile/ProfileSettings";
 import { ProfileStats } from "@/components/profile/ProfileStats";
-
-// Mock user data (would come from database/auth)
-const mockUser = {
-  id: "user1",
-  name: "Jean Dupont",
-  email: "jean.dupont@example.com",
-  role: "user",
-  xp: 2450,
-  level: 12,
-  avatar: "",
-  completedChallenges: 8,
-  inProgressChallenges: 2,
-  badges: 15,
-  plan: "premium",
-  joinDate: "12 Avril 2023",
-};
+import { useAuth } from "@/context/AuthContext";
 
 const Profile = () => {
+  const { user, hasPremiumAccess, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(mockUser);
   
   useEffect(() => {
     document.title = "FinQuest - Profil";
@@ -45,15 +31,38 @@ const Profile = () => {
 
   // Calculate level progress percentage
   const calculateLevelProgress = () => {
-    const xpForCurrentLevel = user.level * 1000;
-    const xpForNextLevel = (user.level + 1) * 1000;
-    const xpInCurrentLevel = user.xp - xpForCurrentLevel;
+    if (!user) return 0;
+    
+    // Mock data for display
+    const level = 12;
+    const xp = 2450;
+    
+    const xpForCurrentLevel = level * 1000;
+    const xpForNextLevel = (level + 1) * 1000;
+    const xpInCurrentLevel = xp - xpForCurrentLevel;
     const xpNeededForNextLevel = xpForNextLevel - xpForCurrentLevel;
     
     return Math.round((xpInCurrentLevel / xpNeededForNextLevel) * 100);
   };
   
   const levelProgress = calculateLevelProgress();
+
+  if (!user) return null; // Safety check
+  
+  const mockUserStats = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    xp: 2450,
+    level: 12,
+    avatar: "",
+    completedChallenges: 8,
+    inProgressChallenges: 2,
+    badges: 15,
+    plan: user.subscription.tier === 'free' ? 'gratuit' : user.subscription.tier,
+    joinDate: "12 Avril 2023",
+  };
   
   return (
     <div className="min-h-screen pb-16 md:pb-0">
@@ -67,13 +76,28 @@ const Profile = () => {
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-16 w-16 border-2 border-primary">
-                      <AvatarImage src={user.avatar || ""} alt={user.name} />
-                      <AvatarFallback className="text-lg">{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarImage src={mockUserStats.avatar || ""} alt={mockUserStats.name} />
+                      <AvatarFallback className="text-lg">{mockUserStats.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <CardTitle className="text-xl">{user.name}</CardTitle>
-                      <CardDescription>{user.email}</CardDescription>
-                      <Badge className="mt-1">{user.plan === "premium" ? "Premium" : "Gratuit"}</Badge>
+                      <CardTitle className="text-xl">{mockUserStats.name}</CardTitle>
+                      <CardDescription>{mockUserStats.email}</CardDescription>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge 
+                          className={hasPremiumAccess ? "bg-amber-500" : ""}
+                        >
+                          {hasPremiumAccess ? (
+                            <span className="flex items-center">
+                              Premium <Crown className="ml-1 h-3 w-3" />
+                            </span>
+                          ) : "Gratuit"}
+                        </Badge>
+                        {user.role === 'admin' && (
+                          <Badge variant="outline" className="bg-primary/10 text-primary">
+                            Admin
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -83,43 +107,55 @@ const Profile = () => {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1 text-sm">
                       <Trophy className="h-4 w-4 text-amber-500" />
-                      <span className="font-medium">Niveau {user.level}</span>
+                      <span className="font-medium">Niveau {mockUserStats.level}</span>
                     </div>
-                    <span className="text-sm text-muted-foreground">{user.xp} XP</span>
+                    <span className="text-sm text-muted-foreground">{mockUserStats.xp} XP</span>
                   </div>
                   <Progress value={levelProgress} className="h-2" />
                   <p className="text-xs text-muted-foreground mt-1 text-right">
-                    {100 - levelProgress}% jusqu'au niveau {user.level + 1}
+                    {100 - levelProgress}% jusqu'au niveau {mockUserStats.level + 1}
                   </p>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">{user.completedChallenges}</div>
+                    <div className="font-semibold">{mockUserStats.completedChallenges}</div>
                     <div className="text-xs text-muted-foreground">Challenges</div>
                   </div>
                   <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">{user.badges}</div>
+                    <div className="font-semibold">{mockUserStats.badges}</div>
                     <div className="text-xs text-muted-foreground">Badges</div>
                   </div>
                   <div className="text-center p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">{user.level}</div>
+                    <div className="font-semibold">{mockUserStats.level}</div>
                     <div className="text-xs text-muted-foreground">Niveau</div>
                   </div>
                 </div>
                 
                 <div className="pt-4">
                   <p className="text-sm text-muted-foreground">
-                    Membre depuis {user.joinDate}
+                    Membre depuis {mockUserStats.joinDate}
                   </p>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col gap-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Paramètres du compte
-                </Button>
-                <Button variant="outline" className="w-full justify-start text-destructive">
+                <Link to="/subscriptions" className="w-full">
+                  <Button className="w-full justify-start bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
+                    <Crown className="mr-2 h-4 w-4" />
+                    {hasPremiumAccess ? "Gérer mon abonnement" : "Passer à Premium"}
+                  </Button>
+                </Link>
+                <Link to="/settings" className="w-full">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Paramètres du compte
+                  </Button>
+                </Link>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start text-destructive"
+                  onClick={logout}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Déconnexion
                 </Button>
@@ -161,7 +197,7 @@ const Profile = () => {
                 </TabsContent>
                 
                 <TabsContent value="settings">
-                  <ProfileSettings user={user} setUser={setUser} />
+                  <ProfileSettings user={mockUserStats} setUser={() => {}} />
                 </TabsContent>
               </Tabs>
             </div>

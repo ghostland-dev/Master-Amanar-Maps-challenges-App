@@ -30,6 +30,7 @@ const Auth = () => {
   
   // Determine if we should show login or register tab by default
   const defaultTab = searchParams.get("tab") === "register" ? "register" : "login";
+  const [activeTab, setActiveTab] = useState(defaultTab);
   
   // Redirect if already authenticated
   useEffect(() => {
@@ -38,6 +39,11 @@ const Auth = () => {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, navigate, location.state]);
+
+  useEffect(() => {
+    // Update tab when URL parameters change
+    setActiveTab(searchParams.get("tab") === "register" ? "register" : "login");
+  }, [searchParams]);
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +101,11 @@ const Auth = () => {
       description: `La connexion avec ${provider} sera bientôt disponible.`,
     });
   };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/auth?tab=${value}`);
+  };
   
   return (
     <MainLayout title="Authentification">
@@ -112,7 +123,7 @@ const Auth = () => {
           </div>
           
           <Card>
-            <Tabs defaultValue={defaultTab}>
+            <Tabs value={activeTab} onValueChange={handleTabChange}>
               <CardHeader>
                 <TabsList className="grid grid-cols-2 w-full">
                   <TabsTrigger value="login">Connexion</TabsTrigger>
@@ -170,7 +181,7 @@ const Auth = () => {
                       <button
                         type="button"
                         className="text-primary hover:underline font-medium"
-                        onClick={() => navigate("/auth?tab=register")}
+                        onClick={() => handleTabChange("register")}
                       >
                         S'inscrire
                       </button>
@@ -246,7 +257,7 @@ const Auth = () => {
                       <button
                         type="button"
                         className="text-primary hover:underline font-medium"
-                        onClick={() => navigate("/auth?tab=login")}
+                        onClick={() => handleTabChange("login")}
                       >
                         Se connecter
                       </button>
