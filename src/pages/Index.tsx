@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, TrendingUp, Layers, Link as LinkIcon, PenTool, Code, LineChart, Palette } from "lucide-react";
-import Hero from "@/components/Hero";
+import Hero from "@/components/hero";
 import CategoryCard from "@/components/CategoryCard";
 import MainLayout from "@/components/layouts/MainLayout";
 
