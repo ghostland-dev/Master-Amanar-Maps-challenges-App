@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import MainLayout from "@/components/layouts/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -255,7 +256,7 @@ const Library = () => {
   });
 
   useEffect(() => {
-    document.title = "FinQuest - Bibliothèque";
+    document.title = "Amanar Map - Bibliothèque";
   }, []);
 
   const handleFilterChange = (values: z.infer<typeof filterSchema>) => {
@@ -315,247 +316,251 @@ const Library = () => {
   };
 
   return (
-    <div className="container max-w-6xl mx-auto py-20 px-4">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Bibliothèque
-          </h1>
-          <p className="text-muted-foreground">
-            Découvrez des ressources pour développer vos compétences financières
-          </p>
-        </div>
+    <MainLayout 
+      title="Bibliothèque" 
+      description="Découvrez des ressources pour développer vos compétences financières"
+    >
+      <div className="container max-w-6xl mx-auto py-8 px-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Bibliothèque
+            </h1>
+            <p className="text-muted-foreground">
+              Découvrez des ressources pour développer vos compétences financières
+            </p>
+          </div>
 
-        <div className="flex gap-2 mt-4 md:mt-0">
-          <Input
-            type="search"
-            placeholder="Rechercher une ressource..."
-            className="md:w-64"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-1.5">
-                <Filter className="h-4 w-4" />
-                Filtrer
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Filtrer les ressources</DialogTitle>
-                <DialogDescription>
-                  Affinez votre recherche en utilisant les filtres ci-dessous.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(handleFilterChange)}
-                  className="space-y-4"
-                >
-                  <FormField
-                    control={form.control}
-                    name="category"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Catégorie</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner une catégorie" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="">Toutes les catégories</SelectItem>
-                            <SelectItem value="Investment">Investissement</SelectItem>
-                            <SelectItem value="Entrepreneurship">
-                              Entrepreneuriat
-                            </SelectItem>
-                            <SelectItem value="Marketing">Marketing</SelectItem>
-                            <SelectItem value="Crypto">Crypto</SelectItem>
-                            <SelectItem value="Finance">Finance</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Type de ressource</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner un type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="">Tous les types</SelectItem>
-                            <SelectItem value="book">Livre</SelectItem>
-                            <SelectItem value="video">Vidéo</SelectItem>
-                            <SelectItem value="article">Article</SelectItem>
-                            <SelectItem value="pdf">PDF</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="difficulty"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Niveau de difficulté</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner un niveau" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="">Tous les niveaux</SelectItem>
-                            <SelectItem value="beginner">Débutant</SelectItem>
-                            <SelectItem value="intermediate">Intermédiaire</SelectItem>
-                            <SelectItem value="advanced">Avancé</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="completed"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-md border px-3 py-2">
-                        <div className="space-y-0.5">
-                          <FormLabel>Ressources terminées</FormLabel>
-                          <FormDescription>
-                            Afficher uniquement les ressources que vous avez
-                            terminées.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="sm"
-                      onClick={handleResetFilters}
-                    >
-                      Réinitialiser
-                    </Button>
-                    <Button type="submit" size="sm">
-                      Appliquer les filtres
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">
-          {filteredItems.length} Ressources disponibles
-        </h2>
-        <Select onValueChange={setSortOrder} defaultValue={sortOrder}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Trier par" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="relevance">Pertinence</SelectItem>
-            <SelectItem value="title">Titre</SelectItem>
-            <SelectItem value="duration">Durée</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedItems.map((item) => {
-          const progress = userProgress.find(
-            (progress) => progress.itemId === item.id
-          );
-          const itemProgress = progress ? progress.progress : 0;
-          const isCompleted = progress ? progress.completed : false;
-
-          return (
-            <Card key={item.id} className="glass hover:shadow-md transition-all">
-              <CardHeader>
-                <CardTitle className="line-clamp-1">{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {item.description}
-                </p>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">{item.category}</Badge>
-                  {item.duration && (
-                    <div className="flex items-center text-xs text-muted-foreground">
-                      <Clock className="mr-1 h-3 w-3" />
-                      <span>{item.duration} minutes</span>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  {isCompleted ? (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Ressource terminée</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ) : itemProgress > 0 ? (
-                    <div className="text-sm text-muted-foreground">
-                      Progression: {itemProgress}%
-                    </div>
-                  ) : null}
-                </div>
-                <Button asChild>
-                  <a href={`/library/${item.id}`}>
-                    Voir plus <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
+          <div className="flex gap-2 mt-4 md:mt-0">
+            <Input
+              type="search"
+              placeholder="Rechercher une ressource..."
+              className="md:w-64"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Filter className="h-4 w-4" />
+                  Filtrer
                 </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Filtrer les ressources</DialogTitle>
+                  <DialogDescription>
+                    Affinez votre recherche en utilisant les filtres ci-dessous.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(handleFilterChange)}
+                    className="space-y-4"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Catégorie</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner une catégorie" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="">Toutes les catégories</SelectItem>
+                              <SelectItem value="Investment">Investissement</SelectItem>
+                              <SelectItem value="Entrepreneurship">
+                                Entrepreneuriat
+                              </SelectItem>
+                              <SelectItem value="Marketing">Marketing</SelectItem>
+                              <SelectItem value="Crypto">Crypto</SelectItem>
+                              <SelectItem value="Finance">Finance</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="type"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Type de ressource</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner un type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="">Tous les types</SelectItem>
+                              <SelectItem value="book">Livre</SelectItem>
+                              <SelectItem value="video">Vidéo</SelectItem>
+                              <SelectItem value="article">Article</SelectItem>
+                              <SelectItem value="pdf">PDF</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="difficulty"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Niveau de difficulté</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner un niveau" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="">Tous les niveaux</SelectItem>
+                              <SelectItem value="beginner">Débutant</SelectItem>
+                              <SelectItem value="intermediate">Intermédiaire</SelectItem>
+                              <SelectItem value="advanced">Avancé</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="completed"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-md border px-3 py-2">
+                          <div className="space-y-0.5">
+                            <FormLabel>Ressources terminées</FormLabel>
+                            <FormDescription>
+                              Afficher uniquement les ressources que vous avez
+                              terminées.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={handleResetFilters}
+                      >
+                        Réinitialiser
+                      </Button>
+                      <Button type="submit" size="sm">
+                        Appliquer les filtres
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">
+            {filteredItems.length} Ressources disponibles
+          </h2>
+          <Select onValueChange={setSortOrder} defaultValue={sortOrder}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Trier par" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="relevance">Pertinence</SelectItem>
+              <SelectItem value="title">Titre</SelectItem>
+              <SelectItem value="duration">Durée</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedItems.map((item) => {
+            const progress = userProgress.find(
+              (progress) => progress.itemId === item.id
+            );
+            const itemProgress = progress ? progress.progress : 0;
+            const isCompleted = progress ? progress.completed : false;
+
+            return (
+              <Card key={item.id} className="glass hover:shadow-md transition-all">
+                <CardHeader>
+                  <CardTitle className="line-clamp-1">{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {item.description}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">{item.category}</Badge>
+                    {item.duration && (
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <Clock className="mr-1 h-3 w-3" />
+                        <span>{item.duration} minutes</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    {isCompleted ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Ressource terminée</p>
+                          </TooltipContent>
+                        </TooltipProvider>
+                      ) : itemProgress > 0 ? (
+                        <div className="text-sm text-muted-foreground">
+                          Progression: {itemProgress}%
+                        </div>
+                      ) : null}
+                  </div>
+                  <Button asChild>
+                    <a href={`/library/${item.id}`}>
+                      Voir plus <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 
