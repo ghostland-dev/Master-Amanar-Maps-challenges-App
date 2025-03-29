@@ -9,9 +9,10 @@ export const mockUsers: User[] = [
     points: 3750,
     rank: 1,
     previousRank: 1,
+    xp: 3750,
     badges: [
-      { name: "Expert en Épargne", type: "secondary" },
-      { name: "Investisseur Pro", type: "secondary" },
+      { id: "b1", name: "Expert en Épargne", type: "secondary", icon: "Award", description: "Maîtrise avancée des stratégies d'épargne" },
+      { id: "b2", name: "Investisseur Pro", type: "secondary", icon: "Trophy", description: "Excellence en investissement" },
     ],
     progress: 92,
     challenges: 28,
@@ -24,9 +25,10 @@ export const mockUsers: User[] = [
     points: 3420,
     rank: 2,
     previousRank: 3,
+    xp: 3420,
     badges: [
-      { name: "Maître Budget", type: "secondary" },
-      { name: "Challenger", type: "outline" },
+      { id: "b3", name: "Maître Budget", type: "secondary", icon: "Shield", description: "Expert en gestion budgétaire" },
+      { id: "b4", name: "Challenger", type: "outline", icon: "Medal", description: "Relève des défis avec succès" },
     ],
     progress: 87,
     challenges: 25,
@@ -39,9 +41,10 @@ export const mockUsers: User[] = [
     points: 3100,
     rank: 3,
     previousRank: 2,
+    xp: 3100,
     badges: [
-      { name: "Débutant", type: "outline" },
-      { name: "Épargnant", type: "secondary" },
+      { id: "b5", name: "Débutant", type: "outline", icon: "Star", description: "Premiers pas dans le monde financier" },
+      { id: "b6", name: "Épargnant", type: "secondary", icon: "Award", description: "Bonnes pratiques d'épargne" },
     ],
     progress: 75,
     challenges: 20,
@@ -54,8 +57,9 @@ export const mockUsers: User[] = [
     points: 2800,
     rank: 4,
     previousRank: 4,
+    xp: 2800,
     badges: [
-      { name: "Analyste", type: "secondary" },
+      { id: "b7", name: "Analyste", type: "secondary", icon: "Trophy", description: "Compétences analytiques avancées" },
     ],
     progress: 65,
     challenges: 18,
@@ -68,8 +72,9 @@ export const mockUsers: User[] = [
     points: 2450,
     rank: 5,
     previousRank: 6,
+    xp: 2450,
     badges: [
-      { name: "Débutant", type: "outline" },
+      { id: "b8", name: "Débutant", type: "outline", icon: "Star", description: "Premiers pas dans le monde financier" },
     ],
     progress: 58,
     challenges: 15,
@@ -82,8 +87,9 @@ export const mockUsers: User[] = [
     points: 2100,
     rank: 6,
     previousRank: 5,
+    xp: 2100,
     badges: [
-      { name: "Novice", type: "outline" },
+      { id: "b9", name: "Novice", type: "outline", icon: "Star", description: "Découverte du monde financier" },
     ],
     progress: 45,
     challenges: 12,
@@ -96,8 +102,9 @@ export const mockUsers: User[] = [
     points: 1900,
     rank: 7,
     previousRank: 7,
+    xp: 1900,
     badges: [
-      { name: "Débutant", type: "outline" },
+      { id: "b10", name: "Débutant", type: "outline", icon: "Star", description: "Premiers pas dans le monde financier" },
     ],
     progress: 40,
     challenges: 10,
@@ -107,8 +114,8 @@ export const mockUsers: User[] = [
 
 // Données pour le graphique des badges
 export const badgeDistributionData: BadgeData[] = [
-  { name: "Investisseur", value: 25 },
-  { name: "Épargnant", value: 35 },
-  { name: "Budget", value: 20 },
-  { name: "Débutant", value: 20 },
+  { name: "Investisseur", value: 25, icon: "Trophy" },
+  { name: "Épargnant", value: 35, icon: "Award" },
+  { name: "Budget", value: 20, icon: "Shield" },
+  { name: "Débutant", value: 20, icon: "Star" },
 ];
