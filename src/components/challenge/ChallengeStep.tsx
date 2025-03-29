@@ -1,12 +1,11 @@
-
 import React from "react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, LockIcon, UnlockIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePdfFromData } from "@/utils/pdf";
 import { StepIcon } from "./step/StepIcon";
 import { StepBadge } from "./step/StepBadge";
-import { StepDetails } from "./step/StepDetails";
+import StepDetails from "./step/StepDetails"; // Changed to default import
 
 interface StepProps {
   step: {
