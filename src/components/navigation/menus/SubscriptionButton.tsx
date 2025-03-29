@@ -18,7 +18,7 @@ export const SubscriptionButton = ({ hasPremiumAccess }: SubscriptionButtonProps
             <Crown 
               className="ml-1 h-3 w-3 text-yellow-500" 
               aria-hidden="true"
-              title="Accès Premium actif"
+              aria-label="Accès Premium actif"
             />
           )}
         </Button>
