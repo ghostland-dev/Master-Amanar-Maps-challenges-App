@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
 
 interface User {
   id: string;
@@ -25,37 +26,46 @@ interface ProfileSettingsProps {
   setUser: React.Dispatch<React.SetStateAction<User>>;
 }
 
+interface ProfileFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface NotificationSettings {
+  email: boolean;
+  challenges: boolean;
+  platform: boolean;
+  marketing: boolean;
+}
+
 export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
-  const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email,
-    password: "",
-    confirmPassword: "",
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<ProfileFormValues>({
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+      password: "",
+      confirmPassword: "",
+    }
   });
   
-  const [notificationSettings, setNotificationSettings] = useState({
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
     email: true,
     challenges: true,
     platform: true,
     marketing: false,
   });
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleNotificationChange = (key: string, checked: boolean) => {
+  const handleNotificationChange = (key: keyof NotificationSettings, checked: boolean) => {
     setNotificationSettings(prev => ({ ...prev, [key]: checked }));
   };
   
-  const handleProfileUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const onSubmitProfile = (data: ProfileFormValues) => {
     // Validate password
-    if (formData.password && formData.password !== formData.confirmPassword) {
+    if (data.password && data.password !== data.confirmPassword) {
       toast({
         title: "Erreur",
         description: "Les mots de passe ne correspondent pas",
@@ -70,8 +80,8 @@ export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
     setTimeout(() => {
       setUser(prev => ({
         ...prev,
-        name: formData.name,
-        email: formData.email,
+        name: data.name,
+        email: data.email,
       }));
       
       setIsUpdating(false);
@@ -106,7 +116,7 @@ export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
       
       <TabsContent value="profile">
         <Card>
-          <form onSubmit={handleProfileUpdate}>
+          <form onSubmit={handleSubmit(onSubmitProfile)}>
             <CardHeader>
               <CardTitle>Informations du profil</CardTitle>
               <CardDescription>
@@ -118,21 +128,29 @@ export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
                 <Label htmlFor="name">Nom</Label>
                 <Input 
                   id="name" 
-                  name="name" 
-                  value={formData.name} 
-                  onChange={handleInputChange} 
+                  {...register("name", { required: "Le nom est requis" })}
                 />
+                {errors.name && (
+                  <p className="text-sm text-destructive">{errors.name.message}</p>
+                )}
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input 
                   id="email" 
-                  name="email" 
-                  type="email" 
-                  value={formData.email} 
-                  onChange={handleInputChange} 
+                  type="email"
+                  {...register("email", { 
+                    required: "L'email est requis",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Email invalide"
+                    }
+                  })}
                 />
+                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email.message}</p>
+                )}
               </div>
               
               <Separator className="my-4" />
@@ -141,10 +159,8 @@ export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
                 <Label htmlFor="password">Nouveau mot de passe</Label>
                 <Input 
                   id="password" 
-                  name="password" 
-                  type="password" 
-                  value={formData.password} 
-                  onChange={handleInputChange} 
+                  type="password"
+                  {...register("password")}
                   placeholder="Laissez vide pour conserver le mot de passe actuel" 
                 />
               </div>
@@ -153,11 +169,17 @@ export function ProfileSettings({ user, setUser }: ProfileSettingsProps) {
                 <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
                 <Input 
                   id="confirmPassword" 
-                  name="confirmPassword" 
-                  type="password" 
-                  value={formData.confirmPassword} 
-                  onChange={handleInputChange} 
+                  type="password"
+                  {...register("confirmPassword", {
+                    validate: value => {
+                      const password = watch("password");
+                      return !password || value === password || "Les mots de passe ne correspondent pas";
+                    }
+                  })}
                 />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+                )}
               </div>
             </CardContent>
             <CardFooter>
