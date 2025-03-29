@@ -10,7 +10,7 @@ export const PaymentNotice = () => {
           <h3 className="text-sm font-medium mb-1">Information importante sur les paiements</h3>
           <p className="text-sm text-muted-foreground">
             Pour l'instant, cette page simule les abonnements sans traitement de paiement réel.
-            Une intégration Stripe sera bientôt mise en place pour gérer les paiements.
+            Une intégration Stripe sera bientôt mise en place pour gérer les paiements de manière sécurisée.
           </p>
         </div>
       </div>
