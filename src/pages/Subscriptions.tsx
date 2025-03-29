@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Crown, Gem, AlertCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import Navbar from "@/components/Navbar";
 import MainLayout from "@/components/layouts/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 
@@ -38,7 +37,7 @@ const Subscriptions = () => {
   const currentPlan = user?.subscription?.tier || 'free';
 
   return (
-    <MainLayout title="Abonnements">
+    <MainLayout title="Abonnements" description="Gérez vos abonnements FinQuest">
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-2">Abonnements</h1>
