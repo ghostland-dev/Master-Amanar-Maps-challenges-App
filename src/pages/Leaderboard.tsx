@@ -298,416 +298,211 @@ const Leaderboard = () => {
               Événements
             </TabsTrigger>
           </TabsList>
-        </Tabs>
-        
-        <TabsContent value="ranking" className={activeTab === "ranking" ? "block" : "hidden"}>
-          <div className="mb-8">
-            <LeaderboardTabs view={view} onViewChange={setView} />
-          </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                    <CardTitle>
-                      {view === "general" ? "Classement Global" : "Distribution des Badges"}
-                    </CardTitle>
-                    {view === "general" && (
-                      <LeaderboardFilters 
-                        period={period}
-                        category={category}
-                        onPeriodChange={setPeriod}
-                        onCategoryChange={setCategory}
-                      />
-                    )}
-                  </div>
-                </CardHeader>
-                <Separator />
-                <CardContent className="pt-4">
-                  {isLoading ? (
-                    <div className="py-20 space-y-4">
-                      <div className="h-8 w-8 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
-                      <p className="text-center text-muted-foreground">Chargement du classement...</p>
-                    </div>
-                  ) : view === "general" ? (
-                    <>
-                      {/* Top 3 users with medals */}
-                      <TopUsersSection users={filteredUsers.slice(0, 3)} />
-                      
-                      {/* Full Leaderboard */}
-                      <div className="space-y-1">
-                        {paginatedUsers.map((user) => (
-                          <div key={user.id} className="rank-card">
-                            <UserRankCard user={user} highlight={user.id === currentUser.id} />
-                          </div>
-                        ))}
-                      </div>
-                      
-                      {totalPages > 1 && (
-                        <LeaderboardPagination 
-                          currentPage={currentPage}
-                          totalPages={totalPages}
-                          onPageChange={setCurrentPage}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <BadgeDistribution data={badgeDistributionData} />
-                  )}
-                </CardContent>
-              </Card>
+          <TabsContent value="ranking">
+            <div className="mb-8">
+              <LeaderboardTabs view={view} onViewChange={setView} />
             </div>
             
-            <div className="space-y-6">
-              <UserProgressCard 
-                currentUser={currentUser} 
-                nextRankUser={mockUsers[currentUser.rank - 2]}
-              />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+                      <CardTitle>
+                        {view === "general" ? "Classement Global" : "Distribution des Badges"}
+                      </CardTitle>
+                      {view === "general" && (
+                        <LeaderboardFilters 
+                          period={period}
+                          category={category}
+                          onPeriodChange={setPeriod}
+                          onCategoryChange={setCategory}
+                        />
+                      )}
+                    </div>
+                  </CardHeader>
+                  <Separator />
+                  <CardContent className="pt-4">
+                    {isLoading ? (
+                      <div className="py-20 space-y-4">
+                        <div className="h-8 w-8 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
+                        <p className="text-center text-muted-foreground">Chargement du classement...</p>
+                      </div>
+                    ) : view === "general" ? (
+                      <>
+                        {/* Top 3 users with medals */}
+                        <TopUsersSection users={filteredUsers.slice(0, 3)} />
+                        
+                        {/* Full Leaderboard */}
+                        <div className="space-y-1">
+                          {paginatedUsers.map((user) => (
+                            <div key={user.id} className="rank-card">
+                              <UserRankCard user={user} highlight={user.id === currentUser.id} />
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {totalPages > 1 && (
+                          <LeaderboardPagination 
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <BadgeDistribution data={badgeDistributionData} />
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
               
-              <UserAchievementsCard currentUser={currentUser} />
-              
-              {/* Tendances */}
-              <Card className="shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Performances de la semaine</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-2">
-                  <div className="space-y-3">
-                    {SPECIAL_BADGES.map((badge, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                        <div className="flex items-center">
-                          <div className="h-8 w-8 rounded-full bg-background mr-3 flex items-center justify-center">
-                            {badge.icon}
-                          </div>
-                          <div>
-                            <p className="text-xs text-muted-foreground">{badge.name}</p>
-                            <div className="flex items-center">
-                              <Avatar className="h-4 w-4 mr-1">
-                                <AvatarImage src={badge.avatar} alt={badge.user} />
-                                <AvatarFallback>{badge.user.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <p className="text-sm font-medium">{badge.user}</p>
+              <div className="space-y-6">
+                <UserProgressCard 
+                  currentUser={currentUser} 
+                  nextRankUser={mockUsers[currentUser.rank - 2]}
+                />
+                
+                <UserAchievementsCard currentUser={currentUser} />
+                
+                {/* Tendances */}
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Performances de la semaine</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <div className="space-y-3">
+                      {SPECIAL_BADGES.map((badge, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                          <div className="flex items-center">
+                            <div className="h-8 w-8 rounded-full bg-background mr-3 flex items-center justify-center">
+                              {badge.icon}
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground">{badge.name}</p>
+                              <div className="flex items-center">
+                                <Avatar className="h-4 w-4 mr-1">
+                                  <AvatarImage src={badge.avatar} alt={badge.user} />
+                                  <AvatarFallback>{badge.user.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <p className="text-sm font-medium">{badge.user}</p>
+                              </div>
                             </div>
                           </div>
+                          <Badge variant="outline">{badge.value}</Badge>
                         </div>
-                        <Badge variant="outline">{badge.value}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="categories" className={activeTab === "categories" ? "block" : "hidden"}>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Classements par catégorie</h2>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sélectionner une catégorie" />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORY_STATS.map(cat => (
-                  <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {CATEGORY_STATS.map(cat => {
-              const CategoryIcon = cat.icon;
-              return (
-                <Card 
-                  key={cat.id} 
-                  className={`hover:shadow-md transition-all cursor-pointer ${
-                    selectedCategory === cat.id ? "border-primary bg-primary/5" : ""
-                  }`}
-                  onClick={() => setSelectedCategory(cat.id)}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <CategoryIcon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{cat.name}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {cat.stats.participants} participants
-                        </p>
-                      </div>
-                    </div>
-                    <Separator className="my-3" />
-                    <div className="grid grid-cols-2 gap-3 text-center mt-3">
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-1">Challenges</p>
-                        <p className="font-medium">{cat.stats.challengesCompleted}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-1">XP Moyenne</p>
-                        <p className="font-medium">{cat.stats.avgXp}</p>
-                      </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
-              );
-            })}
-          </div>
-          
-          <Card className="mb-6">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <CardTitle>
-                  Top 10 - {CATEGORY_STATS.find(c => c.id === selectedCategory)?.name || "Général"}
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Select defaultValue="week">
-                    <SelectTrigger className="w-[140px] h-8 text-xs">
-                      <SelectValue placeholder="Période" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="week">Cette semaine</SelectItem>
-                      <SelectItem value="month">Ce mois</SelectItem>
-                      <SelectItem value="year">Cette année</SelectItem>
-                      <SelectItem value="all">Tout le temps</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Info className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Classement basé sur les XP gagnés</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-1">
-                {filteredUsers.slice(0, 10).map((user) => (
-                  <div key={user.id} className="rank-card">
-                    <UserRankCard user={user} highlight={user.id === currentUser.id} />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </TabsContent>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Meilleure progression</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {filteredUsers.slice(0, 5).map((user, idx) => (
-                    <div key={user.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                      <div className="flex items-center">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 mr-3 flex items-center justify-center text-primary font-medium">
-                          {idx + 1}
+          <TabsContent value="categories">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Classements par catégorie</h2>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Sélectionner une catégorie" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_STATS.map(cat => (
+                    <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {CATEGORY_STATS.map(cat => {
+                const CategoryIcon = cat.icon;
+                return (
+                  <Card 
+                    key={cat.id} 
+                    className={`hover:shadow-md transition-all cursor-pointer ${
+                      selectedCategory === cat.id ? "border-primary bg-primary/5" : ""
+                    }`}
+                    onClick={() => setSelectedCategory(cat.id)}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <CategoryIcon className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="flex items-center">
-                          <Avatar className="h-8 w-8 mr-2">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <p className="font-medium">{user.name}</p>
+                        <div>
+                          <h3 className="font-medium">{cat.name}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {cat.stats.participants} participants
+                          </p>
                         </div>
                       </div>
-                      <Badge className="bg-green-500">+{50 + Math.floor(Math.random() * 200)} XP</Badge>
+                      <Separator className="my-3" />
+                      <div className="grid grid-cols-2 gap-3 text-center mt-3">
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">Challenges</p>
+                          <p className="font-medium">{cat.stats.challengesCompleted}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">XP Moyenne</p>
+                          <p className="font-medium">{cat.stats.avgXp}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+            
+            <Card className="mb-6">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-center">
+                  <CardTitle>
+                    Top 10 - {CATEGORY_STATS.find(c => c.id === selectedCategory)?.name || "Général"}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Select defaultValue="week">
+                      <SelectTrigger className="w-[140px] h-8 text-xs">
+                        <SelectValue placeholder="Période" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="week">Cette semaine</SelectItem>
+                        <SelectItem value="month">Ce mois</SelectItem>
+                        <SelectItem value="year">Cette année</SelectItem>
+                        <SelectItem value="all">Tout le temps</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Info className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Classement basé sur les XP gagnés</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  {filteredUsers.slice(0, 10).map((user) => (
+                    <div key={user.id} className="rank-card">
+                      <UserRankCard user={user} highlight={user.id === currentUser.id} />
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Challenges complétés</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {filteredUsers.slice(0, 5).map((user, idx) => (
-                    <div key={user.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                      <div className="flex items-center">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 mr-3 flex items-center justify-center text-primary font-medium">
-                          {idx + 1}
-                        </div>
-                        <div className="flex items-center">
-                          <Avatar className="h-8 w-8 mr-2">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <p className="font-medium">{user.name}</p>
-                        </div>
-                      </div>
-                      <Badge variant="outline">{3 + Math.floor(Math.random() * 12)} challenges</Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="badges" className={activeTab === "badges" ? "block" : "hidden"}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div className="lg:col-span-2">
-              <BadgeDistribution data={badgeDistributionData} />
-            </div>
-            <div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Vos badges</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    {currentUser.badges.map((badge) => (
-                      <div key={badge.id} className="bg-card rounded-lg p-3 flex flex-col items-center text-center">
-                        <div className={`h-14 w-14 rounded-full bg-${badge.color || "primary"}/10 flex items-center justify-center mb-2`}>
-                          {badge.icon === "Trophy" ? (
-                            <Trophy className="h-7 w-7 text-yellow-500" />
-                          ) : badge.icon === "Award" ? (
-                            <Award className="h-7 w-7 text-primary" />
-                          ) : badge.icon === "Shield" ? (
-                            <Shield className="h-7 w-7 text-blue-500" />
-                          ) : (
-                            <Medal className="h-7 w-7 text-amber-500" />
-                          )}
-                        </div>
-                        <p className="font-medium text-sm">{badge.name}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-center pt-0">
-                  <Button variant="outline" size="sm">
-                    Voir tous mes badges
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-          
-          <Card className="mb-6">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <CardTitle>Badges les plus rares</CardTitle>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Filter className="h-4 w-4 mr-1" />
-                    Filtrer
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {badgeDistributionData.slice(0, 8).map((badge, idx) => (
-                  <div key={idx} className="bg-card rounded-lg border p-4 flex flex-col items-center text-center">
-                    <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                      {badge.icon === "Trophy" ? (
-                        <Trophy className="h-8 w-8 text-yellow-500" />
-                      ) : badge.icon === "Award" ? (
-                        <Award className="h-8 w-8 text-primary" />
-                      ) : badge.icon === "Shield" ? (
-                        <Shield className="h-8 w-8 text-blue-500" />
-                      ) : (
-                        <Medal className="h-8 w-8 text-amber-500" />
-                      )}
-                    </div>
-                    <h3 className="font-medium">{badge.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1 mb-2">{badge.value} utilisateurs</p>
-                    <Badge variant="outline" className="bg-primary/5">
-                      {idx === 0 ? "Ultra Rare" : idx < 3 ? "Très Rare" : "Rare"}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Badges à débloquer</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {badgeDistributionData.slice(8, 11).map((badge, idx) => (
-                  <div key={idx} className="bg-card rounded-lg border p-4 flex items-center">
-                    <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center mr-4">
-                      {badge.icon === "Trophy" ? (
-                        <Trophy className="h-7 w-7 text-muted-foreground/50" />
-                      ) : badge.icon === "Award" ? (
-                        <Award className="h-7 w-7 text-muted-foreground/50" />
-                      ) : badge.icon === "Shield" ? (
-                        <Shield className="h-7 w-7 text-muted-foreground/50" />
-                      ) : (
-                        <Medal className="h-7 w-7 text-muted-foreground/50" />
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="font-medium">{badge.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">Badge verrouillé</p>
-                      <Button variant="outline" size="sm">
-                        Comment l'obtenir
-                        <ArrowUpRight className="h-3 w-3 ml-1" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="events" className={activeTab === "events" ? "block" : "hidden"}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="md:col-span-2">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle>Événements à venir</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {UPCOMING_EVENTS.map((event, idx) => (
-                      <div key={idx} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <Badge className={
-                            event.type === "challenge" ? "bg-green-500" :
-                            event.type === "competition" ? "bg-blue-500" :
-                            "bg-purple-500"
-                          }>
-                            {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
-                          </Badge>
-                          <Badge variant="outline">{event.date}</Badge>
-                        </div>
-                        <h3 className="text-lg font-medium mb-1">{event.name}</h3>
-                        <p className="text-sm text-muted-foreground mb-3">{event.description}</p>
-                        <div className="flex justify-between items-center">
-                          <Badge variant="outline" className="flex items-center">
-                            <Award className="h-3 w-3 mr-1 text-yellow-500" />
-                            +{event.xp} XP
-                          </Badge>
-                          <Button size="sm">Participer</Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div>
-              <Card className="mb-6">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Classement événements</CardTitle>
+                  <CardTitle className="text-lg">Meilleure progression</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -725,136 +520,281 @@ const Leaderboard = () => {
                             <p className="font-medium">{user.name}</p>
                           </div>
                         </div>
-                        <Badge variant="outline">{user.xp} XP</Badge>
+                        <Badge className="bg-green-500">+{50 + Math.floor(Math.random() * 200)} XP</Badge>
                       </div>
                     ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Challenges complétés</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {filteredUsers.slice(0, 5).map((user, idx) => (
+                      <div key={user.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                        <div className="flex items-center">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 mr-3 flex items-center justify-center text-primary font-medium">
+                            {idx + 1}
+                          </div>
+                          <div className="flex items-center">
+                            <Avatar className="h-8 w-8 mr-2">
+                              <AvatarImage src={user.avatar} alt={user.name} />
+                              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <p className="font-medium">{user.name}</p>
+                          </div>
+                        </div>
+                        <Badge variant="outline">{3 + Math.floor(Math.random() * 12)} challenges</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="badges">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
+                <BadgeDistribution data={badgeDistributionData} />
+              </div>
+              <div>
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Vos badges</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-3">
+                      {currentUser.badges.map((badge) => (
+                        <div key={badge.id} className="bg-card rounded-lg p-3 flex flex-col items-center text-center">
+                          <div className={`h-14 w-14 rounded-full bg-${badge.color || "primary"}/10 flex items-center justify-center mb-2`}>
+                            {badge.icon === "Trophy" ? (
+                              <Trophy className="h-7 w-7 text-yellow-500" />
+                            ) : badge.icon === "Award" ? (
+                              <Award className="h-7 w-7 text-primary" />
+                            ) : badge.icon === "Shield" ? (
+                              <Shield className="h-7 w-7 text-blue-500" />
+                            ) : (
+                              <Medal className="h-7 w-7 text-amber-500" />
+                            )}
+                          </div>
+                          <p className="font-medium text-sm">{badge.name}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-center pt-0">
+                    <Button variant="outline" size="sm">
+                      Voir tous mes badges
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+            
+            <Card className="mb-6">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-center">
+                  <CardTitle>Badges les plus rares</CardTitle>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      <Filter className="h-4 w-4 mr-1" />
+                      Filtrer
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  {badgeDistributionData.slice(0, 8).map((badge, idx) => (
+                    <div key={idx} className="bg-card border rounded-lg p-4 text-center">
+                      <div className="h-12 w-12 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                        <Award className="h-6 w-6 text-primary" />
+                      </div>
+                      <p className="font-medium text-sm">{badge.name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {badge.value} utilisateurs ({badge.percentage}%)
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="events">
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Événements à venir</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {UPCOMING_EVENTS.map((event, idx) => (
+                    <Card key={idx} className="overflow-hidden border-border/70">
+                      <div className={`p-2 text-center text-white ${event.type === 'challenge' ? 'bg-blue-600' : event.type === 'competition' ? 'bg-purple-600' : 'bg-amber-600'}`}>
+                        <Badge variant="outline" className="bg-white/20 border-white/40 text-white">
+                          {event.type === 'challenge' ? 'Challenge' : event.type === 'competition' ? 'Compétition' : 'Événement'}
+                        </Badge>
+                      </div>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-medium">{event.name}</h3>
+                          <Badge variant="outline" className="bg-primary/10 text-primary whitespace-nowrap">
+                            {event.xp} XP
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {event.description}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Calendar className="h-3.5 w-3.5 mr-1" />
+                            {event.date}
+                          </div>
+                          <Button variant="outline" size="sm">
+                            S'inscrire
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Records précédents</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Challenge E-commerce MVP</h3>
+                        <Badge variant="outline">Terminé</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Créez une boutique en ligne fonctionnelle en une semaine
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                          <Trophy className="h-4 w-4 text-amber-500" />
+                          <span className="text-sm">Marie Dupont</span>
+                        </div>
+                        <Badge className="bg-amber-500/90">250 XP</Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Hackathon Marketing Digital</h3>
+                        <Badge variant="outline">Terminé</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Développez une stratégie de marketing viral en 48h
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                          <Trophy className="h-4 w-4 text-amber-500" />
+                          <span className="text-sm">Alexandre Petit</span>
+                        </div>
+                        <Badge className="bg-amber-500/90">320 XP</Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Marathon Trading</h3>
+                        <Badge variant="outline">Terminé</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Réalisez le plus grand profit en une journée de trading
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                          <Trophy className="h-4 w-4 text-amber-500" />
+                          <span className="text-sm">Lucas Martin</span>
+                        </div>
+                        <Badge className="bg-amber-500/90">400 XP</Badge>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
               
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Événement de la semaine</CardTitle>
+                  <CardTitle className="text-lg">Vos participations</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center">
-                    <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                      <Crown className="h-10 w-10 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-medium mb-1">Challenge Dropshipping</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Réalisez votre première vente en dropshipping et gagnez des XP bonus
-                    </p>
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Participants</span>
-                        <span>125/200</span>
+                  <div className="space-y-4">
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Challenge Investissement</h3>
+                        <Badge variant="success" className="bg-green-600">Réussi</Badge>
                       </div>
-                      <Progress value={62.5} className="h-2" />
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Créez un portefeuille d'investissement rentable
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-3.5 w-3.5 mr-1" />
+                          15 janvier 2023
+                        </div>
+                        <Badge className="bg-green-600/90">+180 XP</Badge>
+                      </div>
                     </div>
-                    <Button>
-                      Participer maintenant
-                    </Button>
+                    
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Hackathon E-commerce</h3>
+                        <Badge variant="destructive">Non terminé</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Développez une plateforme e-commerce innovante
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-3.5 w-3.5 mr-1" />
+                          28 février 2023
+                        </div>
+                        <Badge variant="outline">0 XP</Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">Workshop Marketing Digital</h3>
+                        <Badge variant="success" className="bg-green-600">Réussi</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Maîtrisez les techniques de marketing numérique
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-3.5 w-3.5 mr-1" />
+                          10 mars 2023
+                        </div>
+                        <Badge className="bg-green-600/90">+150 XP</Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-center mt-6">
+                      <Button variant="outline" size="sm">
+                        Voir toutes vos participations
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
-          </div>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Événements passés</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="rounded-lg border p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge variant="outline">Terminé</Badge>
-                      <Badge variant="secondary">Février 2023</Badge>
-                    </div>
-                    <h3 className="font-medium mb-1">Challenge Crypto Trading {item}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Créez un portefeuille diversifié et maximisez votre ROI
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex -space-x-2">
-                        {[1, 2, 3, 4].map((avatar) => (
-                          <Avatar key={avatar} className="h-6 w-6 border-2 border-background">
-                            <AvatarFallback>U{avatar}</AvatarFallback>
-                          </Avatar>
-                        ))}
-                        <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs">
-                          +42
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Résultats
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-center pt-0">
-              <Button variant="ghost">
-                Voir tous les événements passés
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+          </TabsContent>
+        </Tabs>
       </div>
-      
-      <footer className="bg-muted py-12 mt-20">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">À propos du Classement</h3>
-              <p className="text-muted-foreground text-sm">
-                Le classement FinQuest est mis à jour chaque jour en fonction des points
-                gagnés par nos utilisateurs. Relevez des défis financiers pour améliorer
-                votre position !
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Comment gagner des points</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                  Compléter des défis financiers
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                  Participer aux quizzes hebdomadaires
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                  Utiliser régulièrement les simulateurs
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                  Partager vos connaissances avec la communauté
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Besoin d'aide ?</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                Consultez notre FAQ ou contactez notre équipe si vous avez des questions
-                sur le fonctionnement du classement.
-              </p>
-              <Button variant="outline" size="sm" className="w-full">
-                Voir la FAQ
-              </Button>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-border">
-            <p className="text-center text-sm text-muted-foreground">
-              © {new Date().getFullYear()} FinQuest. Tous droits réservés.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
