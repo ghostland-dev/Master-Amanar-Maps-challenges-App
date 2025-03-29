@@ -37,12 +37,12 @@ const MainLayout = ({ children, title, description, className = "" }: MainLayout
         {children}
       </main>
       
-      <footer className="bg-muted py-8 mt-auto pb-24 md:pb-8 border-t border-border transition-colors duration-300">
+      <footer className="bg-muted py-8 mt-auto pb-24 md:pb-8 border-t border-amanar-border transition-colors duration-300">
         <div className="container max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start mb-2">
-                <span className="text-xl font-bold text-primary mr-2">Amanar Map</span>
+                <span className="text-xl font-bold text-amanar-dark dark:text-amber-500 mr-2">Amanar Map</span>
                 <span className="text-sm text-muted-foreground">©{new Date().getFullYear()}</span>
               </div>
               <p className="text-sm text-muted-foreground text-center md:text-left">
