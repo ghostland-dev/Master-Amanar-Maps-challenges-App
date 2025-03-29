@@ -6,6 +6,7 @@ import FeatureSection from "./FeatureSection";
 import WhySection from "./WhySection";
 import TestimonialSection from "./TestimonialSection";
 import CtaSection from "./CtaSection";
+import SubscriptionPalette from "./SubscriptionPalette";
 
 const Hero = () => {
   return (
@@ -19,6 +20,9 @@ const Hero = () => {
         
         {/* Section image mockup */}
         <HeroImage />
+        
+        {/* Subscription palette */}
+        <SubscriptionPalette />
         
         {/* Features */}
         <FeatureSection />
