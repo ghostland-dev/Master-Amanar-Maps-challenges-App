@@ -51,12 +51,15 @@ export function LibraryItemCard({ item, typeIcon: TypeIcon }: LibraryItemCardPro
     if (progress === 100) return "Revoir";
     return "Continuer";
   };
+
+  // Use default Pexels image if item.image is not available
+  const imageUrl = item.image || `https://images.pexels.com/photos/6694621/pexels-photo-6694621.jpeg?auto=compress&cs=tinysrgb&w=600`;
   
   return (
     <Card className="overflow-hidden h-full flex flex-col transition-all hover:shadow-md">
       <div className="relative h-40 overflow-hidden">
         <img 
-          src={item.image} 
+          src={imageUrl} 
           alt={item.title} 
           className="w-full h-full object-cover" 
         />

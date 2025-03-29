@@ -20,13 +20,14 @@ interface ChallengeProps {
   currentStep: number;
   completed: boolean;
   xpReward: number;
+  image?: string;
 }
 
 interface ProfileChallengesProps {
   userId: string;
 }
 
-// Mock challenges data
+// Mock challenges data with Pexels images
 const mockChallenges: ChallengeProps[] = [
   {
     id: "c1",
@@ -38,7 +39,8 @@ const mockChallenges: ChallengeProps[] = [
     totalSteps: 5,
     currentStep: 5,
     completed: true,
-    xpReward: 500
+    xpReward: 500,
+    image: "https://images.pexels.com/photos/4475523/pexels-photo-4475523.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
     id: "c2",
@@ -50,7 +52,8 @@ const mockChallenges: ChallengeProps[] = [
     totalSteps: 5,
     currentStep: 3,
     completed: false,
-    xpReward: 450
+    xpReward: 450,
+    image: "https://images.pexels.com/photos/6289065/pexels-photo-6289065.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
     id: "c3",
@@ -62,7 +65,8 @@ const mockChallenges: ChallengeProps[] = [
     totalSteps: 8,
     currentStep: 3,
     completed: false,
-    xpReward: 750
+    xpReward: 750,
+    image: "https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
     id: "c4",
@@ -74,7 +78,8 @@ const mockChallenges: ChallengeProps[] = [
     totalSteps: 4,
     currentStep: 4,
     completed: true,
-    xpReward: 400
+    xpReward: 400,
+    image: "https://images.pexels.com/photos/5849577/pexels-photo-5849577.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
 ];
 
@@ -147,12 +152,22 @@ export function ProfileChallenges({ userId }: ProfileChallengesProps) {
                   activeChallenges.map((challenge) => (
                     <div key={challenge.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
                       <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h4 className="font-medium text-base">{challenge.title}</h4>
-                          <p className="text-sm text-muted-foreground">{challenge.description}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="outline">{challenge.category}</Badge>
-                            <Badge className={getDifficultyColor(challenge.difficulty)}>{challenge.difficulty}</Badge>
+                        <div className="flex">
+                          {/* Challenge thumbnail */}
+                          <div className="w-12 h-12 rounded overflow-hidden mr-3 shrink-0">
+                            <img 
+                              src={challenge.image || "https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?auto=compress&cs=tinysrgb&w=300"}
+                              alt={challenge.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-base">{challenge.title}</h4>
+                            <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant="outline">{challenge.category}</Badge>
+                              <Badge className={getDifficultyColor(challenge.difficulty)}>{challenge.difficulty}</Badge>
+                            </div>
                           </div>
                         </div>
                         <Link to={`/challenge/${challenge.id}`}>
@@ -205,16 +220,26 @@ export function ProfileChallenges({ userId }: ProfileChallengesProps) {
                   completedChallenges.map((challenge) => (
                     <div key={challenge.id} className="border rounded-lg p-4 bg-muted/30">
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-medium text-base flex items-center">
-                            {challenge.title}
-                            <CheckCircle className="h-4 w-4 ml-2 text-green-500" />
-                          </h4>
-                          <p className="text-sm text-muted-foreground">{challenge.description}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="outline">{challenge.category}</Badge>
-                            <Badge className={getDifficultyColor(challenge.difficulty)}>{challenge.difficulty}</Badge>
-                            <Badge variant="secondary">+{challenge.xpReward} XP</Badge>
+                        <div className="flex">
+                          {/* Challenge thumbnail */}
+                          <div className="w-12 h-12 rounded overflow-hidden mr-3 shrink-0">
+                            <img 
+                              src={challenge.image || "https://images.pexels.com/photos/5849577/pexels-photo-5849577.jpeg?auto=compress&cs=tinysrgb&w=300"}
+                              alt={challenge.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-base flex items-center">
+                              {challenge.title}
+                              <CheckCircle className="h-4 w-4 ml-2 text-green-500" />
+                            </h4>
+                            <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant="outline">{challenge.category}</Badge>
+                              <Badge className={getDifficultyColor(challenge.difficulty)}>{challenge.difficulty}</Badge>
+                              <Badge variant="secondary">+{challenge.xpReward} XP</Badge>
+                            </div>
                           </div>
                         </div>
                         <Link to={`/challenge/${challenge.id}`}>

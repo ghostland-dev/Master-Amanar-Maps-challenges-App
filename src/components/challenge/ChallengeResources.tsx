@@ -22,6 +22,15 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
     });
   };
 
+  // Default Pexels images for resource types
+  const resourceImages = {
+    pdf: "https://images.pexels.com/photos/6863250/pexels-photo-6863250.jpeg?auto=compress&cs=tinysrgb&w=300",
+    template: "https://images.pexels.com/photos/5058361/pexels-photo-5058361.jpeg?auto=compress&cs=tinysrgb&w=300",
+    simulator: "https://images.pexels.com/photos/7567475/pexels-photo-7567475.jpeg?auto=compress&cs=tinysrgb&w=300",
+    book: "https://images.pexels.com/photos/5834/nature-grass-leaf-green.jpg?auto=compress&cs=tinysrgb&w=300",
+    default: "https://images.pexels.com/photos/5797908/pexels-photo-5797908.jpeg?auto=compress&cs=tinysrgb&w=300"
+  };
+
   const getResourceIcon = (type: string) => {
     switch (type) {
       case 'pdf':
@@ -35,6 +44,10 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
       default:
         return <FileText className="h-5 w-5 text-primary" />;
     }
+  };
+
+  const getResourceImage = (type: string) => {
+    return resourceImages[type as keyof typeof resourceImages] || resourceImages.default;
   };
 
   return (
@@ -56,8 +69,14 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
               <div className="flex items-center justify-between p-3 bg-secondary/40 rounded-lg hover:bg-secondary transition-colors">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center">
-                    {getResourceIcon(resource.type)}
-                    <div className="ml-3 flex-1 min-w-0">
+                    <div className="w-10 h-10 rounded overflow-hidden mr-3 shrink-0">
+                      <img 
+                        src={getResourceImage(resource.type)}
+                        alt={resource.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
                       <div className="font-medium text-sm truncate">{resource.title}</div>
                       {resource.description && (
                         <p className="text-xs text-muted-foreground truncate">{resource.description}</p>
@@ -67,7 +86,6 @@ const ChallengeResources = ({ resources }: ChallengeResourcesProps) => {
                 </div>
                 
                 <div className="flex items-center ml-2 space-x-2">
-                  {/* Since canDownload is not in the ChallengeResource type, we'll assume all resources are downloadable */}
                   <Button 
                     variant="ghost" 
                     size="icon" 
