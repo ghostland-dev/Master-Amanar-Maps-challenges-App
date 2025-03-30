@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -5,30 +6,31 @@ import MainLayout from "./components/layouts/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ResourceModalProvider } from "./components/ResourceModalProvider";
 
-// Pages
-import Home from "./pages/Home";
+// Change the index page import
+import Home from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Library from "./pages/Library";
 import LibraryItem from "./pages/LibraryItem";
-import Challenges from "./pages/Challenges";
-import Simulator from "./pages/Simulator";
+// Using the pages that are correctly located
+import Challenges from "./pages/challenges";
+import Simulator from "./pages/Simulators";
 import Profile from "./pages/Profile";
-import AuthPage from "./pages/AuthPage";
+import AuthPage from "./pages/Auth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminChallenges from "./pages/admin/AdminChallenges";
-import AdminUsers from "./pages/admin/AdminUsers";
-import AdminSubscriptions from "./pages/admin/AdminSubscriptions";
-import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminChallenges from "./pages/admin/ChallengeManager";
+import AdminUsers from "./pages/admin/UserManager";
+import AdminSubscriptions from "./pages/admin/SubscriptionManager";
+import AdminAnalytics from "./pages/admin/AnalyticsManager";
 import AdminSettings from "./pages/admin/AdminSettings";
-import PricingPage from "./pages/PricingPage";
+import PricingPage from "./pages/Subscriptions";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import SubscriptionSuccess from "./pages/SubscriptionSuccess";
-import SubscriptionCancel from "./pages/SubscriptionCancel";
-import PartnerPortal from "./pages/PartnerPortal";
-import AffiliateDashboard from "./pages/AffiliatesDashboard";
-import CommercialDashboard from "./pages/CommercialDashboard";
+import SubscriptionSuccess from "./pages/Subscriptions";
+import SubscriptionCancel from "./pages/Subscriptions";
+import PartnerPortal from "./pages/partner/PartnerPortal";
+import AffiliateDashboard from "./pages/affiliate/AffiliateDashboard";
+import CommercialDashboard from "./pages/commercial/CommercialDashboard";
 import MarginCalculator from "./pages/MarginCalculator";
 import AdBudgetCalculator from "./pages/AdBudgetCalculator";
 
@@ -99,7 +101,7 @@ function App() {
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminDashboard />
                   </ProtectedRoute>
                 }
@@ -107,7 +109,7 @@ function App() {
               <Route
                 path="/admin/challenges"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminChallenges />
                   </ProtectedRoute>
                 }
@@ -115,7 +117,7 @@ function App() {
               <Route
                 path="/admin/users"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminUsers />
                   </ProtectedRoute>
                 }
@@ -123,7 +125,7 @@ function App() {
               <Route
                 path="/admin/subscriptions"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminSubscriptions />
                   </ProtectedRoute>
                 }
@@ -131,7 +133,7 @@ function App() {
               <Route
                 path="/admin/analytics"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminAnalytics />
                   </ProtectedRoute>
                 }
@@ -139,7 +141,7 @@ function App() {
               <Route
                 path="/admin/settings"
                 element={
-                  <ProtectedRoute requiredRole={['admin', 'super_admin']}>
+                  <ProtectedRoute roles={['admin', 'super_admin']}>
                     <AdminSettings />
                   </ProtectedRoute>
                 }
