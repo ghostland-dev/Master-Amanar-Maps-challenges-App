@@ -104,7 +104,7 @@ export function LibraryFilterDialog({
                 <SelectValue placeholder="Toutes les catégories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les catégories</SelectItem>
+                <SelectItem value="all">Toutes les catégories</SelectItem>
                 <SelectItem value="Marketing">Marketing</SelectItem>
                 <SelectItem value="Finance">Finance</SelectItem>
                 <SelectItem value="E-commerce">E-commerce</SelectItem>
@@ -123,7 +123,7 @@ export function LibraryFilterDialog({
                 <SelectValue placeholder="Tous les types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Tous les types</SelectItem>
+                <SelectItem value="all">Tous les types</SelectItem>
                 <SelectItem value="article">Article</SelectItem>
                 <SelectItem value="video">Vidéo</SelectItem>
                 <SelectItem value="ebook">Ebook</SelectItem>
@@ -143,7 +143,7 @@ export function LibraryFilterDialog({
                 <SelectValue placeholder="Toutes les difficultés" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les difficultés</SelectItem>
+                <SelectItem value="all">Toutes les difficultés</SelectItem>
                 <SelectItem value="débutant">Débutant</SelectItem>
                 <SelectItem value="intermédiaire">Intermédiaire</SelectItem>
                 <SelectItem value="avancé">Avancé</SelectItem>

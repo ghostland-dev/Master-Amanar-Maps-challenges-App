@@ -27,11 +27,11 @@ export function LibraryFilters({
         <div>
           <h4 className="font-medium text-sm mb-3">Niveau</h4>
           <RadioGroup 
-            value={selectedDifficulty || ""} 
-            onValueChange={(value) => setSelectedDifficulty(value === "" ? null : value)}
+            value={selectedDifficulty || "all"} 
+            onValueChange={(value) => setSelectedDifficulty(value === "all" ? null : value)}
           >
             <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="" id="difficulty-all" />
+              <RadioGroupItem value="all" id="difficulty-all" />
               <Label htmlFor="difficulty-all">Tous</Label>
             </div>
             <div className="flex items-center space-x-2 mb-2">
@@ -53,11 +53,11 @@ export function LibraryFilters({
         <div>
           <h4 className="font-medium text-sm mb-3">Type de contenu</h4>
           <RadioGroup 
-            value={selectedType || ""} 
-            onValueChange={(value) => setSelectedType(value === "" ? null : value)}
+            value={selectedType || "all"} 
+            onValueChange={(value) => setSelectedType(value === "all" ? null : value)}
           >
             <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="" id="type-all" />
+              <RadioGroupItem value="all" id="type-all" />
               <Label htmlFor="type-all">Tous</Label>
             </div>
             <div className="flex items-center space-x-2 mb-2">
