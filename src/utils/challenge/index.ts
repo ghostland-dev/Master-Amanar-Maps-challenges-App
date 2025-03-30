@@ -1,32 +1,28 @@
+// Existing imports should remain
 
-import { Challenge } from "./types";
-import { dropshippingChallenge } from "./dropshippingChallenge";
-import { cryptoChallenge } from "./cryptoChallenge";
-import { arbitrageChallenge } from "./arbitrageChallenge";
-import { affiliationChallenge } from "./affiliationChallenge";
-import { copywritingChallenge } from "./copywritingChallenge";
-import { nftChallenge } from "./nftChallenge";
-import { achatReventeChallenge } from "./achatReventeChallenge";
-import { marketingChallenge } from "./marketingChallenge";
+import * as dropshippingChallenge from './dropshippingChallenge';
+import * as cryptoChallenge from './cryptoChallenge';
+import * as arbitrageChallenge from './arbitrageChallenge';
+import * as affiliationChallenge from './affiliationChallenge';
+import * as copywritingChallenge from './copywritingChallenge';
+import * as nftChallenge from './nftChallenge';
+import * as achatReventeChallenge from './achatReventeChallenge';
+import * as marketingChallenge from './marketingChallenge';
 
-// Map of challenges
-const challengesMap: Record<string, Challenge> = {
-  "1": dropshippingChallenge,
-  "2": cryptoChallenge,
-  "3": arbitrageChallenge,
-  "4": affiliationChallenge,
-  "5": copywritingChallenge,
-  "6": nftChallenge,
-  "7": achatReventeChallenge,
-  "8": marketingChallenge
+// Export individual challenges
+export {
+  dropshippingChallenge,
+  cryptoChallenge,
+  arbitrageChallenge,
+  affiliationChallenge,
+  copywritingChallenge,
+  nftChallenge,
+  achatReventeChallenge,
+  marketingChallenge
 };
 
-export const getChallengeData = (id: string): Challenge => {
-  return challengesMap[id] || dropshippingChallenge;
-};
-
-export type { Challenge, ChallengeStep, ChallengeResource } from "./types";
-export { 
+// Group all challenges in a single object
+export const challengesData = {
   dropshippingChallenge,
   cryptoChallenge,
   arbitrageChallenge,
