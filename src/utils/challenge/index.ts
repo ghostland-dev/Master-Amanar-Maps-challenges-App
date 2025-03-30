@@ -1,38 +1,25 @@
 
-import { Challenge } from "./types";
-import { dropshippingChallenge } from "./dropshippingChallenge";
-import { cryptoChallenge } from "./cryptoChallenge";
-import { arbitrageChallenge } from "./arbitrageChallenge";
-import { affiliationChallenge } from "./affiliationChallenge";
-import { copywritingChallenge } from "./copywritingChallenge";
-import { nftChallenge } from "./nftChallenge";
-import { achatReventeChallenge } from "./achatReventeChallenge";
-import { marketingChallenge } from "./marketingChallenge";
+import { dropshippingChallenges } from './dropshippingChallenge';
+import { affiliationChallenges } from './affiliationChallenge';
+import { cryptoChallenges } from './cryptoChallenge';
+import { marketingChallenges } from './marketingChallenge';
+import { arbitrageChallenges } from './arbitrageChallenge';
+import { achatReventeChallenges } from './achatReventeChallenge';
+import { nftChallenges } from './nftChallenge';
+import { copywritingChallenges } from './copywritingChallenge';
 
-// Map of challenges
-const challengesMap: Record<string, Challenge> = {
-  "1": dropshippingChallenge,
-  "2": cryptoChallenge,
-  "3": arbitrageChallenge,
-  "4": affiliationChallenge,
-  "5": copywritingChallenge,
-  "6": nftChallenge,
-  "7": achatReventeChallenge,
-  "8": marketingChallenge
+export const getAllChallenges = () => {
+  // Fusionner tous les défis de différentes catégories
+  return [
+    ...dropshippingChallenges,
+    ...affiliationChallenges,
+    ...cryptoChallenges,
+    ...marketingChallenges,
+    ...arbitrageChallenges,
+    ...achatReventeChallenges,
+    ...nftChallenges,
+    ...copywritingChallenges,
+  ];
 };
 
-export const getChallengeData = (id: string): Challenge => {
-  return challengesMap[id] || dropshippingChallenge;
-};
-
-export type { Challenge, ChallengeStep, ChallengeResource } from "./types";
-export { 
-  dropshippingChallenge,
-  cryptoChallenge,
-  arbitrageChallenge,
-  affiliationChallenge,
-  copywritingChallenge,
-  nftChallenge,
-  achatReventeChallenge,
-  marketingChallenge
-};
+export * from './types';
