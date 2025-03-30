@@ -30,6 +30,11 @@ const Challenges = () => {
     if (category) {
       setCategoryFilter(category);
     }
+    
+    const view = params.get("view");
+    if (view) {
+      setViewMode(view);
+    }
   }, [location.search]);
 
   const challenges = getChallenges();

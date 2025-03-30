@@ -114,13 +114,17 @@ const Dashboard = () => {
               <p className="text-muted-foreground">Voici votre progression financière cette semaine</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="secondary">
-                <Target className="h-4 w-4 mr-2" />
-                Définir un objectif
+              <Button variant="secondary" asChild>
+                <Link to="/goals">
+                  <Target className="h-4 w-4 mr-2" />
+                  Définir un objectif
+                </Link>
               </Button>
-              <Button>
-                <Zap className="h-4 w-4 mr-2" />
-                Démarrer un challenge
+              <Button asChild>
+                <Link to="/challenges">
+                  <Zap className="h-4 w-4 mr-2" />
+                  Démarrer un challenge
+                </Link>
               </Button>
             </div>
           </div>
@@ -152,8 +156,10 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Activité récente</span>
-              <Button variant="ghost" size="sm" className="text-xs">
-                Voir tout <ArrowRight className="ml-1 h-3 w-3" />
+              <Button variant="ghost" size="sm" className="text-xs" asChild>
+                <Link to="/activity">
+                  Voir tout <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
               </Button>
             </CardTitle>
           </CardHeader>
@@ -213,8 +219,10 @@ const Dashboard = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-center pt-0">
-            <Button variant="outline" size="sm">
-              Voir tous mes objectifs
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/goals">
+                Voir tous mes objectifs
+              </Link>
             </Button>
           </CardFooter>
         </Card>
@@ -225,9 +233,11 @@ const Dashboard = () => {
         <Card className="glass lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Progression générale</CardTitle>
-            <Button variant="ghost" size="sm" className="text-xs">
-              <BarChart2 className="h-4 w-4 mr-1" />
-              Voir les statistiques détaillées
+            <Button variant="ghost" size="sm" className="text-xs" asChild>
+              <Link to="/statistics">
+                <BarChart2 className="h-4 w-4 mr-1" />
+                Voir les statistiques détaillées
+              </Link>
             </Button>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -273,11 +283,11 @@ const Dashboard = () => {
                 <Clock className="mr-1 h-4 w-4" />
                 <span>Temps estimé: 45 minutes</span>
               </div>
-              <Link to="/library">
-                <Button className="w-full">
+              <Button className="w-full" asChild>
+                <Link to="/library">
                   Continuer l'apprentissage
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -287,16 +297,19 @@ const Dashboard = () => {
       <div ref={challengesRef}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-medium">Challenges en cours</h3>
-          <Button variant="ghost" size="sm">
-            Voir tous mes challenges <ArrowRight className="ml-1 h-4 w-4" />
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/challenges?view=progress">
+              Voir tous mes challenges <ArrowRight className="ml-1 h-4 w-4" />
+            </Link>
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {inProgressChallenges.map((challenge) => (
-            <ChallengeCard 
-              key={challenge.id}
-              {...challenge}
-            />
+            <div key={challenge.id}>
+              <ChallengeCard 
+                {...challenge}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -305,18 +318,19 @@ const Dashboard = () => {
       <div className="mt-10">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-medium">Challenges recommandés</h3>
-          <Link to="/challenges">
-            <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/challenges">
               Découvrir plus de challenges <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {recommendedChallenges.map((challenge) => (
-            <ChallengeCard 
-              key={challenge.id}
-              {...challenge}
-            />
+            <div key={challenge.id}>
+              <ChallengeCard 
+                {...challenge}
+              />
+            </div>
           ))}
         </div>
       </div>

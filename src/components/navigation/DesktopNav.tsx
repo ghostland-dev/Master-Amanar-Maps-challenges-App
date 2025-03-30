@@ -49,39 +49,47 @@ export const DesktopNav = ({ isAuthenticated, hasPremiumAccess, user, logout }: 
         
         {/* Liens spécifiques basés sur le rôle */}
         {isAuthenticated && accessRights.canAccessPartnerPortal && (
-          <Link to="/partner-portal">
-            <Button variant="ghost" className="flex items-center gap-1">
-              <Building className="h-4 w-4 mr-1" />
-              Partenaires
+          <NavigationMenuItem>
+            <Button variant="ghost" className="flex items-center gap-1" asChild>
+              <Link to="/partner-portal">
+                <Building className="h-4 w-4 mr-1" />
+                Partenaires
+              </Link>
             </Button>
-          </Link>
+          </NavigationMenuItem>
         )}
         
         {isAuthenticated && accessRights.canAccessAffiliateTools && (
-          <Link to="/affiliate-dashboard">
-            <Button variant="ghost" className="flex items-center gap-1">
-              <LinkIcon className="h-4 w-4 mr-1" />
-              Affiliation
+          <NavigationMenuItem>
+            <Button variant="ghost" className="flex items-center gap-1" asChild>
+              <Link to="/affiliate-dashboard">
+                <LinkIcon className="h-4 w-4 mr-1" />
+                Affiliation
+              </Link>
             </Button>
-          </Link>
+          </NavigationMenuItem>
         )}
         
         {isAuthenticated && accessRights.canAccessCommercialDashboard && (
-          <Link to="/commercial-dashboard">
-            <Button variant="ghost" className="flex items-center gap-1">
-              <BarChart3 className="h-4 w-4 mr-1" />
-              Commercial
+          <NavigationMenuItem>
+            <Button variant="ghost" className="flex items-center gap-1" asChild>
+              <Link to="/commercial-dashboard">
+                <BarChart3 className="h-4 w-4 mr-1" />
+                Commercial
+              </Link>
             </Button>
-          </Link>
+          </NavigationMenuItem>
         )}
         
         {isAuthenticated && (user?.role === 'admin' || user?.role === 'super_admin') && (
-          <Link to="/admin">
-            <Button variant="ghost" className="flex items-center gap-1">
-              <Shield className="h-4 w-4 mr-1" />
-              Admin
+          <NavigationMenuItem>
+            <Button variant="ghost" className="flex items-center gap-1" asChild>
+              <Link to="/admin">
+                <Shield className="h-4 w-4 mr-1" />
+                Admin
+              </Link>
             </Button>
-          </Link>
+          </NavigationMenuItem>
         )}
       </NavigationMenuWrapper>
       
