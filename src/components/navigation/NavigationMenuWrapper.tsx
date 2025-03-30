@@ -7,12 +7,13 @@ import {
 
 interface NavigationMenuWrapperProps {
   children: ReactNode;
+  className?: string;
 }
 
-export const NavigationMenuWrapper = ({ children }: NavigationMenuWrapperProps) => {
+export const NavigationMenuWrapper = ({ children, className = "" }: NavigationMenuWrapperProps) => {
   return (
-    <NavigationMenu>
-      <NavigationMenuList aria-label="Main Navigation">
+    <NavigationMenu className={className}>
+      <NavigationMenuList aria-label="Main Navigation" className="space-x-2">
         {children}
       </NavigationMenuList>
     </NavigationMenu>
