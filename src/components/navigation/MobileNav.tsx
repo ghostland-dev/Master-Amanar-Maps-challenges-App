@@ -5,7 +5,11 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 import { MobileMenuToggle } from "./mobile/MobileMenuToggle";
 import { MobileMenuContent } from "./mobile/MobileMenuContent";
-import MobileSiteMenu from "@/components/MobileSiteMenu";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 interface MobileNavProps {
   isAuthenticated: boolean;
@@ -23,6 +27,7 @@ export const MobileNav = ({
   setMobileMenuOpen
 }: MobileNavProps) => {
   const { accessRights, user } = useAuth();
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const handleCloseMenu = () => {
     setMobileMenuOpen(false);
@@ -34,8 +39,11 @@ export const MobileNav = ({
         {/* Theme Toggle for Mobile */}
         <ThemeToggle />
         
-        {/* Use our new responsive mobile menu */}
-        <MobileSiteMenu />
+        {/* User menu toggle button */}
+        <MobileMenuToggle
+          isOpen={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        />
       </div>
 
       {/* Legacy Mobile Menu Dropdown with Animation - used for user account stuff */}
