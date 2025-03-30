@@ -1,39 +1,38 @@
 
-import { dropshippingChallenge } from './dropshippingChallenge';
-import { affiliationChallenge } from './affiliationChallenge';
-import { cryptoChallenge } from './cryptoChallenge';
-import { marketingChallenge } from './marketingChallenge';
-import { arbitrageChallenge } from './arbitrageChallenge';
-import { achatReventeChallenge } from './achatReventeChallenge';
-import { nftChallenge } from './nftChallenge';
-import { copywritingChallenge } from './copywritingChallenge';
-import { Challenge } from './types';
+import { Challenge } from "./types";
+import { dropshippingChallenge } from "./dropshippingChallenge";
+import { cryptoChallenge } from "./cryptoChallenge";
+import { arbitrageChallenge } from "./arbitrageChallenge";
+import { affiliationChallenge } from "./affiliationChallenge";
+import { copywritingChallenge } from "./copywritingChallenge";
+import { nftChallenge } from "./nftChallenge";
+import { achatReventeChallenge } from "./achatReventeChallenge";
+import { marketingChallenge } from "./marketingChallenge";
 
-// Function to get all challenges as an array
-export const getAllChallenges = (): Challenge[] => {
-  // Return all challenges as an array
-  return [
-    dropshippingChallenge,
-    affiliationChallenge,
-    cryptoChallenge,
-    marketingChallenge,
-    arbitrageChallenge,
-    achatReventeChallenge,
-    nftChallenge,
-    copywritingChallenge,
-  ];
+// Map of challenges
+const challengesMap: Record<string, Challenge> = {
+  "1": dropshippingChallenge,
+  "2": cryptoChallenge,
+  "3": arbitrageChallenge,
+  "4": affiliationChallenge,
+  "5": copywritingChallenge,
+  "6": nftChallenge,
+  "7": achatReventeChallenge,
+  "8": marketingChallenge
 };
 
-// Function to get a challenge by its ID
 export const getChallengeData = (id: string): Challenge => {
-  const challenge = getAllChallenges().find((ch) => ch.id === id);
-  
-  if (!challenge) {
-    // Return a default challenge or throw an error
-    return getAllChallenges()[0];
-  }
-  
-  return challenge;
+  return challengesMap[id] || dropshippingChallenge;
 };
 
-export * from './types';
+export type { Challenge, ChallengeStep, ChallengeResource } from "./types";
+export { 
+  dropshippingChallenge,
+  cryptoChallenge,
+  arbitrageChallenge,
+  affiliationChallenge,
+  copywritingChallenge,
+  nftChallenge,
+  achatReventeChallenge,
+  marketingChallenge
+};
