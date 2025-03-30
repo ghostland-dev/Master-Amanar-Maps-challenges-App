@@ -91,10 +91,10 @@ const Cookies = () => {
               aux paramètres des cookies dans les navigateurs les plus courants :
             </p>
             <ul>
-              <li><strong>Chrome</strong> : Menu > Paramètres > Confidentialité et sécurité > Cookies et autres données des sites</li>
-              <li><strong>Firefox</strong> : Menu > Options > Vie privée et sécurité > Cookies et données de sites</li>
-              <li><strong>Safari</strong> : Préférences > Confidentialité > Cookies et données de sites web</li>
-              <li><strong>Edge</strong> : Paramètres > Confidentialité, recherche et services > Effacer les données de navigation</li>
+              <li><strong>Chrome</strong> : Menu {"->"} Paramètres {"->"} Confidentialité et sécurité {"->"} Cookies et autres données des sites</li>
+              <li><strong>Firefox</strong> : Menu {"->"} Options {"->"} Vie privée et sécurité {"->"} Cookies et données de sites</li>
+              <li><strong>Safari</strong> : Préférences {"->"} Confidentialité {"->"} Cookies et données de sites web</li>
+              <li><strong>Edge</strong> : Paramètres {"->"} Confidentialité, recherche et services {"->"} Effacer les données de navigation</li>
             </ul>
             <p>
               Toutefois, sachez que si vous désactivez ou refusez les cookies, certaines parties de ce Site pourraient 
