@@ -1,104 +1,128 @@
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { LucideIcon, Clock, BookmarkPlus } from "lucide-react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Eye, FileText, FileVideo, Music, Book } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useResourceModalContext } from "@/components/ResourceModalProvider";
 
-interface LibraryItem {
+interface LibraryItemCardProps {
   id: string;
   title: string;
   description: string;
-  type: string;
   category: string;
-  image: string;
-  duration: number;
-  difficulty: string;
-  progress: number;
+  premium: boolean;
+  resourceType: string;
+  resourceUrl?: string;
+  thumbnailUrl?: string;
 }
 
-interface LibraryItemCardProps {
-  item: LibraryItem;
-  typeIcon: LucideIcon;
-}
+const LibraryItemCard: React.FC<LibraryItemCardProps> = ({
+  id,
+  title,
+  description,
+  category,
+  premium,
+  resourceType,
+  resourceUrl,
+  thumbnailUrl,
+}) => {
+  const { openResourceModal } = useResourceModalContext();
 
-export function LibraryItemCard({ item, typeIcon: TypeIcon }: LibraryItemCardProps) {
-  // Function to format duration
-  const formatDuration = (minutes: number) => {
-    if (minutes < 60) {
-      return `${minutes} min`;
-    } else {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}min` : `${hours}h`;
+  const handlePreview = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (resourceUrl && (resourceType === "pdf" || resourceType === "video" || resourceType === "audio")) {
+      openResourceModal(
+        resourceType as "pdf" | "video" | "audio", 
+        resourceUrl, 
+        title
+      );
     }
   };
-  
-  // Function to get color based on difficulty
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "débutant": return "bg-green-500";
-      case "intermédiaire": return "bg-yellow-500";
-      case "avancé": return "bg-red-500";
-      default: return "bg-blue-500";
+
+  const getResourceIcon = () => {
+    switch (resourceType) {
+      case "pdf":
+        return <FileText className="h-5 w-5" />;
+      case "video":
+        return <FileVideo className="h-5 w-5" />;
+      case "audio":
+        return <Music className="h-5 w-5" />;
+      default:
+        return <Book className="h-5 w-5" />;
     }
   };
-  
-  // Determine button text based on progress
-  const getButtonText = (progress: number) => {
-    if (progress === 0) return "Commencer";
-    if (progress === 100) return "Revoir";
-    return "Continuer";
-  };
 
-  // Use default Pexels image if item.image is not available
-  const imageUrl = item.image || `https://images.pexels.com/photos/6694621/pexels-photo-6694621.jpeg?auto=compress&cs=tinysrgb&w=600`;
-  
+  const previewSupported = resourceUrl && ["pdf", "video", "audio"].includes(resourceType);
+
   return (
-    <Card className="overflow-hidden h-full flex flex-col transition-all hover:shadow-md">
-      <div className="relative h-40 overflow-hidden">
-        <img 
-          src={imageUrl} 
-          alt={item.title} 
-          className="w-full h-full object-cover" 
-        />
-        <Badge className="absolute top-2 right-2 flex items-center gap-1">
-          <TypeIcon className="h-3 w-3" />
-          <span>{item.type === "ebook" ? "E-Book" : item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
-        </Badge>
-        {item.progress > 0 && item.progress < 100 && (
-          <div className="absolute bottom-0 left-0 right-0">
-            <Progress value={item.progress} className="h-1 rounded-none" />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Link to={`/library/${id}`}>
+        <Card className="h-full overflow-hidden hover:shadow-md transition-all hover:-translate-y-1 duration-300 group">
+          <div 
+            className={cn(
+              "h-40 relative bg-secondary/20 overflow-hidden", 
+              !thumbnailUrl && "flex items-center justify-center"
+            )}
+          >
+            {thumbnailUrl ? (
+              <img 
+                src={thumbnailUrl} 
+                alt={title} 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div className="text-primary/50 text-4xl">{getResourceIcon()}</div>
+            )}
+            
+            {/* Category and premium badge */}
+            <div className="absolute top-2 left-2 flex gap-2">
+              <Badge variant="secondary" className="bg-secondary/80 backdrop-blur-sm">
+                {category}
+              </Badge>
+              {premium && (
+                <Badge className="bg-yellow-500/90 text-primary-foreground backdrop-blur-sm">
+                  Premium
+                </Badge>
+              )}
+            </div>
+            
+            {/* Preview button */}
+            {previewSupported && (
+              <div className="absolute bottom-2 right-2">
+                <Button 
+                  size="sm" 
+                  variant="secondary"
+                  onClick={handlePreview}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Eye className="mr-1 h-4 w-4" />
+                  Aperçu
+                </Button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <CardContent className="pt-4 flex-grow">
-        <h3 className="font-medium line-clamp-2 mb-1">{item.title}</h3>
-        <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{item.description}</p>
-        <div className="flex items-center gap-2 mt-auto">
-          <Badge variant="outline" className="capitalize">{item.category}</Badge>
-          <Badge className={getDifficultyColor(item.difficulty)}>
-            {item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1)}
-          </Badge>
-        </div>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between pb-4 pt-0">
-        <div className="flex items-center text-sm text-muted-foreground">
-          <Clock className="h-3 w-3 mr-1" />
-          {formatDuration(item.duration)}
-        </div>
-        <div className="flex gap-2">
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <BookmarkPlus className="h-4 w-4" />
-          </Button>
-          <Link to={`/library/${item.id}`}>
-            <Button size="sm">
-              {getButtonText(item.progress)}
-            </Button>
-          </Link>
-        </div>
-      </CardFooter>
-    </Card>
+          
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2 text-muted-foreground text-sm">
+              {getResourceIcon()}
+              <span className="capitalize">{resourceType}</span>
+            </div>
+            <h3 className="font-medium text-lg line-clamp-1">{title}</h3>
+            <p className="text-muted-foreground mt-1 text-sm line-clamp-2">{description}</p>
+          </CardContent>
+        </Card>
+      </Link>
+    </motion.div>
   );
-}
+};
+
+export default LibraryItemCard;

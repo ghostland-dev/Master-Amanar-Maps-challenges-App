@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 import { MobileMenuToggle } from "./mobile/MobileMenuToggle";
 import { MobileMenuContent } from "./mobile/MobileMenuContent";
+import MobileSiteMenu from "@/components/MobileSiteMenu";
 
 interface MobileNavProps {
   isAuthenticated: boolean;
@@ -33,14 +34,11 @@ export const MobileNav = ({
         {/* Theme Toggle for Mobile */}
         <ThemeToggle />
         
-        {/* Mobile Menu Toggle Button */}
-        <MobileMenuToggle 
-          mobileMenuOpen={mobileMenuOpen} 
-          setMobileMenuOpen={setMobileMenuOpen} 
-        />
+        {/* Use our new responsive mobile menu */}
+        <MobileSiteMenu />
       </div>
 
-      {/* Mobile Menu Dropdown with Animation */}
+      {/* Legacy Mobile Menu Dropdown with Animation - used for user account stuff */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenuContent 
