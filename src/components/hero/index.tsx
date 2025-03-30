@@ -10,7 +10,7 @@ import SubscriptionPalette from "./SubscriptionPalette";
 
 const Hero = () => {
   return (
-    <div className="pt-24 pb-0 transition-colors duration-300">
+    <div className="pt-24 pb-0 min-h-screen bg-gradient-to-b from-background to-secondary/5 transition-colors duration-300">
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
         {/* Hero section */}
         <HeroHeader />
