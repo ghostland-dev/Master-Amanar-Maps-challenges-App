@@ -1,19 +1,11 @@
+
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, Filter, Grid3X3, List } from "lucide-react";
-import ChallengeCard from "@/components/ChallengeCard";
-import { ContextualPopover } from "@/components/navigation/ContextualPopover";
-import { AnimatePresence, motion } from "framer-motion";
-import { dropshippingChallenge, cryptoChallenge, arbitrageChallenge,
-  affiliationChallenge, copywritingChallenge, nftChallenge,
-  achatReventeChallenge, marketingChallenge } from "@/utils/challenge";
-import type { Challenge } from "@/utils/challenge/types";
+import { challengesData } from "@/utils/challenge";
 import { SortOption } from "./types";
 import ChallengeFilters from "./components/ChallengeFilters";
 import ChallengeList from "./components/ChallengeList";
+import ChallengeDisplayModeTabs from "./components/ChallengeDisplayModeTabs";
+import type { Challenge } from "@/utils/challenge/types";
 
 // Function to ensure difficulty is one of the accepted values
 const normalizeDifficulty = (difficulty: string): "beginner" | "intermediate" | "advanced" => {
@@ -23,32 +15,16 @@ const normalizeDifficulty = (difficulty: string): "beginner" | "intermediate" | 
   return "beginner"; // Default fallback
 };
 
-// Mapping challenge objects to an array with IDs
-const challengesData: Array<Challenge & { id: string }> = [
-  { ...dropshippingChallenge, id: "1" },
-  { ...cryptoChallenge, id: "2" },
-  { ...arbitrageChallenge, id: "3" },
-  { ...affiliationChallenge, id: "4" },
-  { ...copywritingChallenge, id: "5" },
-  { ...nftChallenge, id: "6" },
-  { ...achatReventeChallenge, id: "7" },
-  { ...marketingChallenge, id: "8" },
-];
-
-const categories = [
-  { label: "Tous", value: "all" },
-  { label: "E-commerce", value: "ecommerce" },
-  { label: "Marketing", value: "marketing" },
-  { label: "Crypto", value: "crypto" },
-  { label: "Affiliation", value: "affiliation" },
-  { label: "Social Media", value: "social" },
-];
-
-const difficultyLevels = [
-  { label: "Tous niveaux", value: "all" },
-  { label: "Débutant", value: "beginner" },
-  { label: "Intermédiaire", value: "intermediate" },
-  { label: "Avancé", value: "advanced" },
+// Mapping challenge objects to an array with IDs - moved from inline to top level
+const mappedChallengesData: Array<Challenge & { id: string }> = [
+  { ...challengesData.dropshippingChallenge, id: "1" },
+  { ...challengesData.cryptoChallenge, id: "2" },
+  { ...challengesData.arbitrageChallenge, id: "3" },
+  { ...challengesData.affiliationChallenge, id: "4" },
+  { ...challengesData.copywritingChallenge, id: "5" },
+  { ...challengesData.nftChallenge, id: "6" },
+  { ...challengesData.achatReventeChallenge, id: "7" },
+  { ...challengesData.marketingChallenge, id: "8" },
 ];
 
 const Challenges = () => {
@@ -56,7 +32,7 @@ const Challenges = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [displayMode, setDisplayMode] = useState<"grid" | "list">("grid");
-  const [filteredChallenges, setFilteredChallenges] = useState(challengesData);
+  const [filteredChallenges, setFilteredChallenges] = useState(mappedChallengesData);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOption, setSortOption] = useState<SortOption>("popular");
   const [filtersVisible, setFiltersVisible] = useState(false);
@@ -67,7 +43,7 @@ const Challenges = () => {
     
     // Simulate API call/data processing delay
     const timer = setTimeout(() => {
-      const filtered = challengesData.filter(challenge => {
+      const filtered = mappedChallengesData.filter(challenge => {
         const matchesSearch = challenge.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             challenge.description.toLowerCase().includes(searchTerm.toLowerCase());
         
@@ -91,22 +67,6 @@ const Challenges = () => {
     setSearchTerm("");
     setSelectedCategory("all");
     setSelectedDifficulty("all");
-  };
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
   };
 
   return (
@@ -135,149 +95,21 @@ const Challenges = () => {
           resetFilters={resetFilters}
         />
 
-        {/* Challenge List */}
+        {/* Challenge List for immediate display */}
         <ChallengeList 
           challenges={filteredChallenges} 
           resetFilters={resetFilters}
         />
 
-        {/* The rest of the original implementation */}
-        {/* Challenge Display */}
+        {/* Challenge Display with Tabs */}
         <div>
-          <Tabs value={displayMode} className="w-full">
-            <TabsContent value="grid" className="mt-0">
-              {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="animate-pulse">
-                      <div className="aspect-video bg-muted rounded-t-lg"></div>
-                      <div className="h-48 bg-card rounded-b-lg p-4 space-y-3">
-                        <div className="h-5 bg-muted rounded w-3/4"></div>
-                        <div className="h-3 bg-muted rounded w-1/2"></div>
-                        <div className="h-3 bg-muted rounded w-full"></div>
-                        <div className="h-3 bg-muted rounded w-5/6"></div>
-                        <div className="h-8 bg-muted rounded w-full mt-4"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : filteredChallenges.length > 0 ? (
-                <motion.div 
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="show"
-                >
-                  <AnimatePresence>
-                    {filteredChallenges.map((challenge) => (
-                      <motion.div key={challenge.id} variants={itemVariants}>
-                        <ChallengeCard
-                          id={challenge.id}
-                          title={challenge.title}
-                          description={challenge.description}
-                          category={challenge.category || ""}
-                          difficulty={normalizeDifficulty(challenge.difficulty)}
-                          duration={challenge.duration || ""}
-                          xp={challenge.xp || 0}
-                          icon={<span>🏆</span>}
-                        />
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </motion.div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Aucun challenge ne correspond à votre recherche.</p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setSelectedCategory("all");
-                      setSelectedDifficulty("all");
-                    }}
-                  >
-                    Réinitialiser la recherche
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="list" className="mt-0">
-              {isLoading ? (
-                <div className="space-y-4">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="animate-pulse flex bg-card rounded-lg overflow-hidden">
-                      <div className="w-1/4 bg-muted"></div>
-                      <div className="w-3/4 p-4 space-y-3">
-                        <div className="h-5 bg-muted rounded w-1/2"></div>
-                        <div className="h-3 bg-muted rounded w-3/4"></div>
-                        <div className="h-3 bg-muted rounded w-full"></div>
-                        <div className="flex justify-between items-center mt-4">
-                          <div className="h-8 bg-muted rounded w-1/4"></div>
-                          <div className="h-4 bg-muted rounded w-1/6"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : filteredChallenges.length > 0 ? (
-                <motion.div 
-                  className="space-y-4"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="show"
-                >
-                  {filteredChallenges.map((challenge) => (
-                    <motion.div 
-                      key={challenge.id}
-                      variants={itemVariants}
-                      className="bg-card border rounded-lg overflow-hidden flex flex-col md:flex-row"
-                    >
-                      <div className="w-full md:w-1/4 aspect-video md:aspect-auto">
-                        <img 
-                          src={challenge.image || "/placeholder.svg"} 
-                          alt={challenge.title}
-                          className="w-full h-full object-cover" 
-                        />
-                      </div>
-                      <div className="p-4 md:p-6 flex-1">
-                        <h3 className="text-xl font-bold mb-2">{challenge.title}</h3>
-                        <p className="text-muted-foreground line-clamp-2 mb-4">{challenge.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          <Badge variant="secondary">{challenge.category}</Badge>
-                          <Badge variant="outline">{challenge.difficulty}</Badge>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <Button asChild>
-                            <a href={`/challenge/${challenge.id}`}>Voir le challenge</a>
-                          </Button>
-                          <span className="text-sm text-muted-foreground">
-                            {challenge.duration}
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Aucun challenge ne correspond à votre recherche.</p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setSelectedCategory("all");
-                      setSelectedDifficulty("all");
-                    }}
-                  >
-                    Réinitialiser la recherche
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+          <ChallengeDisplayModeTabs
+            displayMode={displayMode}
+            isLoading={isLoading}
+            filteredChallenges={filteredChallenges}
+            resetFilters={resetFilters}
+            normalizeDifficulty={normalizeDifficulty}
+          />
         </div>
       </div>
     </div>
