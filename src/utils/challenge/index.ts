@@ -32,3 +32,28 @@ export const challengesData = {
   achatReventeChallenge,
   marketingChallenge
 };
+
+// Function to get a specific challenge by ID
+export const getChallengeData = (id: string) => {
+  switch (id) {
+    case "1":
+      return dropshippingChallenge.dropshippingChallenge;
+    case "2":
+      return cryptoChallenge.cryptoChallenge;
+    case "3":
+      return arbitrageChallenge.arbitrageChallenge;
+    case "4":
+      return affiliationChallenge.affiliationChallenge;
+    case "5":
+      return copywritingChallenge.copywritingChallenge;
+    case "6":
+      return nftChallenge.nftChallenge;
+    case "7":
+      return achatReventeChallenge.achatReventeChallenge;
+    case "8":
+      return marketingChallenge.marketingChallenge;
+    default:
+      // Default to the dropshipping challenge if ID not found
+      return dropshippingChallenge.dropshippingChallenge;
+  }
+};

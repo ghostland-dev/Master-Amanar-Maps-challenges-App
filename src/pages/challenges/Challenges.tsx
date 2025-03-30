@@ -15,16 +15,16 @@ const normalizeDifficulty = (difficulty: string): "beginner" | "intermediate" | 
   return "beginner"; // Default fallback
 };
 
-// Mapping challenge objects to an array with IDs - moved from inline to top level
+// Mapping challenge objects to an array with IDs
 const mappedChallengesData: Array<Challenge & { id: string }> = [
-  { ...challengesData.dropshippingChallenge, id: "1" },
-  { ...challengesData.cryptoChallenge, id: "2" },
-  { ...challengesData.arbitrageChallenge, id: "3" },
-  { ...challengesData.affiliationChallenge, id: "4" },
-  { ...challengesData.copywritingChallenge, id: "5" },
-  { ...challengesData.nftChallenge, id: "6" },
-  { ...challengesData.achatReventeChallenge, id: "7" },
-  { ...challengesData.marketingChallenge, id: "8" },
+  { ...challengesData.dropshippingChallenge.dropshippingChallenge, id: "1" },
+  { ...challengesData.cryptoChallenge.cryptoChallenge, id: "2" },
+  { ...challengesData.arbitrageChallenge.arbitrageChallenge, id: "3" },
+  { ...challengesData.affiliationChallenge.affiliationChallenge, id: "4" },
+  { ...challengesData.copywritingChallenge.copywritingChallenge, id: "5" },
+  { ...challengesData.nftChallenge.nftChallenge, id: "6" },
+  { ...challengesData.achatReventeChallenge.achatReventeChallenge, id: "7" },
+  { ...challengesData.marketingChallenge.marketingChallenge, id: "8" },
 ];
 
 const Challenges = () => {
