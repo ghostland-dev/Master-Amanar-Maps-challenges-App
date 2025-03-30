@@ -1,150 +1,193 @@
 
+import React from "react";
 import MainLayout from "@/components/layouts/MainLayout";
 import { Button } from "@/components/ui/button";
+import { ExternalLink, ArrowRight, Download } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
-  ArrowDownToLine,
-  FileText,
-  Mail,
-  ExternalLink
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
 
 const Press = () => {
   return (
-    <MainLayout title="Presse" description="Espace presse et médias Amanar Map">
+    <MainLayout title="Presse" description="Centre de presse Amanar Map - Actualités, communiqués et ressources médias">
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">Espace Presse</h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Ressources et informations pour les journalistes et médias intéressés par Amanar Map.
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold mb-2">Centre de presse</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Découvrez les dernières actualités, communiqués de presse et ressources médias d'Amanar Map.
           </p>
         </div>
         
-        {/* Contact Press */}
-        <div className="max-w-4xl mx-auto mb-16 bg-secondary/30 p-8 rounded-xl">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="sm:w-2/3">
-              <h2 className="text-2xl font-bold mb-2">Contact Presse</h2>
-              <p className="text-muted-foreground mb-4">
-                Pour toute demande d'interview, d'information ou de collaboration médiatique, 
-                n'hésitez pas à nous contacter.
+        {/* Latest Press Release */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6">Dernier communiqué de presse</h2>
+          <Card className="bg-muted/30">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="text-xl mb-1">Amanar Map annonce une levée de fonds de 2 millions d'euros pour révolutionner la formation entrepreneuriale en ligne</CardTitle>
+                  <CardDescription>15 Janvier 2023</CardDescription>
+                </div>
+                <Button variant="outline" size="sm" asChild>
+                  <a href="#" className="flex items-center">
+                    <Download className="mr-2 h-4 w-4" />
+                    Télécharger le PDF
+                  </a>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                Amanar Map, la plateforme éducative française spécialisée dans l'accompagnement des entrepreneurs digitaux, 
+                annonce aujourd'hui avoir levé 2 millions d'euros auprès de plusieurs investisseurs de renom dont VC Capital, 
+                Business Angels Network et Digital Ventures.
               </p>
-              <div className="flex items-center mb-2">
-                <Mail className="h-4 w-4 mr-2 text-primary" />
-                <a href="mailto:presse@amanarmap.com" className="text-primary hover:underline">
-                  presse@amanarmap.com
-                </a>
-              </div>
-            </div>
-            <div className="sm:w-1/3 flex justify-center">
-              <Button size="lg" asChild>
-                <a href="mailto:presse@amanarmap.com">Contacter</a>
+              <p className="mb-4">
+                Cette levée de fonds permettra à l'entreprise d'accélérer son développement international, d'enrichir 
+                son catalogue de formations et de renforcer ses équipes, notamment dans les domaines de la technologie et du contenu pédagogique.
+              </p>
+              <p>
+                "Nous sommes ravis de cette marque de confiance de la part de nos investisseurs", déclare Thomas Dubois, 
+                fondateur et CEO d'Amanar Map. "Cette levée de fonds va nous permettre de poursuivre notre mission : 
+                démocratiser l'accès aux compétences entrepreneuriales de qualité et aider davantage de personnes à 
+                atteindre leur indépendance financière."
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild>
+                <Link to="/press/levee-fonds-2023" className="flex items-center">
+                  Lire la suite
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
         
-        {/* Press Kit */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold mb-6">Kit Médias</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Logo et éléments visuels</h3>
-                    <p className="text-muted-foreground text-sm mb-4">
-                      Logos officiels, photos haute résolution et éléments de marque.
-                    </p>
-                  </div>
-                  <FileText className="h-8 w-8 text-primary/70" />
-                </div>
-                <Button variant="outline" className="w-full flex items-center justify-center">
-                  <ArrowDownToLine className="mr-2 h-4 w-4" />
-                  Télécharger (ZIP, 12 MB)
-                </Button>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Dossier de presse</h3>
-                    <p className="text-muted-foreground text-sm mb-4">
-                      Présentation détaillée d'Amanar Map, notre mission et nos réalisations.
-                    </p>
-                  </div>
-                  <FileText className="h-8 w-8 text-primary/70" />
-                </div>
-                <Button variant="outline" className="w-full flex items-center justify-center">
-                  <ArrowDownToLine className="mr-2 h-4 w-4" />
-                  Télécharger (PDF, 5 MB)
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        
-        {/* Press Releases */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold mb-6">Communiqués de presse</h2>
-          
-          <div className="space-y-4">
-            {pressReleases.map((release, index) => (
-              <div key={index} className="p-5 border border-border rounded-lg hover:bg-secondary/20 transition-colors">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
-                  <div className="flex items-center mb-2 sm:mb-0">
-                    <span className="text-muted-foreground text-sm">{release.date}</span>
-                    <Separator orientation="vertical" className="mx-3 h-4" />
-                    <Badge variant="outline" className="bg-primary/10 text-primary">
-                      {release.category}
-                    </Badge>
-                  </div>
-                  <Button variant="ghost" size="sm" className="flex items-center" asChild>
-                    <a href={release.link} target="_blank" rel="noopener noreferrer">
-                      Lire
-                      <ExternalLink className="ml-1 h-3 w-3" />
-                    </a>
+        {/* Press Releases Archive */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6">Communiqués de presse</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {pressReleases.map((release) => (
+              <Card key={release.id}>
+                <CardHeader>
+                  <CardTitle className="text-lg">{release.title}</CardTitle>
+                  <CardDescription>{release.date}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground line-clamp-3">{release.excerpt}</p>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to={`/press/${release.slug}`}>Lire</Link>
                   </Button>
-                </div>
-                <h3 className="text-lg font-semibold">{release.title}</h3>
-                <p className="text-muted-foreground text-sm mt-2">{release.excerpt}</p>
-              </div>
+                  <Button variant="ghost" size="sm" asChild>
+                    <a href="#">Télécharger</a>
+                  </Button>
+                </CardFooter>
+              </Card>
             ))}
+          </div>
+          <div className="text-center mt-8">
+            <Button variant="outline" asChild>
+              <Link to="/press/archives">
+                Voir tous les communiqués
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
         
         {/* Media Coverage */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold mb-6">Dans les médias</h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {mediaCoverage.map((coverage, index) => (
-              <a 
-                key={index} 
-                href={coverage.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300"
-              >
-                <div className="p-4">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="font-medium text-sm">{coverage.source}</span>
-                    <span className="text-xs text-muted-foreground">{coverage.date}</span>
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6">Couverture médiatique</h2>
+          <div className="space-y-6">
+            {mediaCoverage.map((article) => (
+              <div key={article.id} className="p-4 border border-border rounded-lg">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium mb-1">{article.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-2">{article.publisher} • {article.date}</p>
                   </div>
-                  <h3 className="font-medium mb-2 line-clamp-2">{coverage.title}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-3">{coverage.excerpt}</p>
-                  <div className="flex items-center mt-3 text-primary text-sm">
-                    Lire l'article
-                    <ExternalLink className="ml-1 h-3 w-3" />
-                  </div>
+                  <Button variant="ghost" size="sm" asChild>
+                    <a href={article.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                      Lire l'article
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
                 </div>
-              </a>
+                <p className="text-muted-foreground">{article.excerpt}</p>
+              </div>
             ))}
+          </div>
+        </div>
+        
+        {/* Media Resources */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6">Ressources médias</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Kit presse</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Notre kit presse comprend des logos haute résolution, des photos de l'équipe, des visualisations du produit et notre charte graphique.</p>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" asChild>
+                  <a href="#" className="flex items-center justify-center">
+                    <Download className="mr-2 h-4 w-4" />
+                    Télécharger le kit presse
+                  </a>
+                </Button>
+              </CardFooter>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Fiche d'entreprise</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Consultez notre fiche d'entreprise complète avec historique, chiffres clés, vision et informations sur les fondateurs.</p>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" asChild>
+                  <Link to="/press/entreprise">
+                    Consulter la fiche
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+        
+        {/* Contact Press */}
+        <div className="bg-muted/30 p-8 rounded-lg">
+          <div className="flex flex-col md:flex-row gap-8 items-center">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold mb-2">Contact presse</h2>
+              <p className="mb-4 text-muted-foreground">
+                Pour toute demande d'information, interview ou requête presse, notre équipe de relations publiques est à votre disposition.
+              </p>
+              <div className="space-y-2">
+                <p><strong>Email :</strong> presse@amanarmap.com</p>
+                <p><strong>Téléphone :</strong> +33 (0)1 23 45 67 89</p>
+                <p><strong>Contact :</strong> Marie Lambert, Relations Presse</p>
+              </div>
+            </div>
+            <div className="md:w-1/3">
+              <Button className="w-full" asChild>
+                <Link to="/contact" className="flex items-center justify-center">
+                  Formulaire de contact presse
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -152,73 +195,79 @@ const Press = () => {
   );
 };
 
-// Mock data
+// Données pour les communiqués de presse
 const pressReleases = [
   {
-    date: "15 Octobre 2023",
-    category: "Lancement",
-    title: "Amanar Map lance sa nouvelle plateforme d'apprentissage entrepreneurial",
-    excerpt: "Amanar Map dévoile aujourd'hui sa plateforme innovante, conçue pour rendre l'entrepreneuriat digital accessible à tous grâce à des challenges pratiques et des parcours guidés.",
-    link: "#"
+    id: 1,
+    title: "Amanar Map lance une nouvelle plateforme de formation interactive",
+    date: "10 Décembre 2022",
+    excerpt: "Amanar Map dévoile aujourd'hui sa nouvelle plateforme d'apprentissage interactive qui révolutionne la formation entrepreneuriale en ligne grâce à des parcours personnalisés et des défis pratiques.",
+    slug: "nouvelle-plateforme-2022"
   },
   {
-    date: "22 Septembre 2023",
-    category: "Partenariat",
-    title: "Amanar Map signe un partenariat stratégique avec l'école de commerce EM Lyon",
-    excerpt: "Cette collaboration permettra aux étudiants de l'EM Lyon d'accéder à des ressources pratiques pour développer leurs projets entrepreneuriaux en ligne.",
-    link: "#"
+    id: 2,
+    title: "Partenariat stratégique entre Amanar Map et BusinessSchool",
+    date: "5 Octobre 2022",
+    excerpt: "Amanar Map et BusinessSchool annoncent un partenariat stratégique pour proposer des formations certifiantes en entrepreneuriat digital, combinant expertise académique et approche pratique.",
+    slug: "partenariat-businessschool-2022"
   },
   {
-    date: "5 Août 2023",
-    category: "Financement",
-    title: "Amanar Map lève 2 millions d'euros pour démocratiser l'apprentissage de l'entrepreneuriat en ligne",
-    excerpt: "Cette levée de fonds permettra d'accélérer le développement de la plateforme et d'enrichir son catalogue de challenges et ressources pédagogiques.",
-    link: "#"
+    id: 3,
+    title: "Amanar Map franchit le cap des 50 000 utilisateurs",
+    date: "15 Août 2022",
+    excerpt: "Moins de deux ans après son lancement, Amanar Map célèbre une étape importante avec sa communauté qui atteint désormais 50 000 entrepreneurs et porteurs de projets dans plus de 30 pays.",
+    slug: "50000-utilisateurs-2022"
+  },
+  {
+    id: 4,
+    title: "Lancement du programme 'Success Partners' pour accompagner les entrepreneurs",
+    date: "2 Juin 2022",
+    excerpt: "Amanar Map dévoile son nouveau programme d'accompagnement personnalisé 'Success Partners', permettant aux entrepreneurs digitaux de bénéficier d'un mentor dédié pendant 6 mois.",
+    slug: "programme-success-partners-2022"
   }
 ];
 
+// Données pour la couverture médiatique
 const mediaCoverage = [
   {
-    source: "Les Echos",
-    date: "18 Oct 2023",
-    title: "Amanar Map révolutionne l'apprentissage de l'entrepreneuriat en ligne",
-    excerpt: "La start-up française propose une approche innovante basée sur des mini-défis pratiques pour permettre à chacun de développer une activité rentable sur internet.",
-    link: "#"
+    id: 1,
+    title: "Amanar Map : l'EdTech qui réinvente l'apprentissage entrepreneurial",
+    publisher: "Tech Insider",
+    date: "20 Janvier 2023",
+    excerpt: "La startup française qui se distingue par son approche novatrice de l'apprentissage par le challenge et son modèle communautaire.",
+    url: "#"
   },
   {
-    source: "BFM Business",
-    date: "12 Oct 2023",
-    title: "L'entrepreneuriat en ligne à la portée de tous avec Amanar Map",
-    excerpt: "La plateforme qui promet de rendre accessibles les compétences entrepreneuriales grâce à un parcours d'apprentissage ludique et progressif.",
-    link: "#"
+    id: 2,
+    title: "Les 10 startups EdTech françaises à suivre en 2023",
+    publisher: "Business Magazine",
+    date: "5 Janvier 2023",
+    excerpt: "Amanar Map figure dans notre classement des startups EdTech les plus prometteuses de l'année, avec une croissance impressionnante et des retours utilisateurs exceptionnels.",
+    url: "#"
   },
   {
-    source: "Maddyness",
-    date: "8 Oct 2023",
-    title: "Amanar Map lève 2M€ pour démocratiser les revenus en ligne",
-    excerpt: "Cette jeune pousse ambitieuse veut permettre au plus grand nombre de générer des revenus complémentaires grâce à des formations pratiques.",
-    link: "#"
+    id: 3,
+    title: "Interview exclusive avec Thomas Dubois, fondateur d'Amanar Map",
+    publisher: "Entrepreneurs Daily",
+    date: "12 Décembre 2022",
+    excerpt: "Le fondateur nous dévoile sa vision de l'éducation entrepreneuriale et les coulisses de sa récente levée de fonds de 2 millions d'euros.",
+    url: "#"
   },
   {
-    source: "Le Figaro",
-    date: "30 Sept 2023",
-    title: "Ces Français qui réinventent la formation à l'entrepreneuriat",
-    excerpt: "Portrait des fondateurs d'Amanar Map, qui ont quitté leurs emplois en conseil pour créer une plateforme d'apprentissage innovante.",
-    link: "#"
+    id: 4,
+    title: "Comment Amanar Map aide des milliers d'entrepreneurs à se lancer",
+    publisher: "Digital Economy",
+    date: "30 Novembre 2022",
+    excerpt: "Focus sur cette plateforme qui démocratise l'accès aux compétences entrepreneuriales et aide les français à créer des sources de revenus alternatives.",
+    url: "#"
   },
   {
-    source: "Capital",
-    date: "22 Sept 2023",
-    title: "Comment générer un revenu complémentaire sur internet",
-    excerpt: "Enquête sur les nouvelles méthodes pour créer des sources de revenus en ligne, avec le témoignage des utilisateurs d'Amanar Map.",
-    link: "#"
-  },
-  {
-    source: "JDN",
-    date: "15 Sept 2023",
-    title: "Amanar Map: la EdTech qui veut démocratiser l'entrepreneuriat digital",
-    excerpt: "Analyse du modèle pédagogique disruptif proposé par cette start-up française en pleine croissance.",
-    link: "#"
+    id: 5,
+    title: "Le phénomène des 'challenges' dans l'éducation en ligne : étude de cas Amanar Map",
+    publisher: "EdTech Review",
+    date: "15 Octobre 2022",
+    excerpt: "Analyse de l'approche par challenges développée par Amanar Map et de son impact sur l'engagement et les résultats des apprenants.",
+    url: "#"
   }
 ];
 
