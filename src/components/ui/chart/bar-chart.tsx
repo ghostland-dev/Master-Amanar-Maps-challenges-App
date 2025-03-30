@@ -46,6 +46,9 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
         <RechartsPrimitive.BarChart 
           data={data}
           layout={layout}
+          width={500}
+          height={300}
+          margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
         >
           <RechartsPrimitive.XAxis dataKey={index} />
           <RechartsPrimitive.YAxis />
@@ -78,7 +81,14 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>((
               );
             }}
           />
-          {showLegend && <RechartsPrimitive.Legend />}
+          {showLegend && (
+            <RechartsPrimitive.Legend 
+              layout="horizontal" 
+              verticalAlign="bottom" 
+              align="center" 
+              wrapperStyle={{ paddingTop: '10px' }}
+            />
+          )}
           {categories.map((category, i) => (
             <RechartsPrimitive.Bar
               key={category}

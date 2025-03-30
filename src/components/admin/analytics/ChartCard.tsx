@@ -16,8 +16,8 @@ export const ChartCard = ({ title, description, children, className }: ChartCard
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex justify-center items-center">
-        <div className="w-full h-full">
+      <CardContent className="flex justify-center items-center p-0 overflow-hidden">
+        <div className="w-full h-full px-2 pb-4">
           {children}
         </div>
       </CardContent>

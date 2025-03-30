@@ -77,7 +77,7 @@ const AdBudgetResults = ({
             <h3 className="font-medium text-lg mb-4">Répartition du budget</h3>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-full sm:w-1/2 h-52">
+              <div className="w-full sm:w-1/2 h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
