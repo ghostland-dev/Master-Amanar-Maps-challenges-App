@@ -3,9 +3,10 @@ import { Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ChallengeCard from "@/components/ChallengeCard";
 import { categoryLabels } from "../utils/challengeUtils";
+import { Challenge } from "@/utils/challenge/types";
 
 interface ChallengeListProps {
-  challenges: any[];
+  challenges: (Challenge & { id: string })[];
   resetFilters: () => void;
 }
 
@@ -34,8 +35,8 @@ const ChallengeList = ({ challenges, resetFilters }: ChallengeListProps) => {
           title={challenge.title}
           description={challenge.description}
           category={categoryLabels[challenge.category] || challenge.category}
-          icon={challenge.icon}
-          difficulty={challenge.difficulty}
+          // Remove the icon prop as it doesn't exist in Challenge type
+          difficulty={challenge.difficulty as "beginner" | "intermediate" | "advanced"}
           duration={challenge.duration || ""}
           xp={challenge.xp || 0}
         />

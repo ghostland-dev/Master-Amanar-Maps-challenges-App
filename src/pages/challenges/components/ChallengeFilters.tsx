@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Chip } from "@/components/ui/chip";
 import { categoryLabels } from "../utils/challengeUtils";
-import type { SortOption } from "../Challenges";
+import { SortOption } from "../types";
 
 interface ChallengeFiltersProps {
   searchQuery: string;

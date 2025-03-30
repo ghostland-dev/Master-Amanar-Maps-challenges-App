@@ -5,24 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Search, Filter, Grid3X3, List } from "lucide-react";
-import ChallengeCard from "@/components/ChallengeCard"; // Fixed import
+import ChallengeCard from "@/components/ChallengeCard";
 import { ContextualPopover } from "@/components/navigation/ContextualPopover";
 import { AnimatePresence, motion } from "framer-motion";
 import { dropshippingChallenge, cryptoChallenge, arbitrageChallenge,
   affiliationChallenge, copywritingChallenge, nftChallenge,
   achatReventeChallenge, marketingChallenge } from "@/utils/challenge";
 import type { Challenge } from "@/utils/challenge/types";
+import { SortOption } from "./types";
 
 // Mapping challenge objects to an array with IDs
-const challengesData: Array<Challenge & { id: string }> = [
-  { ...dropshippingChallenge, id: "1" },
-  { ...cryptoChallenge, id: "2" },
-  { ...arbitrageChallenge, id: "3" },
-  { ...affiliationChallenge, id: "4" },
-  { ...copywritingChallenge, id: "5" },
-  { ...nftChallenge, id: "6" },
-  { ...achatReventeChallenge, id: "7" },
-  { ...marketingChallenge, id: "8" },
+const challengesData: Array<Challenge & { id: string; icon?: React.ReactNode }> = [
+  { ...dropshippingChallenge, id: "1", icon: <span>🛍️</span> },
+  { ...cryptoChallenge, id: "2", icon: <span>💰</span> },
+  { ...arbitrageChallenge, id: "3", icon: <span>📊</span> },
+  { ...affiliationChallenge, id: "4", icon: <span>🤝</span> },
+  { ...copywritingChallenge, id: "5", icon: <span>✍️</span> },
+  { ...nftChallenge, id: "6", icon: <span>🎭</span> },
+  { ...achatReventeChallenge, id: "7", icon: <span>🔄</span> },
+  { ...marketingChallenge, id: "8", icon: <span>📱</span> },
 ];
 
 const categories = [
@@ -40,6 +41,9 @@ const difficultyLevels = [
   { label: "Intermédiaire", value: "intermediate" },
   { label: "Avancé", value: "advanced" },
 ];
+
+// Export the SortOption type for other files to use
+export { type SortOption };
 
 const Challenges = () => {
   const [searchTerm, setSearchTerm] = useState("");
