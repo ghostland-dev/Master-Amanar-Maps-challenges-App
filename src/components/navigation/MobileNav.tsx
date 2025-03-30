@@ -1,9 +1,10 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Crown } from "lucide-react";
+import { Menu, X, Crown, Info, Phone, FileText, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
 
 interface MobileNavProps {
   isAuthenticated: boolean;
@@ -20,6 +21,8 @@ export const MobileNav = ({
   mobileMenuOpen,
   setMobileMenuOpen
 }: MobileNavProps) => {
+  const { accessRights } = useAuth();
+  
   return (
     <>
       <div className="flex md:hidden items-center space-x-4">
@@ -38,8 +41,8 @@ export const MobileNav = ({
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border py-4 shadow-lg animate-fade-in">
-          <div className="container px-4 mx-auto flex flex-col space-y-3">
+        <div className="md:hidden fixed inset-x-0 top-14 bg-background/95 backdrop-blur-md border-t border-border py-4 shadow-lg animate-fade-in z-40">
+          <div className="container px-4 mx-auto flex flex-col space-y-3 max-h-[80vh] overflow-y-auto">
             <MobileMenuSection title="Challenges">
               <MobileMenuItem to="/challenges?category=Finance" label="Finance" />
               <MobileMenuItem to="/challenges?category=E-commerce" label="E-commerce" />
@@ -62,6 +65,13 @@ export const MobileNav = ({
                 icon={<Crown className="ml-1 h-3 w-3 text-yellow-500" />} 
               />
               <MobileMenuItem to="/library" label="Toute la bibliothèque" isPrimary />
+            </MobileMenuSection>
+            
+            <MobileMenuSection title="À propos">
+              <MobileMenuItem to="/about" label="À propos" icon={<Info className="ml-1 h-3 w-3" />} />
+              <MobileMenuItem to="/contact" label="Contact" icon={<Phone className="ml-1 h-3 w-3" />} />
+              <MobileMenuItem to="/terms-of-service" label="Conditions d'utilisation" icon={<FileText className="ml-1 h-3 w-3" />} />
+              <MobileMenuItem to="/privacy-policy" label="Politique de confidentialité" icon={<Shield className="ml-1 h-3 w-3" />} />
             </MobileMenuSection>
 
             <div className="border-b border-border pb-2">

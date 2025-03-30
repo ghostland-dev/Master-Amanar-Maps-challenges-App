@@ -8,8 +8,13 @@ import { SubscriptionButton } from "./menus/SubscriptionButton";
 import { AuthenticatedControls, UnauthenticatedControls } from "./UserControls";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Building, Link as LinkIcon, BarChart3, Shield } from "lucide-react";
+import { Building, Link as LinkIcon, BarChart3, Shield, Info } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import {
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+} from "@/components/ui/navigation-menu";
 
 interface DesktopNavProps {
   isAuthenticated: boolean;
@@ -28,6 +33,19 @@ export const DesktopNav = ({ isAuthenticated, hasPremiumAccess, user, logout }: 
         <SimulatorsMenu />
         <LibraryMenu />
         <SubscriptionButton hasPremiumAccess={hasPremiumAccess} />
+        
+        {/* Menu À propos */}
+        <NavigationMenuItem>
+          <NavigationMenuTrigger aria-label="À propos">À propos</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid gap-3 p-4 w-[200px]" role="menu">
+              <AboutMenuItem to="/about" title="À propos" />
+              <AboutMenuItem to="/contact" title="Contact" />
+              <AboutMenuItem to="/terms-of-service" title="Conditions d'utilisation" />
+              <AboutMenuItem to="/privacy-policy" title="Politique de confidentialité" />
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
         
         {/* Liens spécifiques basés sur le rôle */}
         {isAuthenticated && accessRights.canAccessPartnerPortal && (
@@ -80,3 +98,11 @@ export const DesktopNav = ({ isAuthenticated, hasPremiumAccess, user, logout }: 
     </div>
   );
 };
+
+// Helper component for about menu items
+const AboutMenuItem = ({ to, title }: { to: string; title: string }) => (
+  <Link to={to} className="p-2 hover:bg-accent rounded-md flex items-center" role="menuitem">
+    <Info className="mr-2 h-4 w-4 text-primary" aria-hidden="true" />
+    <div className="text-sm font-medium">{title}</div>
+  </Link>
+);

@@ -27,10 +27,12 @@ const HeroHeader = () => {
         Suivez simplement les étapes et progressez à votre rythme.
       </p>
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Button size="lg" className="rounded-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all dark:shadow-primary/10">
-          Commencer gratuitement
-          <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
+        <Link to="/auth?tab=register">
+          <Button size="lg" className="rounded-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all dark:shadow-primary/10">
+            Commencer gratuitement
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
         <Link to="/challenges">
           <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base glass hover:bg-primary/10 transition-all dark:glass-dark border-primary/20 hover:border-primary/40">
             Explorer les challenges
