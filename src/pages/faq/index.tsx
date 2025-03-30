@@ -1,43 +1,51 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import MainLayout from "@/components/layouts/MainLayout";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Plus, Minus } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
+interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
 
 const FAQ = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
   
-  // Filter FAQs based on search term
-  const filteredFaqs = faqData.filter(
-    category => 
-      category.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      category.faqs.some(
-        faq => 
-          faq.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
-
+  // Filtrer les FAQs selon la recherche et la catégorie
+  const filteredFAQs = faqData.filter(faq => {
+    const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          faq.answer.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = activeCategory === "all" || faq.category === activeCategory;
+    return matchesSearch && matchesCategory;
+  });
+  
   return (
-    <MainLayout title="FAQ" description="Questions fréquentes sur Amanar Map et ses services">
+    <MainLayout title="FAQ" description="Réponses aux questions fréquentes sur Amanar Map">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold mb-2">Foire Aux Questions</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            Trouvez rapidement des réponses à vos questions les plus courantes sur nos challenges, simulateurs et services.
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Retrouvez les réponses aux questions les plus fréquemment posées sur Amanar Map, nos services et notre fonctionnement.
           </p>
-          
-          {/* Search bar */}
-          <div className="relative max-w-md mx-auto">
+        </div>
+        
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              type="text"
               placeholder="Rechercher une question..."
               className="pl-10"
               value={searchTerm}
@@ -46,116 +54,158 @@ const FAQ = () => {
           </div>
         </div>
         
-        <div className="max-w-3xl mx-auto">
-          {filteredFaqs.map((category) => (
-            <div key={category.id} className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">{category.title}</h2>
-              <Accordion type="single" collapsible className="w-full">
-                {category.faqs.map((faq) => (
-                  <AccordionItem key={faq.id} value={`item-${faq.id}`}>
-                    <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                    <AccordionContent>
-                      <div className="prose prose-sm dark:prose-invert">
-                        <p>{faq.answer}</p>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+        {/* Categories */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <button 
+            onClick={() => setActiveCategory("all")}
+            className={`px-4 py-2 rounded-full text-sm ${
+              activeCategory === "all" 
+                ? "bg-primary text-primary-foreground" 
+                : "bg-secondary/50 text-muted-foreground hover:bg-secondary/80"
+            }`}
+          >
+            Toutes
+          </button>
+          {categories.map((category) => (
+            <button
+              key={category.value}
+              onClick={() => setActiveCategory(category.value)}
+              className={`px-4 py-2 rounded-full text-sm ${
+                activeCategory === category.value 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-secondary/50 text-muted-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {category.label}
+            </button>
           ))}
-          
-          {filteredFaqs.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Aucune question ne correspond à votre recherche. Essayez avec d'autres termes.</p>
+        </div>
+        
+        {/* FAQ Accordion */}
+        <div className="max-w-3xl mx-auto">
+          {filteredFAQs.length > 0 ? (
+            <Accordion type="single" collapsible className="w-full">
+              {filteredFAQs.map((faq) => (
+                <AccordionItem key={faq.id} value={faq.id} className="border-b border-border">
+                  <AccordionTrigger className="py-4 text-left">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pb-4">
+                    <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          ) : (
+            <div className="text-center py-12">
+              <h3 className="text-lg font-medium">Aucun résultat trouvé</h3>
+              <p className="text-muted-foreground mt-2">
+                Essayez d'autres termes de recherche ou parcourez les catégories ci-dessus.
+              </p>
             </div>
           )}
+        </div>
+        
+        {/* Contact */}
+        <div className="mt-12 text-center bg-muted/30 p-8 rounded-lg max-w-3xl mx-auto">
+          <h2 className="text-xl font-semibold mb-2">Vous n'avez pas trouvé votre réponse ?</h2>
+          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+            Notre équipe de support est là pour vous aider. N'hésitez pas à nous contacter si vous avez d'autres questions.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild>
+              <Link to="/contact">Contacter le support</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </MainLayout>
   );
 };
 
-// Mock data for FAQ
-const faqData = [
+// Catégories de FAQ
+const categories = [
+  { label: "Compte", value: "account" },
+  { label: "Abonnements", value: "subscriptions" },
+  { label: "Challenges", value: "challenges" },
+  { label: "Paiements", value: "payments" },
+  { label: "Affiliation", value: "affiliate" },
+  { label: "Technique", value: "technical" }
+];
+
+// Données de FAQ
+const faqData: FAQItem[] = [
   {
-    id: 'general',
-    title: 'Questions générales',
-    faqs: [
-      {
-        id: 1,
-        question: "Qu'est-ce qu'Amanar Map ?",
-        answer: "Amanar Map est une plateforme éducative qui vous aide à développer vos compétences pour générer des revenus en ligne. Nous proposons des challenges guidés, des simulateurs et des ressources pour vous accompagner dans votre parcours vers la liberté financière."
-      },
-      {
-        id: 2,
-        question: "Comment fonctionne la plateforme ?",
-        answer: "Vous pouvez vous inscrire gratuitement et accéder à certains challenges et simulateurs. Notre approche est basée sur des mini-défis pratiques qui vous permettent d'apprendre par la pratique. Chaque challenge est découpé en étapes simples à suivre."
-      },
-      {
-        id: 3,
-        question: "Faut-il des compétences particulières pour commencer ?",
-        answer: "Non, nos challenges sont conçus pour être accessibles aux débutants. Nous vous guidons pas à pas, même si vous n'avez aucune expérience préalable. Vous pourrez progresser à votre rythme."
-      }
-    ]
+    id: "faq-1",
+    question: "Comment créer un compte sur Amanar Map ?",
+    answer: "Pour créer un compte sur Amanar Map, cliquez sur le bouton <strong>S'inscrire</strong> en haut à droite de la page d'accueil. Vous pouvez vous inscrire avec votre adresse email, ou utiliser vos comptes Google ou Facebook pour une inscription rapide. Remplissez ensuite les informations demandées pour finaliser votre profil.",
+    category: "account"
   },
   {
-    id: 'challenges',
-    title: 'Challenges',
-    faqs: [
-      {
-        id: 4,
-        question: "Comment sont structurés les challenges ?",
-        answer: "Chaque challenge est divisé en étapes claires avec des instructions précises. Vous avez accès à des ressources, des conseils et une assistance pour réussir chaque étape. Une fois le challenge terminé, vous recevez un badge de réussite."
-      },
-      {
-        id: 5,
-        question: "Combien de temps faut-il pour compléter un challenge ?",
-        answer: "La durée varie selon le challenge et votre rythme. Certains peuvent être complétés en quelques heures, d'autres peuvent prendre plusieurs semaines. L'important est de progresser régulièrement."
-      },
-      {
-        id: 6,
-        question: "Puis-je travailler sur plusieurs challenges en même temps ?",
-        answer: "Oui, vous pouvez travailler sur plusieurs challenges simultanément. Cependant, nous recommandons de se concentrer sur un seul challenge à la fois pour maximiser vos chances de réussite, surtout si vous débutez."
-      }
-    ]
+    id: "faq-2",
+    question: "Puis-je essayer Amanar Map gratuitement avant de m'abonner ?",
+    answer: "Oui, Amanar Map propose un accès gratuit à certaines fonctionnalités de base et challenges. Vous pouvez explorer la plateforme et tester nos outils sans engagement. Pour accéder à l'ensemble des fonctionnalités premium et challenges avancés, vous devrez souscrire à un abonnement.",
+    category: "subscriptions"
   },
   {
-    id: 'subscriptions',
-    title: 'Abonnements',
-    faqs: [
-      {
-        id: 7,
-        question: "Quels sont les avantages de l'abonnement Premium ?",
-        answer: "L'abonnement Premium vous donne accès à tous les challenges, tous les simulateurs, du contenu exclusif dans la bibliothèque, un accès prioritaire au support, et des analyses détaillées de vos performances."
-      },
-      {
-        id: 8,
-        question: "Comment puis-je annuler mon abonnement ?",
-        answer: "Vous pouvez annuler votre abonnement à tout moment depuis votre espace personnel dans la section 'Paramètres > Abonnement'. L'annulation prendra effet à la fin de votre période de facturation en cours."
-      },
-      {
-        id: 9,
-        question: "Y a-t-il une garantie de remboursement ?",
-        answer: "Oui, nous offrons une garantie de remboursement de 14 jours pour tous nos abonnements. Si vous n'êtes pas satisfait, contactez notre service client dans les 14 jours suivant votre achat."
-      }
-    ]
+    id: "faq-3",
+    question: "Comment fonctionnent les challenges ?",
+    answer: "Les challenges sont des parcours d'apprentissage pratiques qui vous guident étape par étape pour acquérir de nouvelles compétences. Chaque challenge est divisé en étapes concrètes à réaliser. Vous progressez à votre rythme en validant chaque étape, et recevez des récompenses (badges, points XP) à mesure que vous avancez. Vous pouvez également poser des questions et échanger avec la communauté pendant votre progression.",
+    category: "challenges"
   },
   {
-    id: 'technical',
-    title: 'Support technique',
-    faqs: [
-      {
-        id: 10,
-        question: "Comment puis-je contacter le support ?",
-        answer: "Vous pouvez nous contacter via le formulaire de contact sur notre site, par email à support@amanarmap.com, ou via le chat en direct disponible pour les membres Premium."
-      },
-      {
-        id: 11,
-        question: "Le site est-il compatible avec tous les appareils ?",
-        answer: "Oui, notre plateforme est entièrement responsive et fonctionne sur ordinateurs, tablettes et smartphones. Vous pouvez y accéder depuis n'importe quel navigateur moderne."
-      }
-    ]
+    id: "faq-4",
+    question: "Quels modes de paiement acceptez-vous ?",
+    answer: "Nous acceptons les cartes de crédit et de débit (Visa, Mastercard, American Express), PayPal, et dans certains pays, les virements bancaires. Toutes les transactions sont sécurisées et cryptées pour protéger vos informations.",
+    category: "payments"
+  },
+  {
+    id: "faq-5",
+    question: "Comment fonctionne le programme d'affiliation ?",
+    answer: "Notre programme d'affiliation vous permet de gagner des commissions en recommandant Amanar Map. Après inscription au programme, vous recevez un lien de parrainage unique. Lorsque quelqu'un s'abonne via votre lien, vous recevez jusqu'à 30% de commission sur le montant de leur abonnement. Les commissions sont versées mensuellement une fois que votre solde atteint 50€.",
+    category: "affiliate"
+  },
+  {
+    id: "faq-6",
+    question: "Comment puis-je annuler mon abonnement ?",
+    answer: "Pour annuler votre abonnement, connectez-vous à votre compte, allez dans <strong>Paramètres > Abonnements</strong> et cliquez sur \"Gérer mon abonnement\". Suivez ensuite les instructions pour procéder à l'annulation. Vous conserverez l'accès aux fonctionnalités premium jusqu'à la fin de votre période de facturation en cours.",
+    category: "subscriptions"
+  },
+  {
+    id: "faq-7",
+    question: "Mes progrès sont-ils sauvegardés si je change d'appareil ?",
+    answer: "Oui, tous vos progrès sont sauvegardés dans votre compte Amanar Map. Vous pouvez vous connecter depuis n'importe quel appareil (ordinateur, tablette, smartphone) et retrouver votre progression exactement là où vous l'aviez laissée.",
+    category: "technical"
+  },
+  {
+    id: "faq-8",
+    question: "Comment obtenir de l'aide si je bloque sur un challenge ?",
+    answer: "Si vous rencontrez des difficultés sur un challenge, plusieurs options s'offrent à vous :<br><br>1. Consultez les conseils et astuces disponibles dans chaque étape du challenge<br>2. Posez votre question dans la section commentaires du challenge<br>3. Rejoignez notre communauté Discord où d'autres membres et mentors peuvent vous aider<br>4. Pour les abonnés Premium, utilisez la fonctionnalité \"Assistance prioritaire\" pour obtenir une réponse personnalisée de nos experts",
+    category: "challenges"
+  },
+  {
+    id: "faq-9",
+    question: "Puis-je télécharger les ressources pour les consulter hors ligne ?",
+    answer: "Oui, la plupart des ressources (guides PDF, fiches pratiques, templates) peuvent être téléchargées pour une consultation hors ligne. Les vidéos ne sont disponibles qu'en streaming pour protéger notre contenu, mais les abonnés Premium peuvent télécharger certaines vidéos sélectionnées pour un visionnage hors ligne.",
+    category: "technical"
+  },
+  {
+    id: "faq-10",
+    question: "Quand sont versées les commissions d'affiliation ?",
+    answer: "Les commissions d'affiliation sont calculées à la fin de chaque mois et versées le 15 du mois suivant, à condition que votre solde atteigne au moins 50€. Par exemple, les commissions générées en janvier seront versées le 15 février si vous avez atteint le seuil minimum. Les paiements sont effectués par PayPal ou virement bancaire selon votre préférence.",
+    category: "affiliate"
+  },
+  {
+    id: "faq-11",
+    question: "Comment mettre à jour mes informations de paiement ?",
+    answer: "Pour mettre à jour vos informations de paiement, connectez-vous à votre compte et accédez à <strong>Paramètres > Facturation</strong>. Cliquez sur \"Modifier les informations de paiement\" et suivez les instructions pour ajouter ou modifier votre carte ou compte PayPal. Vos informations seront immédiatement mises à jour pour les prochains paiements.",
+    category: "payments"
+  },
+  {
+    id: "faq-12",
+    question: "Comment puis-je récupérer mon mot de passe ?",
+    answer: "Si vous avez oublié votre mot de passe, cliquez sur \"Mot de passe oublié ?\" sur la page de connexion. Saisissez l'adresse email associée à votre compte pour recevoir un lien de réinitialisation. Suivez les instructions dans l'email pour créer un nouveau mot de passe sécurisé.",
+    category: "account"
   }
 ];
 

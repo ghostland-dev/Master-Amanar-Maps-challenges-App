@@ -1,8 +1,19 @@
 
-import { useState } from "react";
+import React from "react";
 import MainLayout from "@/components/layouts/MainLayout";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Search, Filter, Clock, ArrowRight, Play, BookOpen } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -10,207 +21,393 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Clock, PlayCircle, Search, Filter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 
 const Tutorials = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [levelFilter, setLevelFilter] = useState("");
-  
-  // Filter tutorials based on search and filters
-  const filteredTutorials = tutorialsData
-    .filter(tutorial => 
-      tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tutorial.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .filter(tutorial => categoryFilter ? tutorial.category === categoryFilter : true)
-    .filter(tutorial => levelFilter ? tutorial.level === levelFilter : true);
-
-  // Extract unique categories and levels for filters
-  const categories = [...new Set(tutorialsData.map(tutorial => tutorial.category))];
-  const levels = [...new Set(tutorialsData.map(tutorial => tutorial.level))];
-
   return (
-    <MainLayout title="Tutoriels" description="Apprenez pas à pas avec nos tutoriels détaillés">
+    <MainLayout title="Tutoriels" description="Apprenez les compétences essentielles pour réussir en ligne">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-2">Tutoriels</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            Des guides pas à pas pour vous aider à développer vos compétences 
-            et maîtriser les outils essentiels pour réussir en ligne.
+          <h1 className="text-3xl font-bold mb-2">Tutoriels et Formations</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Des guides étape par étape pour maîtriser les compétences essentielles du business en ligne.
+            Disponibles en vidéo et en texte.
           </p>
-          
-          {/* Search and filters */}
-          <div className="max-w-4xl mx-auto mb-10">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative md:col-span-2">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  type="text"
-                  placeholder="Rechercher un tutoriel..."
-                  className="pl-10"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Catégorie" />
+        </div>
+        
+        {/* Filtres et recherche */}
+        <div className="mb-10">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-grow">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                placeholder="Rechercher un tutoriel..."
+                className="pl-10"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Select>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <div className="flex items-center">
+                    <Filter className="mr-2 h-4 w-4" />
+                    <SelectValue placeholder="Catégorie" />
+                  </div>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Toutes les catégories</SelectItem>
-                  {categories.map(category => (
-                    <SelectItem key={category} value={category}>{category}</SelectItem>
-                  ))}
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  <SelectItem value="marketing">Marketing</SelectItem>
+                  <SelectItem value="seo">SEO</SelectItem>
+                  <SelectItem value="copywriting">Copywriting</SelectItem>
+                  <SelectItem value="ecommerce">E-commerce</SelectItem>
+                  <SelectItem value="affiliation">Affiliation</SelectItem>
                 </SelectContent>
               </Select>
-              
-              <Select value={levelFilter} onValueChange={setLevelFilter}>
-                <SelectTrigger>
+              <Select>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <div className="flex items-center">
+                    <Clock className="mr-2 h-4 w-4" />
+                    <SelectValue placeholder="Durée" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les durées</SelectItem>
+                  <SelectItem value="short">Moins de 15 minutes</SelectItem>
+                  <SelectItem value="medium">15-30 minutes</SelectItem>
+                  <SelectItem value="long">Plus de 30 minutes</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Niveau" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les niveaux</SelectItem>
-                  {levels.map(level => (
-                    <SelectItem key={level} value={level}>{level}</SelectItem>
-                  ))}
+                  <SelectItem value="all">Tous les niveaux</SelectItem>
+                  <SelectItem value="beginner">Débutant</SelectItem>
+                  <SelectItem value="intermediate">Intermédiaire</SelectItem>
+                  <SelectItem value="advanced">Avancé</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
         
-        {/* Tutorials grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTutorials.map((tutorial) => (
-            <Link 
-              to={`/tutorials/${tutorial.id}`} 
-              key={tutorial.id}
-              className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300"
-            >
-              <div className="relative">
-                <img 
-                  src={tutorial.image} 
-                  alt={tutorial.title} 
-                  className="w-full h-48 object-cover" 
-                />
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <PlayCircle className="h-16 w-16 text-white" />
-                </div>
-                {tutorial.premium && (
-                  <Badge variant="secondary" className="absolute top-3 right-3 bg-yellow-500/90 text-white">
-                    Premium
-                  </Badge>
-                )}
-              </div>
-              
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <Badge className="bg-primary/10 text-primary border-none">{tutorial.category}</Badge>
-                  <div className="flex items-center text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3 mr-1" />
-                    <span>{tutorial.duration}</span>
+        {/* Onglets */}
+        <Tabs defaultValue="all" className="mb-10">
+          <TabsList className="mb-8">
+            <TabsTrigger value="all">Tous</TabsTrigger>
+            <TabsTrigger value="video">Tutoriels vidéo</TabsTrigger>
+            <TabsTrigger value="text">Guides textuels</TabsTrigger>
+            <TabsTrigger value="interactive">Cours interactifs</TabsTrigger>
+            <TabsTrigger value="started">En cours</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="all">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials.map((tutorial) => (
+                <TutorialCard key={tutorial.id} tutorial={tutorial} />
+              ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="video">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials
+                .filter((tutorial) => tutorial.type === 'video')
+                .map((tutorial) => (
+                  <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="text">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials
+                .filter((tutorial) => tutorial.type === 'text')
+                .map((tutorial) => (
+                  <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="interactive">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials
+                .filter((tutorial) => tutorial.type === 'interactive')
+                .map((tutorial) => (
+                  <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="started">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials
+                .filter((tutorial) => tutorial.progress > 0 && tutorial.progress < 100)
+                .map((tutorial) => (
+                  <TutorialCard key={tutorial.id} tutorial={tutorial} />
+                ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        {/* Section de parcours d'apprentissage */}
+        <div className="bg-muted/30 rounded-lg p-8 mb-10">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-2">Parcours d'apprentissage</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Suivez nos parcours structurés pour acquérir les compétences nécessaires à votre réussite en ligne.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {learningPaths.map((path) => (
+              <Card key={path.id} className="hover:shadow-md transition-all duration-300">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                    {React.cloneElement(path.icon, { className: "h-6 w-6 text-primary" })}
                   </div>
-                </div>
-                
-                <h3 className="text-lg font-semibold mb-2">{tutorial.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{tutorial.description}</p>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-                    {tutorial.level}
-                  </span>
-                  <Button variant="ghost" size="sm" className="text-primary">
-                    Voir le tutoriel
+                  <CardTitle>{path.title}</CardTitle>
+                  <CardDescription>{path.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm mb-2">{path.tutorialsCount} tutoriels • {path.duration}</p>
+                  <div className="flex items-center">
+                    <Progress value={path.completionRate} className="h-2 mr-3" />
+                    <span className="text-sm font-medium">{path.completionRate}%</span>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button asChild className="w-full">
+                    <Link to={`/learning-path/${path.id}`}>
+                      {path.completionRate > 0 ? "Continuer" : "Commencer"}
+                    </Link>
                   </Button>
-                </div>
-              </div>
-            </Link>
-          ))}
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
         
-        {filteredTutorials.length === 0 && (
-          <div className="text-center py-10">
-            <p className="text-muted-foreground mb-4">Aucun tutoriel ne correspond à vos critères.</p>
-            <Button onClick={() => {
-              setSearchTerm("");
-              setCategoryFilter("");
-              setLevelFilter("");
-            }}>
-              Réinitialiser les filtres
+        {/* Appel à l'action */}
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Vous ne trouvez pas ce que vous cherchez ?</h2>
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+            N'hésitez pas à nous suggérer des sujets de tutoriels ou à consulter notre bibliothèque de ressources.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild variant="outline">
+              <Link to="/contact">Suggérer un tutoriel</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/library">Explorer la bibliothèque</Link>
             </Button>
           </div>
-        )}
+        </div>
       </div>
     </MainLayout>
   );
 };
 
-// Mock data for tutorials
-const tutorialsData = [
+interface Tutorial {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  level: "beginner" | "intermediate" | "advanced";
+  duration: string;
+  type: "video" | "text" | "interactive";
+  isPremium: boolean;
+  progress: number;
+  author: string;
+}
+
+// Composant pour afficher un tutoriel
+const TutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
+  const TutorialIcon = () => {
+    switch (tutorial.type) {
+      case 'video':
+        return <Play className="h-4 w-4" />;
+      case 'text':
+        return <BookOpen className="h-4 w-4" />;
+      case 'interactive':
+        return <ArrowRight className="h-4 w-4" />;
+      default:
+        return <BookOpen className="h-4 w-4" />;
+    }
+  };
+  
+  return (
+    <Card className="overflow-hidden hover:shadow-md transition-all duration-300">
+      <div className="relative">
+        <img 
+          src={tutorial.image} 
+          alt={tutorial.title} 
+          className="w-full h-48 object-cover"
+        />
+        {tutorial.isPremium && (
+          <div className="absolute top-2 right-2">
+            <Badge className="bg-yellow-500/90">Premium</Badge>
+          </div>
+        )}
+      </div>
+      <CardContent className="p-6">
+        <div className="flex justify-between items-center mb-2">
+          <Badge variant="outline" className="bg-primary/10 text-primary">{tutorial.category}</Badge>
+          <span className="text-xs text-muted-foreground">{tutorial.duration}</span>
+        </div>
+        <h3 className="font-semibold text-lg mb-2">{tutorial.title}</h3>
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{tutorial.description}</p>
+        
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
+            <span className="text-xs mr-2">Par {tutorial.author}</span>
+          </div>
+          <Badge variant="outline" className={
+            tutorial.level === 'beginner' ? 'bg-green-500/10 text-green-600 border-green-200' :
+            tutorial.level === 'intermediate' ? 'bg-blue-500/10 text-blue-600 border-blue-200' : 
+            'bg-purple-500/10 text-purple-600 border-purple-200'
+          }>
+            {tutorial.level === 'beginner' ? 'Débutant' : 
+             tutorial.level === 'intermediate' ? 'Intermédiaire' : 'Avancé'}
+          </Badge>
+        </div>
+        
+        {tutorial.progress > 0 && (
+          <div className="mb-4">
+            <div className="flex justify-between text-xs mb-1">
+              <span>Progression</span>
+              <span>{tutorial.progress}%</span>
+            </div>
+            <Progress value={tutorial.progress} className="h-1" />
+          </div>
+        )}
+        
+        <Button className="w-full flex items-center justify-center" variant={tutorial.progress > 0 ? "outline" : "default"}>
+          <TutorialIcon />
+          <span className="ml-2">
+            {tutorial.progress > 0 ? "Continuer" : 
+             tutorial.type === 'video' ? "Regarder" : 
+             tutorial.type === 'text' ? "Lire" : "Démarrer"}
+          </span>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+// Données de tutoriels
+const tutorials: Tutorial[] = [
   {
     id: 1,
-    title: "Comment configurer une boutique Shopify en 1 heure",
-    description: "Un guide rapide pour créer et configurer votre première boutique e-commerce sur Shopify, même si vous débutez.",
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2670&auto=format&fit=crop",
-    category: "E-commerce",
-    level: "Débutant",
-    duration: "45 min",
-    premium: false
+    title: "Les bases du Copywriting qui convertit",
+    description: "Apprenez à rédiger des textes persuasifs qui incitent vos visiteurs à passer à l'action.",
+    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2573&auto=format&fit=crop",
+    category: "Copywriting",
+    level: "beginner",
+    duration: "25 min",
+    type: "video",
+    isPremium: false,
+    progress: 65,
+    author: "Léa Dubois"
   },
   {
     id: 2,
-    title: "Maîtriser les annonces Facebook pour l'affiliation",
-    description: "Apprenez à créer des campagnes publicitaires sur Facebook qui convertissent pour vos produits d'affiliation.",
-    image: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?q=80&w=2670&auto=format&fit=crop",
-    category: "Marketing",
-    level: "Intermédiaire",
-    duration: "1h20",
-    premium: true
+    title: "SEO pour les e-commerces",
+    description: "Optimisez votre boutique en ligne pour les moteurs de recherche et attirez plus de clients.",
+    image: "https://images.unsplash.com/photo-1571844307880-751c6d86f3f3?q=80&w=2576&auto=format&fit=crop",
+    category: "SEO",
+    level: "intermediate",
+    duration: "45 min",
+    type: "video",
+    isPremium: true,
+    progress: 0,
+    author: "Thomas Lecomte"
   },
   {
     id: 3,
-    title: "Créer des NFTs qui se vendent",
-    description: "De la conception à la mise en vente, découvrez comment créer et vendre vos premiers NFTs sur les principales plateformes.",
-    image: "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2832&auto=format&fit=crop",
-    category: "Crypto",
-    level: "Intermédiaire",
-    duration: "2h",
-    premium: true
+    title: "Lancer votre première campagne Facebook Ads",
+    description: "Guide complet pour créer et optimiser vos publicités Facebook qui génèrent des résultats.",
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=2574&auto=format&fit=crop",
+    category: "Marketing",
+    level: "beginner",
+    duration: "30 min",
+    type: "interactive",
+    isPremium: false,
+    progress: 0,
+    author: "Sophie Bernard"
   },
   {
     id: 4,
-    title: "Introduction au dropshipping avec AliExpress",
-    description: "Comment démarrer votre business de dropshipping en utilisant AliExpress comme fournisseur principal.",
-    image: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=2831&auto=format&fit=crop",
+    title: "Automatisation des emails pour l'e-commerce",
+    description: "Mettez en place des séquences d'emails efficaces pour augmenter vos ventes.",
+    image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?q=80&w=2574&auto=format&fit=crop",
     category: "E-commerce",
-    level: "Débutant",
-    duration: "1h",
-    premium: false
+    level: "intermediate",
+    duration: "40 min",
+    type: "text",
+    isPremium: true,
+    progress: 20,
+    author: "Marc Duchamp"
   },
   {
     id: 5,
-    title: "Copywriting persuasif pour pages de vente",
-    description: "Les techniques de copywriting qui transforment les visiteurs en clients. Structure et formules éprouvées.",
-    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2573&auto=format&fit=crop",
-    category: "Copywriting",
-    level: "Intermédiaire",
-    duration: "1h30",
-    premium: false
+    title: "Affiliation Amazon de A à Z",
+    description: "Construisez un business d'affiliation rentable avec le programme d'affiliation Amazon.",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=2070&auto=format&fit=crop",
+    category: "Affiliation",
+    level: "beginner",
+    duration: "60 min",
+    type: "video",
+    isPremium: false,
+    progress: 0,
+    author: "Alexandre Martin"
   },
   {
     id: 6,
-    title: "Trading de crypto pour débutants",
-    description: "Les bases pour débuter dans le trading de crypto-monnaies sans se ruiner. Stratégies simples et gestion des risques.",
-    image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?q=80&w=2574&auto=format&fit=crop",
-    category: "Crypto",
-    level: "Débutant",
-    duration: "1h15",
-    premium: false
+    title: "Analyse avancée des données Google Analytics",
+    description: "Exploitez toute la puissance de Google Analytics pour prendre les meilleures décisions.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+    category: "Marketing",
+    level: "advanced",
+    duration: "50 min",
+    type: "interactive",
+    isPremium: true,
+    progress: 0,
+    author: "Claire Dumont"
+  }
+];
+
+// Données des parcours d'apprentissage
+const learningPaths = [
+  {
+    id: 1,
+    title: "Devenir Copywriter",
+    description: "Maîtrisez l'art d'écrire pour vendre et construisez une carrière lucrative en copywriting.",
+    icon: <BookOpen />,
+    tutorialsCount: 8,
+    duration: "5h 30min",
+    completionRate: 40
   },
+  {
+    id: 2,
+    title: "Expert E-commerce",
+    description: "De la création de votre boutique à l'optimisation des conversions et du marketing.",
+    icon: <ArrowRight />,
+    tutorialsCount: 12,
+    duration: "8h 15min",
+    completionRate: 0
+  },
+  {
+    id: 3,
+    title: "Maître de l'Affiliation",
+    description: "Générez des revenus passifs grâce au marketing d'affiliation sur différentes plateformes.",
+    icon: <Play />,
+    tutorialsCount: 10,
+    duration: "6h 45min",
+    completionRate: 15
+  }
 ];
 
 export default Tutorials;
