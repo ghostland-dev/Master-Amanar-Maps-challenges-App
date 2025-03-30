@@ -72,8 +72,8 @@ export function ProfileStats({ userId }: ProfileStatsProps) {
             <TabsTrigger value="activity">Activité</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="xp">
-            <div className="h-80">
+          <TabsContent value="xp" className="mt-2">
+            <div className="h-[300px] w-full">
               <LineChart 
                 data={xpHistoryData} 
                 index="month" 
@@ -84,8 +84,8 @@ export function ProfileStats({ userId }: ProfileStatsProps) {
             </div>
           </TabsContent>
           
-          <TabsContent value="challenges">
-            <div className="h-80">
+          <TabsContent value="challenges" className="mt-2">
+            <div className="h-[300px] w-full flex justify-center">
               <PieChart 
                 data={challengesCompletionData} 
                 index="name" 
@@ -96,8 +96,8 @@ export function ProfileStats({ userId }: ProfileStatsProps) {
             </div>
           </TabsContent>
           
-          <TabsContent value="simulators">
-            <div className="h-80">
+          <TabsContent value="simulators" className="mt-2">
+            <div className="h-[300px] w-full">
               <BarChart 
                 data={simulationsData} 
                 index="month" 
@@ -108,8 +108,8 @@ export function ProfileStats({ userId }: ProfileStatsProps) {
             </div>
           </TabsContent>
           
-          <TabsContent value="activity">
-            <div className="h-80">
+          <TabsContent value="activity" className="mt-2">
+            <div className="h-[300px] w-full">
               <BarChart 
                 data={activityData} 
                 index="day" 

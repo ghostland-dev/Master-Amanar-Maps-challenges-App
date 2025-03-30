@@ -29,18 +29,20 @@ export const RevenueTab = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ChartCard 
           title="Revenus par abonnement" 
           description="Répartition des revenus par type d'abonnement"
         >
-          <PieChart 
-            data={revenueBySubscriptionData} 
-            index="name" 
-            category="value" 
-            colors={["#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"]}
-            valueFormatter={(value) => `${value}%`}
-          />
+          <div className="h-[300px] pt-4">
+            <PieChart 
+              data={revenueBySubscriptionData} 
+              index="name" 
+              category="value" 
+              colors={["#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"]}
+              valueFormatter={(value) => `${value}%`}
+            />
+          </div>
         </ChartCard>
 
         <ChartCard 
@@ -48,7 +50,7 @@ export const RevenueTab = () => {
           description="Revenus mensuels sur les 12 derniers mois"
           className="h-auto"
         >
-          <div className="h-80">
+          <div className="h-[300px] pt-4">
             <LineChart 
               data={yearlyRevenueData} 
               index="month" 

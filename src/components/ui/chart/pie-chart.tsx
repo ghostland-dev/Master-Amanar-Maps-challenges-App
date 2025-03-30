@@ -41,7 +41,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
       className={className}
     >
       {({ chartId }) => (
-        <RechartsPrimitive.PieChart>
+        <RechartsPrimitive.PieChart width={400} height={300}>
           <RechartsPrimitive.Pie
             data={data}
             dataKey={category}
@@ -50,6 +50,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
             cy="50%"
             outerRadius={80}
             fill="#8884d8"
+            label
           >
             {data.map((entry, i) => (
               <RechartsPrimitive.Cell
@@ -80,7 +81,14 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>((
               );
             }}
           />
-          {showLegend && <RechartsPrimitive.Legend />}
+          {showLegend && (
+            <RechartsPrimitive.Legend 
+              layout="horizontal" 
+              verticalAlign="bottom" 
+              align="center"
+              wrapperStyle={{ paddingTop: '10px' }}
+            />
+          )}
         </RechartsPrimitive.PieChart>
       )}
     </ChartContainer>
