@@ -7,7 +7,7 @@ import { getChallengeData } from "@/utils/challenge";
 import ChallengeInfo from "@/components/challenge/ChallengeInfo";
 import ChallengeResources from "@/components/challenge/ChallengeResources";
 import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { ChallengeHeader } from "./ChallengeHeader";
 import { ChallengeBadges } from "./ChallengeBadges";
 import { ChallengeTabs } from "./ChallengeTabs";

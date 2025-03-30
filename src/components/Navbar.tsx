@@ -6,7 +6,6 @@ import { Logo } from "@/components/navigation/Logo";
 import { DesktopNav } from "@/components/navigation/DesktopNav";
 import { MobileNav } from "@/components/navigation/MobileNav";
 import { motion } from "framer-motion";
-import MobileSiteMenu from "@/components/MobileSiteMenu";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,11 +46,6 @@ const Navbar = () => {
           <Logo />
         </motion.div>
 
-        {/* Mobile Site Navigation Menu (only for site navigation) */}
-        <div className="md:hidden">
-          <MobileSiteMenu />
-        </div>
-
         {/* Desktop Navigation */}
         <DesktopNav 
           isAuthenticated={isAuthenticated} 
@@ -60,7 +54,7 @@ const Navbar = () => {
           logout={logout}
         />
 
-        {/* Mobile Navigation (only for user controls) */}
+        {/* Mobile Navigation */}
         <MobileNav 
           isAuthenticated={isAuthenticated} 
           hasPremiumAccess={hasPremiumAccess} 

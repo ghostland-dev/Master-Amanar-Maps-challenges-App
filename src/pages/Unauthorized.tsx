@@ -1,41 +1,61 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Shield, Home } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShieldX, Home, ArrowLeft } from 'lucide-react';
+import MainLayout from '@/components/layouts/MainLayout';
+import { useAuth } from '@/context/AuthContext';
 
-const Unauthorized: React.FC = () => {
+const Unauthorized = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-md mx-auto text-center">
-        <div className="flex justify-center mb-6">
-          <ShieldX className="h-24 w-24 text-destructive" />
-        </div>
-        
-        <h1 className="text-3xl font-bold mb-4">Accès refusé</h1>
-        
-        <p className="text-muted-foreground mb-8">
-          Vous n'avez pas les autorisations nécessaires pour accéder à cette page. 
-          Veuillez contacter un administrateur si vous pensez que c'est une erreur.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            variant="outline" 
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" /> Retour
-          </Button>
-          
-          <Link to="/">
-            <Button className="flex items-center gap-2 w-full">
-              <Home className="h-4 w-4" /> Accueil
+    <MainLayout title="Accès refusé" description="Vous n'avez pas les droits nécessaires pour accéder à cette page">
+      <div className="min-h-[70vh] flex items-center justify-center px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 rounded-full bg-destructive/10">
+                <Shield className="h-10 w-10 text-destructive" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl">Accès refusé</CardTitle>
+            <CardDescription>
+              Vous n'avez pas les autorisations nécessaires pour accéder à cette page.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-muted-foreground text-center mb-4">
+              {user ? (
+                <p>
+                  Vous êtes connecté en tant que <span className="font-semibold">{user.name}</span> avec le 
+                  rôle <span className="font-semibold">{user.role}</span>, qui ne dispose pas des droits d'accès pour cette section.
+                </p>
+              ) : (
+                <p>Veuillez vous connecter avec un compte disposant des droits nécessaires.</p>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-2">
+            <Button 
+              onClick={() => navigate("/")}
+              className="w-full"
+            >
+              <Home className="mr-2 h-4 w-4" />
+              Retour à l'accueil
             </Button>
-          </Link>
-        </div>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate(-1)}
+              className="w-full"
+            >
+              Retour à la page précédente
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

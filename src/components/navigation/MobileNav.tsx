@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
@@ -32,14 +33,14 @@ export const MobileNav = ({
         {/* Theme Toggle for Mobile */}
         <ThemeToggle />
         
-        {/* User menu toggle button */}
-        <MobileMenuToggle
-          isOpen={mobileMenuOpen}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        {/* Mobile Menu Toggle Button */}
+        <MobileMenuToggle 
+          mobileMenuOpen={mobileMenuOpen} 
+          setMobileMenuOpen={setMobileMenuOpen} 
         />
       </div>
 
-      {/* Legacy Mobile Menu Dropdown with Animation - used for user account stuff */}
+      {/* Mobile Menu Dropdown with Animation */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenuContent 
