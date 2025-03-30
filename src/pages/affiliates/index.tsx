@@ -1,300 +1,262 @@
 
+import React from "react";
 import MainLayout from "@/components/layouts/MainLayout";
 import { Button } from "@/components/ui/button";
+import { Check, HelpCircle, ArrowRight } from "lucide-react";
 import {
-  CheckCircle,
-  TrendingUp,
-  Link as LinkIcon,
-  DollarSign,
-  Award,
-  BarChart3,
-  ArrowRight
-} from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
-import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
 
 const Affiliates = () => {
-  const { isAuthenticated } = useAuth();
-  
   return (
     <MainLayout title="Programme d'affiliation" description="Gagnez des commissions en recommandant Amanar Map">
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-14">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">Programme d'Affiliation</h1>
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold mb-4">Programme d'affiliation Amanar Map</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            Recommandez Amanar Map à votre audience et gagnez des commissions généreuses 
-            sur chaque abonnement réalisé grâce à votre lien.
+            Recommandez notre plateforme et gagnez jusqu'à 30% de commission sur chaque abonnement généré.
+            Un programme pensé pour être simple, transparent et rentable.
           </p>
-          
-          {isAuthenticated ? (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
               <Link to="/affiliate-dashboard">
-                Accéder à mon tableau de bord
-                <ArrowRight className="ml-2 h-4 w-4" />
+                Rejoindre le programme
               </Link>
             </Button>
-          ) : (
-            <Button size="lg" asChild>
-              <Link to="/auth?redirect=/affiliates">
-                Devenir affilié
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <Button size="lg" variant="outline" asChild>
+              <a href="#how-it-works">
+                Comment ça marche
+              </a>
             </Button>
-          )}
+          </div>
         </div>
-        
-        {/* Program Benefits */}
-        <div className="max-w-5xl mx-auto mb-20">
-          <h2 className="text-2xl font-bold text-center mb-10">Pourquoi devenir affilié ?</h2>
-          
+
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <StatCard
+            value="30%"
+            label="Commission"
+            description="Sur chaque abonnement généré par votre lien"
+          />
+          <StatCard
+            value="365"
+            label="Jours de cookie"
+            description="Chaque visiteur est tracé pendant un an"
+          />
+          <StatCard
+            value="€0"
+            label="Coût d'entrée"
+            description="Rejoindre notre programme est totalement gratuit"
+          />
+        </div>
+
+        {/* How it works */}
+        <div id="how-it-works" className="mb-16 scroll-mt-20">
+          <h2 className="text-2xl font-bold text-center mb-10">Comment ça fonctionne ?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <BenefitCard 
-              icon={<DollarSign />} 
-              title="Commissions attractives" 
-              description="Gagnez 30% de commission sur tous les abonnements générés via votre lien, pendant toute la durée de l'abonnement."
+            <Step
+              number={1}
+              title="Inscrivez-vous"
+              description="Créez votre compte d'affilié gratuitement et accédez à votre tableau de bord"
             />
-            <BenefitCard 
-              icon={<LinkIcon />} 
-              title="Liens et outils personnalisés" 
-              description="Accédez à des liens de tracking personnalisés et des outils marketing pour maximiser vos conversions."
+            <Step
+              number={2}
+              title="Partagez votre lien"
+              description="Utilisez vos liens personnalisés sur vos canaux de communication"
             />
-            <BenefitCard 
-              icon={<BarChart3 />} 
-              title="Analytics détaillés" 
-              description="Suivez vos performances en temps réel avec des statistiques complètes sur vos clics et conversions."
+            <Step
+              number={3}
+              title="Gagnez des commissions"
+              description="Recevez jusqu'à 30% sur chaque abonnement généré"
             />
           </div>
         </div>
-        
-        {/* How It Works */}
-        <div className="max-w-4xl mx-auto mb-20">
-          <h2 className="text-2xl font-bold text-center mb-10">Comment ça fonctionne</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 border border-dashed border-primary/40 rounded-xl">
-              <div className="relative w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">1</span>
-                <LinkIcon className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold mb-2">Inscrivez-vous</h3>
-              <p className="text-sm text-muted-foreground">
-                Créez votre compte affilié et obtenez votre lien de parrainage unique.
-              </p>
-            </div>
-            
-            <div className="text-center p-6 border border-dashed border-primary/40 rounded-xl">
-              <div className="relative w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">2</span>
-                <TrendingUp className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold mb-2">Partagez</h3>
-              <p className="text-sm text-muted-foreground">
-                Partagez votre lien sur vos réseaux, blog, emails ou autres canaux.
-              </p>
-            </div>
-            
-            <div className="text-center p-6 border border-dashed border-primary/40 rounded-xl">
-              <div className="relative w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">3</span>
-                <DollarSign className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="font-semibold mb-2">Gagnez</h3>
-              <p className="text-sm text-muted-foreground">
-                Recevez vos commissions chaque mois pour tous les abonnements générés.
-              </p>
-            </div>
-          </div>
-          
-          <div className="mt-10 p-6 rounded-xl bg-secondary/30">
-            <h3 className="font-semibold mb-3 text-center">Programme VIP pour les grands affiliés</h3>
-            <p className="text-center text-muted-foreground mb-4">
-              Vous avez une large audience ? Contactez-nous pour discuter de commissions personnalisées 
-              et de ressources marketing exclusives.
-            </p>
-            <div className="text-center">
-              <Button variant="outline" asChild>
-                <a href="mailto:affiliate@amanarmap.com">Contacter l'équipe d'affiliation</a>
-              </Button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Commission Structure */}
-        <div className="max-w-3xl mx-auto mb-20">
-          <h2 className="text-2xl font-bold text-center mb-10">Structure de commissions</h2>
-          
-          <div className="overflow-hidden rounded-lg border border-border">
-            <div className="grid grid-cols-3 font-medium bg-secondary/50 p-4">
-              <div>Abonnement</div>
-              <div className="text-center">Prix</div>
-              <div className="text-right">Votre commission</div>
-            </div>
-            <Separator />
-            <div className="grid grid-cols-3 p-4">
-              <div>Mensuel</div>
-              <div className="text-center">19,99€/mois</div>
-              <div className="text-right font-medium">6€/mois</div>
-            </div>
-            <Separator />
-            <div className="grid grid-cols-3 p-4">
-              <div>Annuel</div>
-              <div className="text-center">199€/an</div>
-              <div className="text-right font-medium">60€/an</div>
-            </div>
-            <Separator />
-            <div className="grid grid-cols-3 p-4 bg-secondary/30">
-              <div>Enterprise</div>
-              <div className="text-center">499€/an</div>
-              <div className="text-right font-medium">150€/an</div>
-            </div>
-          </div>
-          
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            * Les commissions sont versées après une période de garantie de 30 jours
-          </div>
-        </div>
-        
-        {/* Testimonials */}
-        <div className="max-w-5xl mx-auto mb-20">
-          <h2 className="text-2xl font-bold text-center mb-10">Ce que disent nos affiliés</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <p className="italic text-muted-foreground mb-4">"{testimonial.quote}"</p>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mr-3">
-                      {testimonial.initial}
-                    </div>
-                    <div>
-                      <p className="font-medium">{testimonial.name}</p>
-                      <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                    </div>
+
+        {/* Commission Plans */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-10">Plans de commission</h2>
+          <Tabs defaultValue="standard" className="w-full max-w-4xl mx-auto">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="standard">Standard</TabsTrigger>
+              <TabsTrigger value="premium">Premium</TabsTrigger>
+            </TabsList>
+            <TabsContent value="standard">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Plan Standard</CardTitle>
+                  <CardDescription>Pour tous les affiliés qui débutent</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <CommissionItem
+                      percentage="20%"
+                      description="Sur les abonnements mensuels"
+                    />
+                    <CommissionItem
+                      percentage="25%"
+                      description="Sur les abonnements annuels"
+                    />
+                    <CommissionItem
+                      percentage="10%"
+                      description="Sur les renouvellements"
+                    />
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Button className="w-full" asChild>
+                    <Link to="/affiliate-dashboard">Démarrer maintenant</Link>
+                  </Button>
+                </CardFooter>
               </Card>
-            ))}
-          </div>
-        </div>
-        
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto mb-20">
-          <h2 className="text-2xl font-bold text-center mb-10">Questions fréquentes</h2>
-          
-          <Tabs defaultValue="general" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="general">Général</TabsTrigger>
-              <TabsTrigger value="payments">Paiements</TabsTrigger>
-            </TabsList>
-            <TabsContent value="general" className="mt-6 space-y-4">
-              <FaqItem 
-                question="Qui peut devenir affilié ?" 
-                answer="Toute personne majeure peut devenir affilié. Notre programme est particulièrement adapté aux blogueurs, influenceurs, formateurs, coachs et entrepreneurs dans les domaines du marketing digital, e-commerce, et business en ligne." 
-              />
-              <FaqItem 
-                question="Combien de temps le cookie d'affiliation est-il valide ?" 
-                answer="Notre cookie d'affiliation est valide pendant 60 jours. Cela signifie que si un visiteur clique sur votre lien, vous serez crédité de la commission si ce visiteur s'abonne dans les 60 jours suivant le clic." 
-              />
-              <FaqItem 
-                question="Puis-je promouvoir Amanar Map sur plusieurs canaux ?" 
-                answer="Oui, vous pouvez promouvoir Amanar Map sur tous vos canaux : site web, blog, réseaux sociaux, emails, etc. Nous fournissons des outils et ressources pour vous aider sur chaque canal." 
-              />
             </TabsContent>
-            
-            <TabsContent value="payments" className="mt-6 space-y-4">
-              <FaqItem 
-                question="Quand sont versées les commissions ?" 
-                answer="Les commissions sont versées mensuellement, le 15 du mois suivant. Par exemple, les commissions générées en janvier seront versées le 15 février." 
-              />
-              <FaqItem 
-                question="Quel est le montant minimum pour être payé ?" 
-                answer="Le seuil minimum de paiement est de 50€. Si vous n'atteignez pas ce montant, vos commissions sont reportées au mois suivant jusqu'à atteindre ce seuil." 
-              />
-              <FaqItem 
-                question="Quelles sont les méthodes de paiement disponibles ?" 
-                answer="Nous proposons plusieurs méthodes de paiement : virement bancaire, PayPal, et Stripe. Vous pouvez choisir votre méthode préférée dans votre tableau de bord d'affiliation." 
-              />
+            <TabsContent value="premium">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Plan Premium</CardTitle>
+                  <CardDescription>Pour les affiliés qui génèrent plus de 10 ventes par mois</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <CommissionItem
+                      percentage="25%"
+                      description="Sur les abonnements mensuels"
+                    />
+                    <CommissionItem
+                      percentage="30%"
+                      description="Sur les abonnements annuels"
+                    />
+                    <CommissionItem
+                      percentage="15%"
+                      description="Sur les renouvellements"
+                    />
+                    <CommissionItem
+                      percentage="5%"
+                      description="Commission à 2 niveaux sur les affiliés que vous parrainez"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full" variant="outline" asChild>
+                    <Link to="/contact">Contacter l'équipe</Link>
+                  </Button>
+                </CardFooter>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>
-        
-        {/* Call to Action */}
-        <div className="max-w-3xl mx-auto text-center bg-gradient-to-r from-primary/10 via-secondary/50 to-primary/10 p-10 rounded-xl">
-          <Award className="h-12 w-12 text-primary mx-auto mb-4" />
+
+        {/* FAQ */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-10">Questions fréquentes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <FaqItem
+              question="Quand sont versées les commissions ?"
+              answer="Les commissions sont versées le 15 de chaque mois pour le mois précédent, à condition que votre solde atteigne le minimum de 50€."
+            />
+            <FaqItem
+              question="Comment sont tracées les ventes ?"
+              answer="Nous utilisons des cookies avec une durée de vie de 365 jours. Si un utilisateur clique sur votre lien et s'abonne dans l'année, vous recevez votre commission."
+            />
+            <FaqItem
+              question="Puis-je promouvoir vos services sur les réseaux sociaux ?"
+              answer="Absolument ! Vous êtes libre d'utiliser tous les canaux de communication que vous souhaitez, tant que vous respectez nos conditions d'utilisation."
+            />
+            <FaqItem
+              question="Y a-t-il un minimum de ventes à réaliser ?"
+              answer="Non, il n'y a pas de minimum de ventes. Vous pouvez promouvoir nos services à votre rythme sans aucune contrainte de performance."
+            />
+          </div>
+          <div className="text-center mt-10">
+            <Button variant="outline" asChild>
+              <Link to="/faq" className="flex items-center">
+                Voir toutes les FAQ <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center bg-gradient-to-r from-primary/10 to-secondary/50 p-10 rounded-xl">
           <h2 className="text-2xl font-bold mb-4">Prêt à commencer ?</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-            Rejoignez notre programme d'affiliation dès aujourd'hui et commencez à gagner 
-            des commissions en partageant une plateforme que vous adorez.
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+            Rejoignez notre programme d'affiliation dès aujourd'hui et commencez à gagner des commissions en recommandant une plateforme que vous appréciez.
           </p>
-          
-          {isAuthenticated ? (
-            <Button size="lg" asChild>
-              <Link to="/affiliate-dashboard">
-                Accéder à mon tableau de bord
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          ) : (
-            <Button size="lg" asChild>
-              <Link to="/auth?redirect=/affiliates">
-                Devenir affilié maintenant
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          )}
+          <Button size="lg" asChild>
+            <Link to="/affiliate-dashboard">
+              Devenir affilié maintenant
+            </Link>
+          </Button>
         </div>
       </div>
     </MainLayout>
   );
 };
 
-// Benefit Card Component
-const BenefitCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className="p-6 rounded-xl bg-card border border-border">
-    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-      {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-primary" })}
+// Helper components
+const StatCard = ({ value, label, description }: { value: string, label: string, description: string }) => (
+  <div className="bg-secondary/20 p-6 rounded-lg text-center">
+    <p className="text-4xl font-bold text-primary">{value}</p>
+    <h3 className="text-xl font-semibold mt-2 mb-1">{label}</h3>
+    <p className="text-sm text-muted-foreground">{description}</p>
+  </div>
+);
+
+const Step = ({ number, title, description }: { number: number, title: string, description: string }) => (
+  <div className="flex flex-col items-center text-center">
+    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-4">
+      {number}
     </div>
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <h3 className="text-lg font-semibold mb-2">{title}</h3>
     <p className="text-muted-foreground">{description}</p>
   </div>
 );
 
-// FAQ Item Component
-const FaqItem = ({ question, answer }: { question: string, answer: string }) => (
-  <div className="border border-border rounded-lg p-4">
-    <h4 className="font-medium flex items-center mb-2">
-      <CheckCircle className="h-4 w-4 text-primary mr-2" />
-      {question}
-    </h4>
-    <p className="text-muted-foreground text-sm pl-6">{answer}</p>
+const CommissionItem = ({ percentage, description }: { percentage: string, description: string }) => (
+  <div className="flex items-center justify-between">
+    <div className="flex items-center">
+      <Check className="h-5 w-5 text-primary mr-2" />
+      <span>{description}</span>
+    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center">
+            <span className="font-bold">{percentage}</span>
+            <HelpCircle className="h-4 w-4 ml-1 text-muted-foreground" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">Commission calculée sur le montant HT</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   </div>
 );
 
-// Testimonials Data
-const testimonials = [
-  {
-    quote: "Amanar Map est devenu ma principale source de revenu d'affiliation. Mes abonnés adorent la plateforme et les commissions récurrentes sont un vrai plus.",
-    name: "Thomas M.",
-    initial: "T",
-    role: "Blogueur entrepreneurial"
-  },
-  {
-    quote: "Le système d'affiliation est super simple à utiliser et le support répond toujours rapidement. J'ai déjà généré plus de 2000€ en 3 mois.",
-    name: "Sophie L.",
-    initial: "S",
-    role: "Coach en marketing digital"
-  },
-  {
-    quote: "Les ressources marketing qu'ils fournissent sont vraiment efficaces. J'ai pu facilement intégrer leur promotion dans mon podcast sans que ça paraisse forcé.",
-    name: "Marc D.",
-    initial: "M",
-    role: "Podcaster"
-  }
-];
+const FaqItem = ({ question, answer }: { question: string, answer: string }) => (
+  <div className="border border-border rounded-lg p-4">
+    <h4 className="font-medium mb-2">{question}</h4>
+    <p className="text-sm text-muted-foreground">{answer}</p>
+  </div>
+);
 
 export default Affiliates;

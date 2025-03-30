@@ -1,6 +1,7 @@
 
+import React from "react";
 import MainLayout from "@/components/layouts/MainLayout";
-import { Button } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
