@@ -36,12 +36,12 @@ const Library = () => {
   }, [user]);
 
   const handleFilterChange = (values: {
-    category?: string;
-    type?: string;
-    difficulty?: string;
-    completed?: boolean;
-    premium?: "all" | "free" | "premium";
-    search?: string;
+    category: string;
+    type: string;
+    difficulty: string;
+    completed: boolean;
+    premium: "all" | "free" | "premium";
+    search: string;
   }) => {
     setSelectedCategory(values.category || "");
     setSelectedType(values.type || "");
