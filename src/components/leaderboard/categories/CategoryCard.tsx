@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { LucideIcon } from "lucide-react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface CategoryStats {
   participants: number;
@@ -17,6 +18,7 @@ interface CategoryCardProps {
   stats: CategoryStats;
   isSelected: boolean;
   onClick: () => void;
+  image?: string;
 }
 
 export const CategoryCard = ({ 
@@ -25,15 +27,27 @@ export const CategoryCard = ({
   icon: CategoryIcon, 
   stats, 
   isSelected, 
-  onClick 
+  onClick,
+  image
 }: CategoryCardProps) => {
   return (
     <Card 
-      className={`hover:shadow-md transition-all cursor-pointer ${
+      className={`hover:shadow-md transition-all cursor-pointer h-full ${
         isSelected ? "border-primary bg-primary/5" : ""
       }`}
       onClick={onClick}
     >
+      {image && (
+        <AspectRatio ratio={16/9} className="bg-muted rounded-t-lg overflow-hidden">
+          <img 
+            src={image} 
+            alt={name}
+            className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-60"></div>
+        </AspectRatio>
+      )}
+      
       <CardContent className="p-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
