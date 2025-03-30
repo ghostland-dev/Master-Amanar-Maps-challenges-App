@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -168,9 +169,10 @@ const Challenges = () => {
                           title={challenge.title}
                           description={challenge.description}
                           category={challenge.category || ""}
-                          difficulty={challenge.difficulty}
+                          difficulty={challenge.difficulty as "beginner" | "intermediate" | "advanced"}
                           duration={challenge.duration || ""}
                           xp={challenge.xp || 0}
+                          icon={<span>🏆</span>}
                         />
                       </motion.div>
                     ))}
