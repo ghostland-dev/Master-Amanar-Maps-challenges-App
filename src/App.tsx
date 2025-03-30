@@ -27,6 +27,18 @@ import Contact from "./pages/Contact";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
+// Nouvelles pages ajoutées
+import Blog from "./pages/blog";
+import FAQ from "./pages/faq";
+import Tutorials from "./pages/tutorials";
+import Tools from "./pages/tools";
+import Events from "./pages/events";
+import Careers from "./pages/careers";
+import Press from "./pages/press";
+import Affiliates from "./pages/affiliates";
+import Cookies from "./pages/cookies";
+import GDPR from "./pages/gdpr";
+
 // Pages protégées (utilisateur connecté)
 import Dashboard from "./pages/Dashboard";
 import Challenges from "./pages/challenges";
@@ -76,6 +88,18 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              
+              {/* Nouvelles routes pour les pages ajoutées */}
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/tutorials" element={<Tutorials />} />
+              <Route path="/tools" element={<Tools />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/press" element={<Press />} />
+              <Route path="/affiliates" element={<Affiliates />} />
+              <Route path="/cookies" element={<Cookies />} />
+              <Route path="/gdpr" element={<GDPR />} />
               
               {/* Routes protégées (utilisateur connecté) */}
               <Route path="/dashboard" element={

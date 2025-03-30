@@ -19,6 +19,7 @@ export const SubscriptionLink = ({
       to="/subscriptions"
       label="Abonnements"
       icon={Crown}
+      iconClassName={hasPremiumAccess ? "text-yellow-500" : undefined}
       isActive={isActive("/subscriptions")}
       badge={
         hasPremiumAccess ? (
