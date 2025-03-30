@@ -30,7 +30,7 @@ export const NavItem = ({
   className = "",
   iconClassName = "",
 }: NavItemProps) => {
-  // If there are children, it's a dropdown
+  // Si il y a des enfants, c'est un menu déroulant
   if (children) {
     return (
       <NavigationMenuItem className={className}>
@@ -45,14 +45,14 @@ export const NavItem = ({
             <span>{label}</span>
           </div>
         </NavigationMenuTrigger>
-        <NavigationMenuContent>
+        <NavigationMenuContent className="origin-top">
           <div className="w-[220px] p-2">{children}</div>
         </NavigationMenuContent>
       </NavigationMenuItem>
     );
   }
 
-  // If there's no children, it's a simple link
+  // Si il n'y a pas d'enfants, c'est un lien simple
   return (
     <NavigationMenuItem className={className}>
       <Link
@@ -70,7 +70,7 @@ export const NavItem = ({
   );
 };
 
-// For dropdown menu items
+// Pour les éléments du menu déroulant
 export const NavDropdownItem = ({
   to,
   label,
