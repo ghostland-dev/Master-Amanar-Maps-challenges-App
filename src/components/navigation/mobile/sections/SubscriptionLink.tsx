@@ -18,7 +18,7 @@ export const SubscriptionLink = ({
     <MobileNavLink
       to="/subscriptions"
       label="Abonnements"
-      icon={hasPremiumAccess ? (props) => <Crown {...props} className="h-5 w-5 text-yellow-500" /> : Crown}
+      icon={Crown}
       isActive={isActive("/subscriptions")}
       badge={
         hasPremiumAccess ? (
