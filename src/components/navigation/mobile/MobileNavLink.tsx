@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface MobileNavLinkProps {
   to: string;
@@ -11,6 +12,7 @@ interface MobileNavLinkProps {
   badge?: ReactNode;
   isActive?: boolean;
   onClick?: () => void;
+  iconClassName?: string;
 }
 
 export const MobileNavLink = ({
@@ -20,6 +22,7 @@ export const MobileNavLink = ({
   badge,
   isActive = false,
   onClick,
+  iconClassName,
 }: MobileNavLinkProps) => (
   <Link
     to={to}
@@ -29,7 +32,7 @@ export const MobileNavLink = ({
     onClick={onClick}
   >
     <div className="flex items-center space-x-3">
-      {Icon && <Icon className="h-5 w-5" />}
+      {Icon && <Icon className={cn("h-5 w-5", iconClassName)} />}
       <span className="font-medium">{label}</span>
       {badge}
     </div>
