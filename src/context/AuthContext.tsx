@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 
 export type SubscriptionTier = 'free' | 'premium' | 'enterprise';

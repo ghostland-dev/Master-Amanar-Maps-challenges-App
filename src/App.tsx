@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Library from "./pages/Library";
 import LibraryItem from "./pages/LibraryItem";
 import Challenges from "./pages/challenges";
+import Challenge from "./pages/challenge";
 import Simulator from "./pages/Simulators";
 import Profile from "./pages/Profile";
 import AuthPage from "./pages/Auth";
@@ -37,9 +38,9 @@ import Unauthorized from "./pages/Unauthorized";
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <ResourceModalProvider>
-          <Router>
+      <Router>
+        <AuthProvider>
+          <ResourceModalProvider>
             <Routes>
               {/* Main Routes */}
               <Route path="/" element={<MainLayout />}>
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/library" element={<Library />} />
                 <Route path="/library/:id" element={<LibraryItem />} />
                 <Route path="/challenges" element={<Challenges />} />
+                <Route path="/challenge/:id" element={<Challenge />} />
                 <Route path="/simulators" element={<Simulator />} />
                 <Route path="/margin-calculator" element={<MarginCalculator />} />
                 <Route path="/ad-budget-calculator" element={<AdBudgetCalculator />} />
@@ -148,9 +150,9 @@ function App() {
                 }
               />
             </Routes>
-          </Router>
-        </ResourceModalProvider>
-      </AuthProvider>
+          </ResourceModalProvider>
+        </AuthProvider>
+      </Router>
     </ThemeProvider>
   );
 }
