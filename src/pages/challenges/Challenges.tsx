@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Search, Filter, Grid3X3, List } from "lucide-react";
-import { ChallengeCard } from "@/components/ChallengeCard";
+import ChallengeCard from "@/components/ChallengeCard"; // Fixed import
 import { ContextualPopover } from "@/components/navigation/ContextualPopover";
 import { AnimatePresence, motion } from "framer-motion";
 import { dropshippingChallenge, cryptoChallenge, arbitrageChallenge,
@@ -60,7 +60,7 @@ const Challenges = () => {
                             challenge.description.toLowerCase().includes(searchTerm.toLowerCase());
         
         const matchesCategory = selectedCategory === "all" || 
-                              (challenge.categories && challenge.categories.includes(selectedCategory));
+                              challenge.category === selectedCategory;
         
         const matchesDifficulty = selectedDifficulty === "all" || 
                                 challenge.difficulty === selectedDifficulty;
@@ -253,7 +253,16 @@ const Challenges = () => {
                   <AnimatePresence>
                     {filteredChallenges.map((challenge) => (
                       <motion.div key={challenge.id} variants={itemVariants}>
-                        <ChallengeCard challenge={challenge} />
+                        <ChallengeCard
+                          id={challenge.id}
+                          title={challenge.title}
+                          description={challenge.description}
+                          category={challenge.category || ""}
+                          icon={challenge.icon}
+                          difficulty={challenge.difficulty}
+                          duration={challenge.duration || ""}
+                          xp={challenge.xp || 0}
+                        />
                       </motion.div>
                     ))}
                   </AnimatePresence>
@@ -318,9 +327,7 @@ const Challenges = () => {
                         <h3 className="text-xl font-bold mb-2">{challenge.title}</h3>
                         <p className="text-muted-foreground line-clamp-2 mb-4">{challenge.description}</p>
                         <div className="flex flex-wrap gap-2 mb-4">
-                          {challenge.categories?.map((category) => (
-                            <Badge key={category} variant="secondary">{category}</Badge>
-                          ))}
+                          <Badge variant="secondary">{challenge.category}</Badge>
                           <Badge variant="outline">{challenge.difficulty}</Badge>
                         </div>
                         <div className="flex justify-between items-center">
@@ -328,7 +335,7 @@ const Challenges = () => {
                             <a href={`/challenge/${challenge.id}`}>Voir le challenge</a>
                           </Button>
                           <span className="text-sm text-muted-foreground">
-                            {challenge.estimatedTime} min
+                            {challenge.duration}
                           </span>
                         </div>
                       </div>

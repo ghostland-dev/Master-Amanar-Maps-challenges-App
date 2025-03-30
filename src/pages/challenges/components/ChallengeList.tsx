@@ -30,8 +30,14 @@ const ChallengeList = ({ challenges, resetFilters }: ChallengeListProps) => {
       {challenges.map((challenge) => (
         <ChallengeCard 
           key={challenge.id}
-          {...challenge}
-          category={categoryLabels[challenge.category]}
+          id={challenge.id}
+          title={challenge.title}
+          description={challenge.description}
+          category={categoryLabels[challenge.category] || challenge.category}
+          icon={challenge.icon}
+          difficulty={challenge.difficulty}
+          duration={challenge.duration || ""}
+          xp={challenge.xp || 0}
         />
       ))}
     </div>
