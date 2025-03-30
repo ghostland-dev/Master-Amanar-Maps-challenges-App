@@ -17,7 +17,7 @@ import Challenges from "./pages/challenges";
 import Simulator from "./pages/Simulators";
 import Profile from "./pages/Profile";
 import AuthPage from "./pages/Auth";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import SuperAdmin from "./pages/SuperAdmin"; // Changed from AdminDashboard
 import AdminChallenges from "./pages/admin/ChallengeManager";
 import AdminUsers from "./pages/admin/UserManager";
 import AdminSubscriptions from "./pages/admin/SubscriptionManager";
@@ -33,6 +33,7 @@ import AffiliateDashboard from "./pages/affiliate/AffiliateDashboard";
 import CommercialDashboard from "./pages/commercial/CommercialDashboard";
 import MarginCalculator from "./pages/MarginCalculator";
 import AdBudgetCalculator from "./pages/AdBudgetCalculator";
+import Unauthorized from "./pages/Unauthorized"; // Add import for Unauthorized page
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/subscriptions" element={<PricingPage />} />
                 <Route path="/subscription-success" element={<SubscriptionSuccess />} />
                 <Route path="/subscription-cancel" element={<SubscriptionCancel />} />
+                <Route path="/unauthorized" element={<Unauthorized />} /> {/* Add route for Unauthorized page */}
 
                 {/* Protected Routes */}
                 <Route
@@ -102,7 +104,7 @@ function App() {
                 path="/admin"
                 element={
                   <ProtectedRoute roles={['admin', 'super_admin']}>
-                    <AdminDashboard />
+                    <SuperAdmin /> {/* Changed from AdminDashboard */}
                   </ProtectedRoute>
                 }
               />
