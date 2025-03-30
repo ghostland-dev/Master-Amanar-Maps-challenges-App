@@ -1,8 +1,7 @@
 
-import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useAuth } from "@/context/AuthContext";
 import { MobileMenuToggle } from "./mobile/MobileMenuToggle";
 import { MobileMenuContent } from "./mobile/MobileMenuContent";
 
