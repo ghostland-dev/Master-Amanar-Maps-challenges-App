@@ -1,4 +1,3 @@
-
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Clock, Award, ArrowRight, Users, Target, BookOpen, Star, Trophy, TrendingUp } from "lucide-react";
@@ -6,12 +5,12 @@ import { Chip } from "@/components/ui/chip";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
-interface ChallengeCardProps {
+export interface ChallengeCardProps {
   id: string;
   title: string;
   description: string;
   category: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   difficulty: "beginner" | "intermediate" | "advanced";
   duration: string;
   xp: number;

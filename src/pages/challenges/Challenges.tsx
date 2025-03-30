@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,17 +12,19 @@ import { dropshippingChallenge, cryptoChallenge, arbitrageChallenge,
   achatReventeChallenge, marketingChallenge } from "@/utils/challenge";
 import type { Challenge } from "@/utils/challenge/types";
 import { SortOption } from "./types";
+import ChallengeFilters from "./components/ChallengeFilters";
+import ChallengeList from "./components/ChallengeList";
 
 // Mapping challenge objects to an array with IDs
-const challengesData: Array<Challenge & { id: string; icon?: React.ReactNode }> = [
-  { ...dropshippingChallenge, id: "1", icon: <span>🛍️</span> },
-  { ...cryptoChallenge, id: "2", icon: <span>💰</span> },
-  { ...arbitrageChallenge, id: "3", icon: <span>📊</span> },
-  { ...affiliationChallenge, id: "4", icon: <span>🤝</span> },
-  { ...copywritingChallenge, id: "5", icon: <span>✍️</span> },
-  { ...nftChallenge, id: "6", icon: <span>🎭</span> },
-  { ...achatReventeChallenge, id: "7", icon: <span>🔄</span> },
-  { ...marketingChallenge, id: "8", icon: <span>📱</span> },
+const challengesData: Array<Challenge & { id: string }> = [
+  { ...dropshippingChallenge, id: "1" },
+  { ...cryptoChallenge, id: "2" },
+  { ...arbitrageChallenge, id: "3" },
+  { ...affiliationChallenge, id: "4" },
+  { ...copywritingChallenge, id: "5" },
+  { ...nftChallenge, id: "6" },
+  { ...achatReventeChallenge, id: "7" },
+  { ...marketingChallenge, id: "8" },
 ];
 
 const categories = [
@@ -42,9 +43,6 @@ const difficultyLevels = [
   { label: "Avancé", value: "advanced" },
 ];
 
-// Export the SortOption type for other files to use
-export { type SortOption };
-
 const Challenges = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -52,6 +50,8 @@ const Challenges = () => {
   const [displayMode, setDisplayMode] = useState<"grid" | "list">("grid");
   const [filteredChallenges, setFilteredChallenges] = useState(challengesData);
   const [isLoading, setIsLoading] = useState(true);
+  const [sortOption, setSortOption] = useState<SortOption>("popular");
+  const [filtersVisible, setFiltersVisible] = useState(false);
 
   // Filter challenges based on search term, category, and difficulty
   useEffect(() => {
@@ -78,6 +78,12 @@ const Challenges = () => {
     
     return () => clearTimeout(timer);
   }, [searchTerm, selectedCategory, selectedDifficulty]);
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSelectedDifficulty("all");
+  };
 
   // Animation variants
   const containerVariants = {
@@ -106,128 +112,28 @@ const Challenges = () => {
           </p>
         </div>
 
-        {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Rechercher un challenge..."
-              className="pl-10"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex gap-2">
-            {/* Category Filter */}
-            <ContextualPopover
-              trigger={
-                <Button variant="outline" className="flex items-center">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Catégorie
-                </Button>
-              }
-              content={
-                <div className="bg-popover rounded-md shadow-md border p-2 min-w-[200px]">
-                  <div className="space-y-1">
-                    {categories.map((category) => (
-                      <Button
-                        key={category.value}
-                        variant={selectedCategory === category.value ? "default" : "ghost"}
-                        className="w-full justify-start"
-                        onClick={() => setSelectedCategory(category.value)}
-                      >
-                        {category.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              }
-              contentClassName="w-[200px]"
-            />
+        {/* Filters */}
+        <ChallengeFilters
+          searchQuery={searchTerm}
+          setSearchQuery={setSearchTerm}
+          categoryFilter={selectedCategory}
+          setCategoryFilter={setSelectedCategory}
+          difficultyFilter={selectedDifficulty}
+          setDifficultyFilter={setSelectedDifficulty}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+          filtersVisible={filtersVisible}
+          setFiltersVisible={setFiltersVisible}
+          resetFilters={resetFilters}
+        />
 
-            {/* Difficulty Filter */}
-            <ContextualPopover
-              trigger={
-                <Button variant="outline" className="flex items-center">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Difficulté
-                </Button>
-              }
-              content={
-                <div className="bg-popover rounded-md shadow-md border p-2 min-w-[200px]">
-                  <div className="space-y-1">
-                    {difficultyLevels.map((level) => (
-                      <Button
-                        key={level.value}
-                        variant={selectedDifficulty === level.value ? "default" : "ghost"}
-                        className="w-full justify-start"
-                        onClick={() => setSelectedDifficulty(level.value)}
-                      >
-                        {level.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              }
-              contentClassName="w-[200px]"
-            />
+        {/* Challenge List */}
+        <ChallengeList 
+          challenges={filteredChallenges} 
+          resetFilters={resetFilters}
+        />
 
-            {/* Display Mode Toggle */}
-            <Tabs defaultValue="grid" value={displayMode} onValueChange={(v) => setDisplayMode(v as "grid" | "list")}>
-              <TabsList className="h-10">
-                <TabsTrigger value="grid" className="px-3">
-                  <Grid3X3 className="h-4 w-4" />
-                </TabsTrigger>
-                <TabsTrigger value="list" className="px-3">
-                  <List className="h-4 w-4" />
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        </div>
-
-        {/* Filter Pills */}
-        <div className="flex flex-wrap gap-2">
-          {selectedCategory !== "all" && (
-            <Badge variant="outline" className="py-1 px-3">
-              {categories.find(c => c.value === selectedCategory)?.label || selectedCategory}
-              <button 
-                className="ml-2 hover:text-destructive"
-                onClick={() => setSelectedCategory("all")}
-              >
-                ×
-              </button>
-            </Badge>
-          )}
-          
-          {selectedDifficulty !== "all" && (
-            <Badge variant="outline" className="py-1 px-3">
-              {difficultyLevels.find(d => d.value === selectedDifficulty)?.label || selectedDifficulty}
-              <button 
-                className="ml-2 hover:text-destructive"
-                onClick={() => setSelectedDifficulty("all")}
-              >
-                ×
-              </button>
-            </Badge>
-          )}
-          
-          {(selectedCategory !== "all" || selectedDifficulty !== "all") && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => {
-                setSelectedCategory("all");
-                setSelectedDifficulty("all");
-              }}
-            >
-              Réinitialiser les filtres
-            </Button>
-          )}
-        </div>
-
+        {/* The rest of the original implementation */}
         {/* Challenge Display */}
         <div>
           <Tabs value={displayMode} className="w-full">
@@ -262,7 +168,6 @@ const Challenges = () => {
                           title={challenge.title}
                           description={challenge.description}
                           category={challenge.category || ""}
-                          icon={challenge.icon}
                           difficulty={challenge.difficulty}
                           duration={challenge.duration || ""}
                           xp={challenge.xp || 0}

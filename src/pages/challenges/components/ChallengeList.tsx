@@ -35,10 +35,10 @@ const ChallengeList = ({ challenges, resetFilters }: ChallengeListProps) => {
           title={challenge.title}
           description={challenge.description}
           category={categoryLabels[challenge.category] || challenge.category}
-          // Remove the icon prop as it doesn't exist in Challenge type
           difficulty={challenge.difficulty as "beginner" | "intermediate" | "advanced"}
           duration={challenge.duration || ""}
           xp={challenge.xp || 0}
+          icon={<span>🏆</span>} // Add a default icon
         />
       ))}
     </div>
