@@ -26,6 +26,14 @@ const ChallengeList = ({ challenges, resetFilters }: ChallengeListProps) => {
     );
   }
 
+  // Function to normalize difficulty values
+  const normalizeDifficulty = (difficulty: string): "beginner" | "intermediate" | "advanced" => {
+    if (difficulty === "beginner" || difficulty === "intermediate" || difficulty === "advanced") {
+      return difficulty as "beginner" | "intermediate" | "advanced";
+    }
+    return "beginner"; // Default fallback
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {challenges.map((challenge) => (
@@ -35,7 +43,7 @@ const ChallengeList = ({ challenges, resetFilters }: ChallengeListProps) => {
           title={challenge.title}
           description={challenge.description}
           category={categoryLabels[challenge.category] || challenge.category}
-          difficulty={challenge.difficulty as "beginner" | "intermediate" | "advanced"}
+          difficulty={normalizeDifficulty(challenge.difficulty)}
           duration={challenge.duration || ""}
           xp={challenge.xp || 0}
           icon={<span>🏆</span>} // Add a default icon

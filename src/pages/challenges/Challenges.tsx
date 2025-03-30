@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +14,14 @@ import type { Challenge } from "@/utils/challenge/types";
 import { SortOption } from "./types";
 import ChallengeFilters from "./components/ChallengeFilters";
 import ChallengeList from "./components/ChallengeList";
+
+// Function to ensure difficulty is one of the accepted values
+const normalizeDifficulty = (difficulty: string): "beginner" | "intermediate" | "advanced" => {
+  if (difficulty === "beginner" || difficulty === "intermediate" || difficulty === "advanced") {
+    return difficulty as "beginner" | "intermediate" | "advanced";
+  }
+  return "beginner"; // Default fallback
+};
 
 // Mapping challenge objects to an array with IDs
 const challengesData: Array<Challenge & { id: string }> = [
@@ -169,7 +176,7 @@ const Challenges = () => {
                           title={challenge.title}
                           description={challenge.description}
                           category={challenge.category || ""}
-                          difficulty={challenge.difficulty as "beginner" | "intermediate" | "advanced"}
+                          difficulty={normalizeDifficulty(challenge.difficulty)}
                           duration={challenge.duration || ""}
                           xp={challenge.xp || 0}
                           icon={<span>🏆</span>}

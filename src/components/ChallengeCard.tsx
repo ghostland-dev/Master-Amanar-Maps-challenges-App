@@ -1,3 +1,4 @@
+
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Clock, Award, ArrowRight, Users, Target, BookOpen, Star, Trophy, TrendingUp } from "lucide-react";
@@ -32,7 +33,7 @@ const ChallengeCard = ({
   description,
   category,
   icon,
-  difficulty,
+  difficulty = "beginner", // Add default value to prevent undefined issues
   duration,
   xp,
   progress = 0,
@@ -46,6 +47,12 @@ const ChallengeCard = ({
   className,
   image,
 }: ChallengeCardProps) => {
+  // Make sure difficulty is one of the valid values
+  const safetyDifficulty: "beginner" | "intermediate" | "advanced" = 
+    (difficulty === "beginner" || difficulty === "intermediate" || difficulty === "advanced") 
+      ? difficulty 
+      : "beginner";
+
   const difficultyMap = {
     beginner: {
       label: "Débutant",
@@ -71,6 +78,9 @@ const ChallengeCard = ({
 
   // Use the provided image or select a random one from the defaults
   const cardImage = image || defaultImages[Math.floor(Math.random() * defaultImages.length)];
+
+  // Use safetyDifficulty instead of difficulty directly
+  const difficultyInfo = difficultyMap[safetyDifficulty];
 
   return (
     <Link to={`/challenge/${id}`} className="block h-full">
@@ -142,8 +152,8 @@ const ChallengeCard = ({
                 {completedBy} complétions
               </div>
             )}
-            <Chip variant={difficultyMap[difficulty].color} size="sm">
-              {difficultyMap[difficulty].label}
+            <Chip variant={difficultyInfo.color} size="sm">
+              {difficultyInfo.label}
             </Chip>
           </div>
           
