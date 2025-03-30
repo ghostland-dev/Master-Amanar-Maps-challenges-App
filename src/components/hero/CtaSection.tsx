@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, CheckCircle } from "lucide-react";
 import { scaleIn } from "@/lib/animations";
+import { Link } from "react-router-dom";
 
 const CtaSection = () => {
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -51,13 +52,17 @@ const CtaSection = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-primary/30 hover:shadow-primary/40 transition-all dark:shadow-primary/20">
-            Créer un compte gratuit
-            <ChevronRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base glass hover:bg-primary/10 transition-all dark:glass-dark hover:dark:bg-primary/10 border-primary/20 hover:border-primary/40">
-            Découvrir les simulateurs
-          </Button>
+          <Link to="/auth?tab=register">
+            <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-primary/30 hover:shadow-primary/40 transition-all dark:shadow-primary/20">
+              Créer un compte gratuit
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link to="/simulators">
+            <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base glass hover:bg-primary/10 transition-all dark:glass-dark hover:dark:bg-primary/10 border-primary/20 hover:border-primary/40">
+              Découvrir les simulateurs
+            </Button>
+          </Link>
         </div>
         <p className="mt-6 text-xs text-muted-foreground">
           Aucune carte de crédit requise. Accès gratuit aux fonctionnalités de base.
