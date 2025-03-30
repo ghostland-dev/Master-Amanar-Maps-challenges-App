@@ -3,6 +3,22 @@ import { Challenge } from "@/utils/challenge/types";
 
 export type SortOption = "newest" | "oldest" | "az" | "za" | "popular" | "difficulty";
 
+// Add categoryLabels mapping
+export const categoryLabels: Record<string, string> = {
+  dropshipping: "Dropshipping",
+  affiliation: "Affiliation",
+  crypto: "Crypto-monnaie",
+  marketing: "Marketing",
+  arbitrage: "Arbitrage",
+  achatRevente: "Achat-Revente",
+  nft: "NFT",
+  copywriting: "Copywriting",
+  ecommerce: "E-Commerce",
+  seo: "SEO",
+  socialMedia: "Réseaux sociaux",
+  investment: "Investissement"
+};
+
 export const sortChallenges = (challenges: Challenge[], sortOption: SortOption) => {
   const sortedChallenges = [...challenges];
 
