@@ -30,6 +30,7 @@ const Index = () => {
       count: 5,
       difficulty: "beginner" as const,
       to: "/challenges?category=achat-revente",
+      image: "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=2340&auto=format&fit=crop",
     },
     {
       title: "Crypto",
@@ -38,6 +39,7 @@ const Index = () => {
       count: 7,
       difficulty: "intermediate" as const,
       to: "/challenges?category=crypto",
+      image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?q=80&w=2574&auto=format&fit=crop",
     },
     {
       title: "E-commerce",
@@ -46,6 +48,7 @@ const Index = () => {
       count: 8,
       difficulty: "intermediate" as const,
       to: "/challenges?category=ecommerce",
+      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2670&auto=format&fit=crop",
     },
     {
       title: "Affiliation",
@@ -54,6 +57,7 @@ const Index = () => {
       count: 6,
       difficulty: "beginner" as const,
       to: "/challenges?category=affiliation",
+      image: "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?q=80&w=2670&auto=format&fit=crop",
     },
     {
       title: "Copywriting",
@@ -62,6 +66,7 @@ const Index = () => {
       count: 4,
       difficulty: "intermediate" as const,
       to: "/challenges?category=copywriting",
+      image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2573&auto=format&fit=crop",
     },
     {
       title: "Développement",
@@ -70,6 +75,7 @@ const Index = () => {
       count: 5,
       difficulty: "advanced" as const,
       to: "/challenges?category=developpement",
+      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2669&auto=format&fit=crop",
     },
     {
       title: "Marketing",
@@ -78,6 +84,7 @@ const Index = () => {
       count: 7,
       difficulty: "intermediate" as const,
       to: "/challenges?category=marketing",
+      image: "https://images.unsplash.com/photo-1533750516457-a7f992034fec?q=80&w=2574&auto=format&fit=crop",
     },
     {
       title: "Design",
@@ -86,6 +93,7 @@ const Index = () => {
       count: 3,
       difficulty: "intermediate" as const,
       to: "/challenges?category=design",
+      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2671&auto=format&fit=crop",
     },
   ];
 
@@ -130,7 +138,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category, index) => (
-              <div key={index} className="category-card transform hover:-translate-y-1 transition-all duration-300">
+              <div key={index} className="category-card transform hover:-translate-y-1 transition-all duration-300 h-full">
                 <CategoryCard {...category} />
               </div>
             ))}
