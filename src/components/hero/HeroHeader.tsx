@@ -19,12 +19,11 @@ const HeroHeader = () => {
         <span className="text-xs font-medium">La plateforme qui gamifie l'apprentissage financier</span>
       </div>
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-        Apprenez à <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-700 dark:from-amber-400 dark:to-amber-600">gagner de l'argent</span> en ligne
+        Apprenez à <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-700 dark:from-amber-400 dark:to-amber-600">générer vos premiers revenus</span> en ligne
       </h1>
       <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-        Réalisez des petits challenges guidés pour réussir vos premiers euros sur internet, 
-        <span className="font-medium text-foreground"> même sans diplôme ni expérience</span>. 
-        Suivez simplement les étapes et progressez à votre rythme.
+        Relevez des mini-défis guidés, même sans diplôme ni expérience, et commencez à gagner de l'argent pas à pas. 
+        Suivez un parcours <span className="font-medium text-foreground">simple, accessible</span>, et progressez à votre rythme vers votre liberté financière.
       </p>
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
         <Button size="lg" className="rounded-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all dark:shadow-primary/10" asChild>
