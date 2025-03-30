@@ -1,24 +1,48 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import CommissionItem from "./CommissionItem";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import CommissionPlan from "./CommissionPlan";
 
 const CommissionPlansSection = () => {
+  const standardCommissions = [
+    {
+      percentage: "20%",
+      description: "Sur les abonnements mensuels",
+    },
+    {
+      percentage: "25%",
+      description: "Sur les abonnements annuels",
+    },
+    {
+      percentage: "10%",
+      description: "Sur les renouvellements",
+    },
+  ];
+
+  const premiumCommissions = [
+    {
+      percentage: "25%",
+      description: "Sur les abonnements mensuels",
+    },
+    {
+      percentage: "30%",
+      description: "Sur les abonnements annuels",
+    },
+    {
+      percentage: "15%",
+      description: "Sur les renouvellements",
+    },
+    {
+      percentage: "5%",
+      description: "Commission à 2 niveaux sur les affiliés que vous parrainez",
+    },
+  ];
+
   return (
     <div className="mb-16">
       <h2 className="text-2xl font-bold text-center mb-10">Plans de commission</h2>
@@ -28,66 +52,23 @@ const CommissionPlansSection = () => {
           <TabsTrigger value="premium">Premium</TabsTrigger>
         </TabsList>
         <TabsContent value="standard">
-          <Card>
-            <CardHeader>
-              <CardTitle>Plan Standard</CardTitle>
-              <CardDescription>Pour tous les affiliés qui débutent</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <CommissionItem
-                  percentage="20%"
-                  description="Sur les abonnements mensuels"
-                />
-                <CommissionItem
-                  percentage="25%"
-                  description="Sur les abonnements annuels"
-                />
-                <CommissionItem
-                  percentage="10%"
-                  description="Sur les renouvellements"
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" asChild>
-                <Link to="/affiliate-dashboard">Démarrer maintenant</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <CommissionPlan
+            title="Plan Standard"
+            description="Pour tous les affiliés qui débutent"
+            commissions={standardCommissions}
+            buttonText="Démarrer maintenant"
+            buttonLink="/affiliate-dashboard"
+          />
         </TabsContent>
         <TabsContent value="premium">
-          <Card>
-            <CardHeader>
-              <CardTitle>Plan Premium</CardTitle>
-              <CardDescription>Pour les affiliés qui génèrent plus de 10 ventes par mois</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <CommissionItem
-                  percentage="25%"
-                  description="Sur les abonnements mensuels"
-                />
-                <CommissionItem
-                  percentage="30%"
-                  description="Sur les abonnements annuels"
-                />
-                <CommissionItem
-                  percentage="15%"
-                  description="Sur les renouvellements"
-                />
-                <CommissionItem
-                  percentage="5%"
-                  description="Commission à 2 niveaux sur les affiliés que vous parrainez"
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" variant="outline" asChild>
-                <Link to="/contact">Contacter l'équipe</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <CommissionPlan
+            title="Plan Premium"
+            description="Pour les affiliés qui génèrent plus de 10 ventes par mois"
+            commissions={premiumCommissions}
+            buttonText="Contacter l'équipe"
+            buttonLink="/contact"
+            variant="outline"
+          />
         </TabsContent>
       </Tabs>
     </div>
