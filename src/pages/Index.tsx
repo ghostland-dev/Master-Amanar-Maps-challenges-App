@@ -1,14 +1,19 @@
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, TrendingUp, Layers, Link as LinkIcon, PenTool, Code, LineChart, Palette } from "lucide-react";
+import { ShoppingCart, TrendingUp, Layers, Link as LinkIcon, PenTool, Code, LineChart, Palette, ChevronRight } from "lucide-react";
 import Hero from "@/components/hero";
 import CategoryCard from "@/components/CategoryCard";
 import MainLayout from "@/components/layouts/MainLayout";
+import { fadeIn } from "@/lib/animations";
 
 const Index = () => {
   const categoriesRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (categoriesRef.current) fadeIn(categoriesRef.current);
+  }, []);
   
   const categories = [
     {
@@ -82,11 +87,17 @@ const Index = () => {
       <Hero />
       
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto pb-20">
-        <div ref={categoriesRef}>
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold">Catégories de challenges</h2>
+        <div ref={categoriesRef} className="pt-12">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Catégories de challenges</h2>
+              <p className="text-muted-foreground">Explorez nos différentes catégories et trouvez celle qui vous correspond</p>
+            </div>
             <Link to="/challenges">
-              <Button variant="ghost">Voir tous les challenges</Button>
+              <Button variant="secondary" className="group">
+                Voir tous les challenges
+                <ChevronRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+              </Button>
             </Link>
           </div>
           
