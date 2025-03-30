@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import ChallengeStep from "./ChallengeStep";
 import { ChallengeStep as StepType } from "@/utils/challenge/types";
 
@@ -56,7 +57,7 @@ const ChallengeSteps = ({ steps, currentStep, totalSteps, onProgressUpdate }: Ch
       toast({
         title: "Challenge terminé !",
         description: "Félicitations ! Vous avez terminé toutes les étapes de ce challenge.",
-        variant: "default", // Changed from 'success' to 'default'
+        variant: "default",
       });
     } else {
       // Passer automatiquement à l'étape suivante

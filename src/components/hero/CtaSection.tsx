@@ -52,17 +52,17 @@ const CtaSection = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/auth?tab=register">
-            <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-primary/30 hover:shadow-primary/40 transition-all dark:shadow-primary/20">
+          <Button size="lg" className="rounded-full px-8 py-6 text-base shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-primary/30 hover:shadow-primary/40 transition-all dark:shadow-primary/20" asChild>
+            <Link to="/auth?tab=register">
               Créer un compte gratuit
               <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link to="/simulators">
-            <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base glass hover:bg-primary/10 transition-all dark:glass-dark hover:dark:bg-primary/10 border-primary/20 hover:border-primary/40">
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base glass hover:bg-primary/10 transition-all dark:glass-dark hover:dark:bg-primary/10 border-primary/20 hover:border-primary/40" asChild>
+            <Link to="/simulators">
               Découvrir les simulateurs
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
         <p className="mt-6 text-xs text-muted-foreground">
           Aucune carte de crédit requise. Accès gratuit aux fonctionnalités de base.

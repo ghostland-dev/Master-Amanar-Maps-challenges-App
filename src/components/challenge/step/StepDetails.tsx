@@ -10,7 +10,7 @@ import { StepCommonMistakes } from "./StepCommonMistakes";
 import { StepActions } from "./StepActions";
 import StepChecklist from "./StepChecklist";
 import StepAssistance from "./StepAssistance";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface StepDetailsProps {
   step: {
