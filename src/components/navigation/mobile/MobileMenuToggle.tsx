@@ -3,23 +3,23 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MobileMenuToggleProps {
-  mobileMenuOpen: boolean;
-  setMobileMenuOpen: (open: boolean) => void;
+  isOpen: boolean;
+  onClick: () => void;
 }
 
 export const MobileMenuToggle = ({
-  mobileMenuOpen,
-  setMobileMenuOpen,
+  isOpen,
+  onClick,
 }: MobileMenuToggleProps) => {
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+      onClick={onClick}
       className="relative"
-      aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+      aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
     >
-      {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
     </Button>
   );
 };
