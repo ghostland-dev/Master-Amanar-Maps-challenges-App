@@ -1,38 +1,66 @@
-# Welcome to your Lovable project
+# Amanar Map 1.0.1
+![image](https://github.com/user-attachments/assets/270673d6-8eff-4885-9afb-c35515900c4e)
 
-## Project info
+Apprenez à **générer vos premiers revenus en ligne** grâce à une plateforme accessible, gamifiée et orientée résultats.
 
-**URL**: https://lovable.dev/projects/b026f8fa-353a-4ac5-b726-09b486aa51a3
+![Aperçu du site](./path/to/screenshot.png) <!-- À remplacer par un lien valide vers une capture d'écran -->
 
-## How can I edit this code?
+## 🚀 Objectif
 
-There are several ways of editing your application.
+Amanar Map aide les débutants à découvrir des méthodes concrètes pour gagner leurs premiers euros en ligne grâce à des défis guidés, des simulations interactives et une progression structurée.
 
-**Use Lovable**
+## 🧩 Fonctionnalités clés
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/b026f8fa-353a-4ac5-b726-09b486aa51a3) and start prompting.
+- ✅ Défis guidés pour générer ses premiers revenus
+- 🧠 Simulateurs interactifs pour apprendre par la pratique
+- 📚 Accès à une bibliothèque de ressources
+- 📈 Système de progression et suivi personnalisé
+- 🔐 Communauté sécurisée et entraide entre membres
+- 💬 Témoignages utilisateurs authentiques
+- 🏷️ Catégories variées : E-commerce, Crypto, Rédaction, Affiliation, Développement, etc.
 
-Changes made via Lovable will be committed automatically to this repo.
+## 💸 Offres d'abonnement
 
-**Use your preferred IDE**
+| Plan        | Prix         | Contenu principal |
+|-------------|--------------|-------------------|
+| **Gratuit** | 0€/mois      | Accès à la base de ressources, défis découverte |
+| **Premium** | 19,99€/mois  | Contenu exclusif, communauté privée, progression |
+| **Entreprise** | 49,99€/mois | Accès complet + analytics et coaching |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Stack technique (suggestion)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Ce site pourrait être développé avec les technologies suivantes :
 
-Follow these steps:
+- **Frontend** : React + TailwindCSS + Lucide Icons
+- **Backend** : Node.js / Express ou Laravel (selon besoin)
+- **Auth & DB** : Firebase Auth + Firestore / Supabase
+- **Paiement** : Stripe
+- **Analytics** : Plausible / Matomo
+- **Emailing** : Sendinblue / Mailchimp
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📸 Inspirations visuelles
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Palette chaleureuse, tons crème/orange
+- Illustrations inspirées d’univers startup/fintech
+- Cartes avec effets de survol doux
+- Icônes claires pour navigation intuitive
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📦 À venir
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- ✅ Défis adaptés aux niveaux
+- ✅ Challenges hebdomadaires
+- 🔜 Certifications de progression
+- 🔜 Système de parrainage
+- 🔜 App mobile
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Merci de soumettre une *issue* ou une *pull request* avant de proposer des modifications.
+
+---
+
+© 2025 Amanar Map. Tous droits réservés.
+d an instant preview.
 npm run dev
 ```
 
