@@ -1,10 +1,6 @@
 # Amanar Map 1.0.1
 ![image](https://github.com/user-attachments/assets/270673d6-8eff-4885-9afb-c35515900c4e)
 
-Apprenez à **générer vos premiers revenus en ligne** grâce à une plateforme accessible, gamifiée et orientée résultats.
-
-![Aperçu du site](./path/to/screenshot.png) <!-- À remplacer par un lien valide vers une capture d'écran -->
-
 ## 🚀 Objectif
 
 Amanar Map aide les débutants à découvrir des méthodes concrètes pour gagner leurs premiers euros en ligne grâce à des défis guidés, des simulations interactives et une progression structurée.
