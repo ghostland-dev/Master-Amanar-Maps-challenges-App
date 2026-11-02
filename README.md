@@ -60,3 +60,9 @@ This project is built with .
 - Tailwind CSS
 
  
+
+## Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fghostland-dev%2Famanar-maps-challenges)
+
+Click the button to deploy your own copy on Vercel in one step.
